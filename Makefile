@@ -55,9 +55,9 @@ libovr.lib:	$(OVROBJS)
 	rm -f libovr.lib
 	for o in $(OVROBJS); do echo $$o;$(LIBR) -r libovr.lib -$$o;done
 
-libf.lib: libf.old printf.obj scanf.obj
+libf.lib: libf.org printf.obj scanf.obj
 	rm -f libf.lib
-	cp libf.old libf.lib
+	cp libf.org libf.lib
 	$(LIBR) -r libf.lib -fprintf.obj
 	$(LIBR) -r libf.lib -fscanf.obj
 	$(LIBR) -r libf.lib -printf.obj
@@ -122,8 +122,14 @@ testbdos.com: testbdos.c  $(LIBS) $(TOOLS) $(CRTOBJS)
 testbios.com: testbios.c  $(LIBS) $(TOOLS) $(CRTOBJS)
 	zxccp c --v --r testbios.c
 
+testtrig.com: testtrig.c  $(LIBS) $(TOOLS) $(CRTOBJS)
+	zxccp c --v --r testtrig.c
+
+testftim.com: testftim.c  $(LIBS) $(TOOLS) $(CRTOBJS)
+	zxccp c --v --r testftim.c
+
 test: testver.com testio.com testovr.com testovr1.ovr testovr2.ovr teststr.com \
- testbios.com testbdos.com
+ testbios.com testbdos.com testtrig.com testftim.com
 	zxccp testver
 	rm -f testio.sta testio.out testio.err
 	zxccp testovr

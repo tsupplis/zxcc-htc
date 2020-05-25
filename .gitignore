@@ -1,0 +1,7 @@
+c.com
+*.rsx
+todo
+symtoas.com
+**/.*.swp
+**/*.obj
+dist

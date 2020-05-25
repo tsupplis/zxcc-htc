@@ -1,0 +1,11 @@
+c -v -r testver.c
+c -v -r testio.c
+c -ftestovrx.sym -v -r testovr.c -lovr
+c -y -r -v testovr2.c testovrx.sym
+c -y -r -v testovr1.c testovrx.sym
+testver
+era testio.sta
+era testio.out
+era testio.err
+testovr
+testio
