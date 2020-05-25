@@ -1,7 +1,7 @@
 .SUFFIXES: .obj .c .as
-LIBR=zxccp libr
-AS=zxccp zas
-CC=zxccp c
+LIBR=zxcc libr
+AS=zxcc zas
+CC=zxcc c
 CFLAGS=--o
 ASFLAGS=--j
 
@@ -28,7 +28,7 @@ bios.obj cleanup.obj _exit.obj fakeclea.obj fakecpcl.obj  \
 sys_err.obj memcpy.obj memcmp.obj memset.obj abs.obj  \
 asallsh.obj allsh.obj asalrsh.obj asar.obj asdiv.obj  \
 asladd.obj asland.obj asll.obj asllrsh.obj aslmul.obj  \
-aslor.obj aslsub.obj aslxor.obj asmod.obj atoi.obj  \
+aslor.obj aslsub.obj aslxor.obj strftime.obj asmod.obj atoi.obj  \
 atol.obj blkclr.obj blkcpy.obj calloc.obj asmul.obj  \
 bitfield.obj ctype_.obj getsp.obj index.obj strchr.obj  \
 inout.obj iregset.obj isalpha.obj isdigit.obj islower.obj  \
@@ -39,9 +39,8 @@ max.obj idiv.obj pnum.obj ldiv.obj qsort.obj  \
 swap.obj aslr.obj bmove.obj imul.obj rand.obj  \
 alrsh.obj lmul.obj rindex.obj strrchr.obj sbrk.obj  \
 shar.obj shll.obj shlr.obj strcat.obj strcmp.obj  \
-strcpy.obj strlen.obj strncat.obj strncmp.obj strncpy.obj  \
-csv.obj rcsv.obj tolower.obj toupper.obj xtoi.obj \
-stricmp.obj
+strcpy.obj strlen.obj stricmp.obj stristr.obj strncat.obj \
+strncmp.obj strncpy.obj csv.obj rcsv.obj tolower.obj toupper.obj xtoi.obj 
 
 FOBJS=printf.obj fprintf.obj sprintf.obj scanf.obj fscanf.obj sscanf.obj fdoprnt.obj \
  fdoscan.obj atof.obj fnum.obj fbcd.obj tan.obj acos.obj asin.obj atan2.obj atan.obj \
@@ -79,10 +78,10 @@ libc.lib: $(COBJS)
 	for o in $(COBJS); do echo $$o;$(LIBR) -r libc.lib -$$o;done
 
 zcrt0.obj: zcrt0.as
-	zxccp zas zcrt0.as
+	zxcc zas zcrt0.as
 
 zrrt0.obj: zrrt0.as
-	zxccp zas zrrt0.as
+	zxcc zas zrrt0.as
 
 rrt0.obj: zrrt0.obj
 	cp zrrt0.obj rrt0.obj
@@ -97,54 +96,56 @@ clean:
 	-rm -rf libf
 
 exec.com: exec.obj
-	zxccp link --l --ptext=0,bss exec.obj
-	zxccp objtohex --R --B100H l.obj exec.com
+	zxcc link --l --ptext=0,bss exec.obj
+	zxcc objtohex --R --B100H l.obj exec.com
 	-rm l.obj
 
 symtoas.com: symtoas.obj $(LIBS) $(CRTOBJS) c.com
-	zxccp c --v --r symtoas.obj
+	zxcc c --v --r symtoas.obj
 
 c.com: ec.obj $(LIBS) $(CRTOBJS)
-	zxccp link --z --Ptext=0,data,bss --C100h --oc.com crt0.obj ec.obj libc.lib
+	zxcc link --z --Ptext=0,data,bss --C100h --oc.com crt0.obj ec.obj libc.lib
 
 teststr.com: teststr.c $(LIBS) $(TOOLS) $(CRTOBJS)
-	zxccp c --v --r teststr.c --lc
+	zxcc c --v --r teststr.c --lc
 
 testver.com: testver.c $(LIBS) $(TOOLS) $(CRTOBJS)
-	zxccp c --v --r testver.c --lc
+	zxcc c --v --r testver.c --lc
 
 testio.com: testio.c $(LIBS) $(TOOLS) $(CRTOBJS)
-	zxccp c --v --r testio.c 
+	zxcc c --v --r testio.c 
 
 testovr.com testovrx.sym: testovr.c $(LIBS) $(TOOLS) $(CRTOBJS)
-	zxccp c --ftestovrx.sym --v --r testovr.c --lovr
+	zxcc c --ftestovrx.sym --v --r testovr.c --lovr
 
 testovr2.ovr: testovr2.obj testovrx.sym
-	zxccp c --y --r --v testovr2.c testovrx.sym
+	zxcc c --y --r --v testovr2.c testovrx.sym
 
 testovr1.ovr: testovr2.obj testovrx.sym
-	zxccp c --y --r --v testovr1.c testovrx.sym
+	zxcc c --y --r --v testovr1.c testovrx.sym
 	#o=`grep __ovrbgn testovr.sym |sed -e 's/ .*//g'`;\
 	#xcc link --c"$$o"h --ptext=0"$$o"h,data --otestovr1.ovr testovr1.obj testovrx.obj 
 
 testbdos.com: testbdos.c  $(LIBS) $(TOOLS) $(CRTOBJS)
-	zxccp c --v --r testbdos.c
+	zxcc c --v --r testbdos.c
 
 testbios.com: testbios.c  $(LIBS) $(TOOLS) $(CRTOBJS)
-	zxccp c --v --r testbios.c
+	zxcc c --v --r testbios.c
 
 testtrig.com: testtrig.c  $(LIBS) $(TOOLS) $(CRTOBJS)
-	zxccp c --v --r testtrig.c
+	zxcc c --v --r testtrig.c --lf
 
 testftim.com: testftim.c  $(LIBS) $(TOOLS) $(CRTOBJS)
-	zxccp c --v --r testftim.c
+	zxcc c --v --r testftim.c
 
 test: testver.com testio.com testovr.com testovr1.ovr testovr2.ovr teststr.com \
  testbios.com testbdos.com testtrig.com testftim.com
-	zxccp testver
+	zxcc testver
 	rm -f testio.sta testio.out testio.err
-	zxccp testovr
-	zxccp teststr
+	zxcc testovr
+	zxcc teststr
+	zxcc testtrig
+	zxcc testftim
 
 dist: dist/htc.zip
 

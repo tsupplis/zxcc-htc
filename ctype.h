@@ -23,8 +23,13 @@ extern	unsigned char	_ctype_[];	/* in libc.lib */
 #define isgraph(c)	((_ctype_+1)[c]&(_P|_U|_L|_N))
 #define iscntrl(c)	((_ctype_+1)[c]&_C)
 #define isascii(c)	(!((c)&0xFF80))
+/*
 #define toupper(c)	((c)-'a'+'A')
 #define tolower(c)	((c)-'A'+'a')
+*/
 #define toascii(c)	((c)&0x7F)
+extern int toupper(int);	/* in LIBC.LIB */
+extern int tolower(int);	/* in LIBC.LIB */
+
 
 #endif

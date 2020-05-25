@@ -1,6 +1,8 @@
 #ifndef _HTC_TIME_H
 #define _HTC_TIME_H
 
+#include <hitech.h>
+
 #ifndef	_TIME
 
 typedef	long	time_t;		/* for representing times in seconds */
@@ -18,6 +20,13 @@ struct tm {
 #define	_TIME
 #endif	
 
+#ifndef _STDDEF
+typedef int	ptrdiff_t;	/* result type of pointer difference */
+typedef unsigned size_t;	/* type yielded by sizeof */
+#define _STDDEF
+#define offsetof(ty, mem)	((int)&(((ty *)0)->mem))
+#endif
+
 extern int	time_zone;	/* minutes WESTWARD of Greenwich */
 				/* this value defaults to 0 since with
 				   operating systems like MS-DOS there is
@@ -28,5 +37,6 @@ extern char *	asctime(struct tm *);	/* converts struct tm to ascii time */
 extern char *	ctime();	/* current local time in ascii form */
 extern struct tm *	gmtime();	/* Universal time */
 extern struct tm *	localtime();	/* local time */
+extern size_t strftime(char *s, size_t maxs, char *f, struct tm *t);
 
 #endif
