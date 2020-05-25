@@ -42,6 +42,13 @@ shar.obj shll.obj shlr.obj strcat.obj strcmp.obj  \
 strcpy.obj strlen.obj strncat.obj strncmp.obj strncpy.obj  \
 csv.obj rcsv.obj tolower.obj toupper.obj xtoi.obj \
 stricmp.obj
+
+FOBJS=printf.obj fprintf.obj sprintf.obj scanf.obj fscanf.obj sscanf.obj doprnt.obj \
+ doscan.obj atof.obj fnum.obj fbcd.obj tan.obj acos.obj asin.obj atan2.obj atan.obj \
+ cos.obj sin.obj sinh.obj cosh.obj tanh.obj exp.obj log.obj evalpoly.obj sqrt.obj \
+ frexp.obj fabs.obj ceil.obj floor.obj finc.obj asfloat.obj frndint.obj ftol.obj \
+ ltof.obj float.obj
+
 OVROBJS=ovrload.obj ovrbgn.obj
 CRTOBJS=crt0.obj rrt0.obj crtredir.obj
 ZCRTOBJS=zcrt0.obj zrrt0.obj
@@ -55,13 +62,17 @@ libovr.lib:	$(OVROBJS)
 	rm -f libovr.lib
 	for o in $(OVROBJS); do echo $$o;$(LIBR) -r libovr.lib -$$o;done
 
-libf.lib: libf.org printf.obj scanf.obj
+#libf.lib: libf.org $(FOBJS)
+#	rm -f libf.lib
+#	cp libf.org libf.lib
+#	$(LIBR) -r libf.lib -fprintf.obj
+#	$(LIBR) -r libf.lib -fscanf.obj
+#	$(LIBR) -r libf.lib -printf.obj
+#	$(LIBR) -r libf.lib -scanf.obj
+
+libf.lib: $(FOBJS)
 	rm -f libf.lib
-	cp libf.org libf.lib
-	$(LIBR) -r libf.lib -fprintf.obj
-	$(LIBR) -r libf.lib -fscanf.obj
-	$(LIBR) -r libf.lib -printf.obj
-	$(LIBR) -r libf.lib -scanf.obj
+	for o in $(FOBJS); do echo $$o;$(LIBR) -r libf.lib -$$o;done
 
 libc.lib: $(COBJS)
 	rm -f libc.lib
