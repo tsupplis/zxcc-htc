@@ -23,7 +23,7 @@ open.obj read.obj write.obj seek.obj stat.obj  \
 chmod.obj fcbname.obj rename.obj creat.obj time.obj  \
 convtime.obj timezone.obj isatty.obj close.obj unlink.obj  \
 dup.obj execl.obj getfcb.obj srand1.obj srand.obj abort.obj  \
-getch.obj signal.obj getuid.obj bdos.obj bdoshl.obj  \
+getch.obj signal.obj getuid.obj bdos.obj  \
 bios.obj cleanup.obj _exit.obj fakeclea.obj fakecpcl.obj  \
 sys_err.obj memcpy.obj memcmp.obj memset.obj abs.obj  \
 asallsh.obj allsh.obj asalrsh.obj asar.obj asdiv.obj  \
@@ -146,6 +146,7 @@ test: testver.com testio.com testovr.com testovr1.ovr testovr2.ovr teststr.com \
 	zxcc teststr
 	zxcc testtrig
 	zxcc testftim
+	zxcc testbdos
 
 dist: dist/htc.zip
 

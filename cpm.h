@@ -46,15 +46,17 @@ extern struct	fcb {
 }	_fcb[MAXFILE];
 
 extern char		bdos(int, ...);
-extern char		bdose(int, ...);
+#define bdoshl	   bdos
+#define bdose	   bdos
 extern struct fcb *	getfcb(void);
 extern char * fcbname(short i);
 
-extern short		bdoshl(int, ...);	/* bdos call returning value in hl */
-extern uchar		getuid(void);
+extern uchar	getuid(void);
 extern void		setuid(int);
 extern uchar	setfcb(struct fcb *, char *);
 extern char *   (*_passwd)(struct FCB *);
+extern short	bios(short fn, ...);
+#define bios3 bios
 
 /*	 flag values in fcb.use */
 
@@ -132,5 +134,7 @@ extern char *   (*_passwd)(struct FCB *);
 
 #define cpm_set_rcode(a) (bdoshl(CPMRCODE,(a)))
 #define cpm_get_rcode(a) (bdoshl(CPMRCODE,0xFFFF))
+
+/* CP/M BIOS functions.  Numbers above 16 pertain to CP/M 3 only.  */
 
 #endif
