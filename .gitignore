@@ -4,6 +4,7 @@ todo
 symtoas.com
 test*.com
 *.ovr
+*.lib
 **/.*.swp
 **/*.obj
 dist
