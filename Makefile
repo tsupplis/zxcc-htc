@@ -91,6 +91,7 @@ crt0.obj: zcrt0.obj
 
 clean:
 	-rm -f $(TOOLS) $(LIBS) $(COBJS) $(CRTOBJS) $(ZCRTOBJS) $(OVROBJS) $(TOOLSOBJS) \
+        $(FOBJS) \
         test*.com test*.obj test*.out test*.sta test*.err test*.sym \
         testovrx.* test*.ovr
 	-rm -rf libf

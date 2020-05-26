@@ -23,4 +23,3 @@ brelop:
 	inc	a		;set sign flag as appropriate and reset Z flag
 	pop	de
 	ret
-
