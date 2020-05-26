@@ -25,6 +25,6 @@ _sigchk()
 	if(c != CPMRBT)
 		return;
 	if(where == SIG_DFL)
-		exit();
+		exit(0);
 	(*where)(0);
 }

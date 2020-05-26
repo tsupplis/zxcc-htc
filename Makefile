@@ -107,6 +107,9 @@ symtoas.com: symtoas.obj $(LIBS) $(CRTOBJS) c.com
 c.com: ec.obj $(LIBS) $(CRTOBJS)
 	zxcc link --z --Ptext=0,data,bss --C100h --oc.com crt0.obj ec.obj libc.lib
 
+testfile.com: testfile.c $(LIBS) $(TOOLS) $(CRTOBJS)
+	zxcc c --v --r testfile.c --lc
+
 teststr.com: teststr.c $(LIBS) $(TOOLS) $(CRTOBJS)
 	zxcc c --v --r teststr.c --lc
 
@@ -140,7 +143,7 @@ testftim.com: testftim.c  $(LIBS) $(TOOLS) $(CRTOBJS)
 	zxcc c --v --r testftim.c
 
 test: testver.com testio.com testovr.com testovr1.ovr testovr2.ovr teststr.com \
- testbios.com testbdos.com testtrig.com testftim.com
+ testbios.com testbdos.com testtrig.com testftim.com testfile.com
 	zxcc testver
 	rm -f testio.sta testio.out testio.err
 	zxcc testovr
@@ -148,6 +151,7 @@ test: testver.com testio.com testovr.com testovr1.ovr testovr2.ovr teststr.com \
 	zxcc testtrig
 	zxcc testftim
 	zxcc testbdos
+	zxcc testfile
 
 dist: dist/htc.zip
 

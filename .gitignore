@@ -10,3 +10,4 @@ test*.com
 **/.*.swp
 **/*.obj
 dist
+test.dat
