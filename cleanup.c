@@ -20,9 +20,8 @@ void _cpm_clean()
 	uchar	i;
 
 	i = 0;
-	do {
+	do 
 		close(i);
-    }
 	while(++i < MAXFILE);
 }
 
