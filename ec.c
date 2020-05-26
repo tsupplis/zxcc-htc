@@ -77,7 +77,7 @@ static char *	paths[] =
 	"CRT0.OBJ",
 	"$EXEC",
 	"CREF",
-	"CRTREDIR.OBJ",
+	"RDR0.OBJ",
 };
 
 #define	linker	paths[0]
@@ -91,7 +91,7 @@ static char *	paths[] =
 #define	strtoff	paths[8]
 #define	execprg	paths[9]
 #define	cref	paths[10]
-#define	crtredir paths[11]
+#define	rdr0 paths[11]
 
 #define	RELSTRT	strtoff[plen]
 
@@ -180,7 +180,7 @@ main(int argc, char ** argv)
 				/*flgs[flg_idx++] = GETARGS;*/
 				/*flgs[flg_idx++] = CPPGET;*/
 				iuds[iud_idx++] = CPPGET;
-                objs[obj_idx++] = crtredir;
+                objs[obj_idx++] = rdr0;
 				break;
 
 			case 'V':
@@ -376,7 +376,7 @@ doit()
             if(overlay && strcmp( objs[i],strtoff)==0) {
                 continue;
             }
-            if(overlay && strcmp( objs[i],crtredir)==0) {
+            if(overlay && strcmp( objs[i],rdr0)==0) {
                 continue;
             }
 			flgs[flg_idx++] = objs[i];

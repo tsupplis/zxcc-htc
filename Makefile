@@ -49,7 +49,7 @@ FOBJS=printf.obj fprintf.obj sprintf.obj scanf.obj fscanf.obj sscanf.obj fdoprnt
  ltof.obj float.obj
 
 OVROBJS=ovrload.obj ovrbgn.obj
-CRTOBJS=crt0.obj rrt0.obj crtredir.obj
+CRTOBJS=crt0.obj rrt0.obj rdr0.obj
 ZCRTOBJS=zcrt0.obj zrrt0.obj
 TOOLSOBJS=ec.obj symtoas.obj exec.obj
 LIBS=libc.lib libovr.lib libf.lib
