@@ -30,4 +30,3 @@ mult8b:
 	ret	z
 	djnz	mult8b
 	ret
-

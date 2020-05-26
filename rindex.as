@@ -26,4 +26,3 @@ _rindex:
 
 2:	ld	hl,0
 	jp	4b
-

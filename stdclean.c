@@ -4,6 +4,7 @@ _cleanup()
 {
 	uchar	i;
 	register struct _iobuf *	ip;
+
 	i = _NFILE;
 	ip = _iob;
 	do {

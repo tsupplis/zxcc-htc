@@ -7,4 +7,3 @@ startup:
 	psect	bss
 __argc_:
 	defs	2
-
