@@ -21,7 +21,7 @@ int main(int argc, char ** argv)
     f=fopen("testio.sta","w");
     fprintf(f,"stamp\r\n");
     fclose(f);
-    i=bdoshl(CPMVERS,0);
+    i=bdos(CPMVERS,0);
     switch(i) {
     case 0x00:
         major=1;

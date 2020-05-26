@@ -13,7 +13,7 @@ int main(int argc, char ** argv)
     int* biosaddr=(int*)1;
     unsigned int tpa;
 
-    i=bdoshl(CPMVERS,0);
+    i=bdos(CPMVERS,0);
     switch(i) {
     case 0x00:
         major=1;

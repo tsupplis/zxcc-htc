@@ -15,7 +15,7 @@ struct fcb	_fcb[MAXFILE] =
 #endif
 };
 
-_cpm_clean()
+void _cpm_clean()
 {
 	uchar	i;
 
@@ -26,9 +26,7 @@ _cpm_clean()
 	while(++i < MAXFILE);
 }
 
-_putrno(where, rno)
-uchar *	where;
-long	rno;
+void _putrno(uchar * where, long rno)
 {
 	where[0] = rno & 0xFF;
 	where[1] = (rno >> 8) & 0xFF;
