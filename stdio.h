@@ -12,11 +12,12 @@
 #ifndef FILE
 #define	uchar	unsigned char
 
-extern	struct	_iobuf {
+extern	struct	_iobuf 
+{
 	char *		_ptr;
 	int		_cnt;
 	char *		_base;
-	unsigned int _flag;
+	unsigned short _flag;
 	char		_file;
 } _iob[_NFILE];
 
@@ -55,7 +56,8 @@ extern	struct	_iobuf {
 #define	getchar()	getc(stdin)
 #define	putchar(x)	putc(x,stdout)
 
-/*	getc() and putc() must be functions for CP/M to allow the special
+/*	
+ *  getc() and putc() must be functions for CP/M to allow the special
  *	handling of '\r', '\n' and '\032'. The same for MSDOS except that
  *	it at least knows the length of a file.
  */
@@ -74,7 +76,8 @@ extern	struct	_iobuf {
 #define	clrerr(p)	p->_flag &= ~_IOERR
 #define	clreof(p)	p->_flag &= ~_IOEOF
 
-#define	L_TMPNAM	34		/* max length of temporary names */
+#define	L_TMPNAM	34		        /* max length of temporary names */
+#define	L_tmpnam	(L_TMPNAME)		/* max length of temporary names */
 
 extern int	fclose(FILE *);
 extern int	fflush(FILE *);

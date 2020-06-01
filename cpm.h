@@ -121,7 +121,7 @@ extern short	bios(short fn, ...);
 #define	CPMILOG	24		/* get bit map of logged in disks */
 #define	CPMIDRV	25		/* interrogate drive number */
 #define	CPMSDMA	26		/* set DMA address for i/o */
-#define CPMSATT 30      /* set File Attribute */
+#define CPMSATT 30      /* set file attributes */
 #define CPMDPB	31		/* get disk parameter block */
 #define	CPMSUID	32		/* set/get user id */
 #define	CPMRRAN	33		/* read random record */

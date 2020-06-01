@@ -37,7 +37,7 @@ The sources of the fixes needs to be documented ... It constantly aligns with (h
 - rrtcpm.obj has been renamed rrt0.obj to win some command line space
 - rdr0.obj has been added to add expansion of wild card (-R option)
 - libovl.lib has been added for overlay support
-- stdint.h has been added
+- stdint.h/unistd.h have been added
 
 ### Z80 CP/M C compiler options:
 
