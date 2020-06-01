@@ -4,6 +4,7 @@ script_*
 *.sym
 todo
 symtoas.com
+exec.com
 test*.com
 *.ovr
 *.lib
