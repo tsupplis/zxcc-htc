@@ -50,12 +50,10 @@ char * fcbname(short i)
 			*cp++ = (*xp++) & 0x7F;
 		*cp = 0;
 		return abuf;
-#ifdef _HTC_PIPEMGR_SUPPORT
 	case U_RSX:
 		return "RSX:";
 	case U_ERR:
 		return "ERR:";
-#endif
 	default:
 		return (char *)0;
 	}

@@ -4,15 +4,9 @@
 
 struct fcb	_fcb[MAXFILE] =
 {
-#ifdef _HTC_PIPEMGR_SUPPORT
     { FILL, U_RSX },    /* stdin */
     { FILL, U_RSX },    /* stdout */
     { FILL, U_ERR },    /* stderr */
-#else
-	{ FILL, U_CON },	/* stdin */
-	{ FILL, U_CON },	/* stdout */
-	{ FILL, U_CON },	/* stderr */
-#endif
 };
 
 void _cpm_clean()

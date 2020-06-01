@@ -21,17 +21,11 @@ static char    dnames[][DNAMLEN] =
     "RDR:",
     "PUN:",
     "LST:",
-#ifdef _HTC_PIPEMGR_SUPPORT
     "RSX:",
     "ERR:"
-#endif
 };
 
-#ifdef _HTC_PIPEMGR_SUPPORT
 #define    NDNAMES    6
-#else
-#define    NDNAMES    4
-#endif
 
 extern int    atoi(char *);
 static void fc_parse(struct fcb *, char *);

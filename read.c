@@ -1,23 +1,17 @@
 #include    "cpm.h"
 
-#ifdef _HTC_PIPEMGR_SUPPORT
 extern char _piped;    /* PIPEMGR loaded? */
-#endif
 
-#define CPMEOF 0x1A         /* Control-Z */
+#define CPMEOF 0x1A    /* Control-Z */
 
-#ifdef _HTC_PIPEMGR_SUPPORT
 static char RSXPB[]={0x7C,0};
-#endif
 
 int read(uchar fd, char *buf, ushort nbytes)
 {
     register struct fcb *    fc;
     uchar    size, offs, luid;
     ushort    cnt;
-#ifdef _HTC_PIPEMGR_SUPPORT
-        ushort  pipev;
-#endif
+    ushort  pipev;
     char    buffer[SECSIZE+2];
 
     cnt = 0;
@@ -36,7 +30,6 @@ int read(uchar fd, char *buf, ushort nbytes)
         }
         return cnt - nbytes;
 
-#ifdef _HTC_PIPEMGR_SUPPORT
     case U_RSX:       /* PIPEMGR RSX : input */
         if (_piped)
         {
@@ -54,7 +47,6 @@ int read(uchar fd, char *buf, ushort nbytes)
             }
             return cnt - nbytes;
         }
-#endif
 
     case U_CON:
         if(nbytes > SECSIZE)

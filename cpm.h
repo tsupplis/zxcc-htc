@@ -67,11 +67,8 @@ extern short	bios(short fn, ...);
 #define	U_RDR	5		/* device is reader */
 #define	U_PUN	6		/* device is punch */
 #define	U_LST	7		/* list device */
-#define _HTC_PIPEMGR_SUPPORT 1
-#ifdef _HTC_PIPEMGR_SUPPORT
 #define U_RSX   8       /* PIPEMGR RSX */
 #define U_ERR   9       /* PIPEMGR stderr channel */
-#endif
 
 /*	 special character values */
 

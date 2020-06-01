@@ -1,8 +1,6 @@
 #include    "cpm.h"
 
-#ifdef _HTC_PIPEMGR_SUPPORT
 extern char _piped;    /* PIPEMGR loaded? */
-#endif
 
 write(uchar fd, char *buf, ushort nbytes)
 {
@@ -43,7 +41,6 @@ write(uchar fd, char *buf, ushort nbytes)
         }
         return count;
 
-#ifdef _HTC_PIPEMGR_SUPPORT
     case U_ERR:
          RSXPB[0]=0x7A;
     case U_RSX:
@@ -57,7 +54,6 @@ write(uchar fd, char *buf, ushort nbytes)
                 bdos(CPMWCON,RSXPB[2]);
         }
         return count;    
-#endif
     case U_WRITE:
     case U_RDWR:
         luid = getuid();
