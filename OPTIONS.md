@@ -5,7 +5,7 @@ Z80 CP/M C compiler options:
 -V	Be verbose during compilation
 -S	Generate assembler code in a .AS file; don't assemble or link
 -C	Generate object code only; don't link.
--E  Name of the executable output
+-E	Name of the executable output
 -O	Invoke the peephole optimizer
 -I	Specify an include directory, e.g. -I1:B:
 -U	Undefine a predefined symbol, e.g. -UDEBUG

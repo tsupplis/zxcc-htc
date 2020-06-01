@@ -152,7 +152,7 @@ main(int argc, char ** argv)
 	register char *	cp, * xp;
 	short		i;
 
-	fprintf(stderr, "HI-TECH C COMPILER (CP/M-80) V3.09-P004\n");
+	fprintf(stderr, "HI-TECH C COMPILER (CP/M-80) V3.09-P005\n");
 	fprintf(stderr, "Copyright (C) 1984-2017 HI-TECH SOFTWARE\n");
 #if	EDUC
 	fprintf(stderr, "Licensed for Educational purposes only\n");

@@ -34,7 +34,7 @@ bitfield.obj ctype_.obj getsp.obj index.obj strchr.obj  \
 inout.obj iregset.obj isalpha.obj isdigit.obj islower.obj  \
 isspace.obj isupper.obj ladd.obj land.obj linc.obj  \
 llrsh.obj longjmp.obj lor.obj brelop.obj wrelop.obj  \
-lrelop.obj frelop.obj lsub.obj lxor.obj malloc.obj  \
+lrelop.obj frelop.obj lsub.obj lxor.obj strdup.obj malloc.obj  \
 max.obj idiv.obj pnum.obj ldiv.obj qsort.obj  \
 swap.obj aslr.obj bmove.obj imul.obj rand.obj  \
 alrsh.obj lmul.obj rindex.obj strrchr.obj sbrk.obj  \
