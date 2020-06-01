@@ -110,6 +110,9 @@ c.com: ec.obj $(LIBS) $(CRTOBJS)
 testfile.com: testfile.c $(LIBS) $(TOOLS) $(CRTOBJS)
 	zxcc c --v --r testfile.c --lc
 
+testaes.com: testaes.c $(LIBS) $(TOOLS) $(CRTOBJS)
+	zxcc c --v --r testaes.c --lc
+
 teststr.com: teststr.c $(LIBS) $(TOOLS) $(CRTOBJS)
 	zxcc c --v --r teststr.c --lc
 
@@ -143,7 +146,7 @@ testftim.com: testftim.c  $(LIBS) $(TOOLS) $(CRTOBJS)
 	zxcc c --v --r testftim.c
 
 test: testver.com testio.com testovr.com testovr1.ovr testovr2.ovr teststr.com \
- testbios.com testbdos.com testtrig.com testftim.com testfile.com
+ testbios.com testbdos.com testtrig.com testftim.com testfile.com testaes.com
 	zxcc testver
 	rm -f testio.sta testio.out testio.err
 	zxcc testovr
@@ -152,6 +155,7 @@ test: testver.com testio.com testovr.com testovr1.ovr testovr2.ovr teststr.com \
 	zxcc testftim
 	zxcc testbdos
 	zxcc testfile
+	zxcc testaes
 
 dist: dist/htc.zip
 

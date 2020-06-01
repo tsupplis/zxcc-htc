@@ -25,4 +25,3 @@ _strncmp:
 	dec	hl
 	dec	hl
 	jp	cret
-

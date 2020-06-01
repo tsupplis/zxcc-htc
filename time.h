@@ -3,7 +3,7 @@
 
 #include <hitech.h>
 
-#ifndef	_TIME
+#ifndef	_HTC_TIME_T
 
 typedef	long	time_t;		/* for representing times in seconds */
 struct tm {
@@ -17,7 +17,7 @@ struct tm {
 	int	tm_yday;
 	int	tm_isdst;
 };
-#define	_TIME
+#define	_HTC_TIME_T
 #endif	
 
 #ifndef _STDDEF

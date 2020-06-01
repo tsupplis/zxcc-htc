@@ -29,7 +29,7 @@ int stat(register char * s, register struct stat * b)
 	if(setfcb(&fc, s))
 		return -1;		/* A device ! */
 	setuid(fc.uid);
-	if(!bdos(CPMFDAT, &fc) || bdos(CPMVERS) < 0x30) 
+	if(!bdos(CPMGFTS, &fc) || bdos(CPMVERS) < 0x30) 
     {	
         /* get size */
 		b->st_size = fc.ranrec[0] 
@@ -56,7 +56,7 @@ int stat(register char * s, register struct stat * b)
             b->st_size-=d;
         }
         /* Corrected to account for directory code return [jrs 2014-04-20] */
-        if ((bdos(CPMFDAT, &fc) & 0xFF) < 4) /* Get file date stamp */
+        if ((bdos(CPMGFTS, &fc) & 0xFF) < 4) /* Get file date stamp */
         {
 			td.days = ((int *)&fc)[24/sizeof(int)];
 			td.hoursmins = ((int *)&fc)[26/sizeof(int)];

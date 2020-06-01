@@ -24,4 +24,5 @@ exit0:	ld	d,a
 	ld	c,6ch
 	call	5		;Report error.
 	rst	0
+
     end

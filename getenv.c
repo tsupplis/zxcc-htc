@@ -54,7 +54,7 @@ char *	s;
 		{
 			for (scbpb=0x4C; scbpb<0x50; scbpb++)
 			{
-			    drive=bdos(CPMASCB,&scbpb);
+			    drive=bdos(CPMSCB,&scbpb);
                 if (drive & 0x20) 
                     break; /* End of chain */ 
                 else 
