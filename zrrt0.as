@@ -11,12 +11,12 @@
 
 	psect	cpm
 	defs	100h		;Base of CP/M's TPA
-	global	start,_main,_exit,__Lbss,__Hstack, __z3env, __piped,__piped_r
+	global	start,_main,_exit,__Lbss,__Hstack, __z3env, __piped
 
 reloc:	defb	0ebh,04h	;DOS protection... JMPS LABE
 	ex	de,hl
 	jp	begin
-;
+
 	defb	0b4h,09h	;DOS protection... MOV AH,9
 	defb	0bah
 	defw	bvmes		;DOS protection... MOV DX,OFFSET BVMES
@@ -26,10 +26,10 @@ reloc:	defb	0ebh,04h	;DOS protection... JMPS LABE
 	defb	13
 	defm	'Compiled with Hi-Tech C [Relocatable]'
 	defb	13,10,26
-;
+
 	psect	data
 z3ecst:	defm	'Z3ENV'
-bvmes:	defm	'This program requires a Z80 processor.'
+bvmes:	defm	'This program requires a CP/M on Z80.'
 	defb	13,10,'$'
 memmes:	defm	'Not enough memory to run.'
 	defb	13,10,'$'
@@ -144,8 +144,6 @@ memok:
 	ld	a,h
 	inc	l	;HL=00FFh if no PIPEMGR present.
 	or	l
-	ld	(__piped_r),a
-    ld  a,0
 	ld	(__piped),a
 	ld	hl,(6)			;base address of fdos
 
@@ -210,8 +208,6 @@ nularg:	defm	'main'
 __z3env:
 	defw	0
 __piped:
-        defw    0
-__piped_r:
         defw    0
 rsxpb:	defb	79h,1
 	defw	pipesgn

@@ -1,3 +1,5 @@
+; CSV.AS	Modified version from Tesseract vol 91
+;
 	global	csv,cret,indir, ncsv
 	psect	text
 csv:	pop	hl		;return address

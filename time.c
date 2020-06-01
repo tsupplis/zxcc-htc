@@ -15,9 +15,7 @@ struct tod
 
 extern time_t	convtime();
 
-time_t
-time(tp)
-time_t *	tp;
+time_t time(time_t *tp)
 {
 	struct tod	tod;
 	time_t		t;

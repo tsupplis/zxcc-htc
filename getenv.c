@@ -11,7 +11,8 @@ extern char *	sbrk();
 
 static char envname[]=ENVFILE;
 
-static char loadenv(char *name, char **avec, char *abuf, short *i,short avsize, short absize)
+static char loadenv(char *name, char **avec, char *abuf, short *i,
+                    short avsize, short absize)
 {
 	FILE *fp;
 	register char *cp;
@@ -23,7 +24,7 @@ static char loadenv(char *name, char **avec, char *abuf, short *i,short avsize, 
 		strcpy(cp, abuf);
 		cp[strlen(cp)-1] = 0;
 		avec[(*i)++] = cp;
-		}
+	}
 	fclose(fp);
 
 	return(1);
@@ -54,16 +55,21 @@ char *	s;
 			for (scbpb=0x4C; scbpb<0x50; scbpb++)
 			{
 			    drive=bdos(CPMASCB,&scbpb);
-                            if (drive & 0x20) break; /* End of chain */ 
-                            else 
-                            {
-			        if (!drive) drive=bdos(CPMIDRV);
+                if (drive & 0x20) 
+                    break; /* End of chain */ 
+                else 
+                {
+                    /* if default, get current drive 0..15 */
+			        if (!drive) 
+                        drive=bdos(CPMIDRV)+1; /**AGN fix*/
 			        envname[2]=drive+'@';
-			        if (loadenv(envname+2,avec,abuf,&i,av,ab)) break;
-                                if (loadenv(envname,avec,abuf,&i,av,ab)) break;
-                            }
-			}
-                        if (i==0) loadenv(envname+4,avec,abuf,&i,av,ab);
+			        if (loadenv(envname+2,avec,abuf,&i,av,ab)) 
+                        break;
+                    if (loadenv(envname,avec,abuf,&i,av,ab)) 
+                        break;
+                }
+		    }
+            if (i==0) loadenv(envname+4,avec,abuf,&i,av,ab);
 		}
 		else	/* Not CP/M 3. Search current drive & user 0 */
 		{

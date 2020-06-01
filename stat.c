@@ -18,8 +18,7 @@ struct tod
 
 extern time_t convtime();
 
-int
-stat(register char * s, register struct stat * b)
+int stat(register char * s, register struct stat * b)
 {
 	short		c,d;
 	struct fcb	fc;
@@ -30,8 +29,12 @@ stat(register char * s, register struct stat * b)
 	if(setfcb(&fc, s))
 		return -1;		/* A device ! */
 	setuid(fc.uid);
-	if(!bdose(0x23, &fc) || bdoshl(CPMVERS) < 0x30) {	/* get size */
-		b->st_size = fc.ranrec[0] + ((long)fc.ranrec[1] << 8) + ((long)fc.ranrec[2] << 16);
+	if(!bdos(CPMFDAT, &fc) || bdos(CPMVERS) < 0x30) 
+    {	
+        /* get size */
+		b->st_size = fc.ranrec[0] 
+                    + ((long)fc.ranrec[1] << 8) 
+                    + ((long)fc.ranrec[2] << 16);
 		b->st_size *= SECSIZE;
 		if(fc.ft[0] & 0x80)
 			b->st_mode = S_IREAD|S_IFREG;
@@ -44,12 +47,17 @@ stat(register char * s, register struct stat * b)
 		td.secs = 0;
 		td.days = td.hoursmins = 0;
 		bdos(CPMSDMA,buf);
-                if (d=bdose(CPMFFST,&fc) < 4) {  /* Account for CP/M3 bytewise */
-                        d=(buf[13+ (d << 5)] & 0x7F);  /* file sizes */
-                        if (d) d=0x80-d;
-                        b->st_size-=d;
-                        }
-                if(!bdose(CPMFDAT, &fc)) {
+        if ((d = bdos(CPMFFST,&fc)) < 4) 
+        {  
+            /* Account for CP/M3 bytewise */
+            d=(buf[13+ (d << 5)] & 0x7F);  /* file sizes */
+            if (d) 
+                d=0x80-d;
+            b->st_size-=d;
+        }
+        /* Corrected to account for directory code return [jrs 2014-04-20] */
+        if ((bdos(CPMFDAT, &fc) & 0xFF) < 4) /* Get file date stamp */
+        {
 			td.days = ((int *)&fc)[24/sizeof(int)];
 			td.hoursmins = ((int *)&fc)[26/sizeof(int)];
 			b->st_atime = convtime(&td);

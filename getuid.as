@@ -4,7 +4,7 @@
 
 	entry	equ	5		;CP/M system call entry
 	sguid	equ	20h		;set/get uid call value
-	arg	equ	6		;offset of 1st arg
+	arg	equ	6		    ;offset of 1st arg
 
 	psect	text
 _getuid:
@@ -26,4 +26,3 @@ _setuid:
 	call	entry
 	pop	ix
 	jp	cret
-

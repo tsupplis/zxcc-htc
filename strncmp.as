@@ -26,26 +26,3 @@ _strncmp:
 	dec	hl
 	jp	cret
 
-_strnicmp:
-	call	rcsv
-
-4:	ld	a,c
-	or	b
-	jp	z,6f
-	dec	bc
-	ld	a,(de)
-	cp	(hl)
-	jr	nz,5f
-	inc	de
-	inc	hl
-	or	a
-	jr	nz,4b
-6:
-	ld	hl,0
-	jp	cret
-
-5:	ld	hl,1
-	jp	c,cret
-	dec	hl
-	dec	hl
-	jp	cret

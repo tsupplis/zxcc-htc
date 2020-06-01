@@ -125,7 +125,7 @@ extern short	bios(short fn, ...);
 #define	CPMCFS	35		/* compute file size */
 #define CPMASCB 49      /* access control block */
 #define	CPMDSEG	51		/* set DMA segment */
-#define	CPMCRSX	60		/* call RSX */
+#define	CPMRSX	60		/* call RSX */
 #define CPMFDAT 102     /* file time date */
 #define CPMSDAT 104     /* get time date */
 #define CPMGDAT 105     /* get time date */

@@ -1,4 +1,4 @@
-#include    <cpm.h>
+#include    "cpm.h"
 
 #ifdef _HTC_PIPEMGR_SUPPORT
 extern char _piped;    /* PIPEMGR loaded? */
@@ -10,10 +10,7 @@ extern char _piped;    /* PIPEMGR loaded? */
 static char RSXPB[]={0x7C,0};
 #endif
 
-read(fd, buf, nbytes)
-uchar    fd;
-ushort    nbytes;
-char *    buf;
+int read(uchar fd, char *buf, ushort nbytes)
 {
     register struct fcb *    fc;
     uchar    size, offs, luid;
@@ -27,33 +24,38 @@ char *    buf;
     if(fd >= MAXFILE)
         return -1;
     fc = &_fcb[fd];
-    switch(fc->use) {
-
+    switch(fc->use) 
+    {
     case U_RDR:
         cnt = nbytes;
-        while(nbytes) {
-            nbytes--;
+        while(nbytes) 
+        {
+            --nbytes;
             if((*buf++ = (bdos(CPMRRDR) & 0x7f)) == '\n')
                 break;
         }
         return cnt - nbytes;
+
 #ifdef _HTC_PIPEMGR_SUPPORT
     case U_RSX:       /* PIPEMGR RSX : input */
         if (_piped)
         {
             cnt = nbytes;
-            while(nbytes) {
-                pipev = bdoshl(CPMCRSX,&RSXPB);
+            while(nbytes) 
+            {
+                pipev = bdos(CPMRSX,&RSXPB);
                 if (pipev < 0x100) 
                     break;
-                else *buf++ = (pipev & 0xFF);
-                    nbytes--; /* Only decrement if the read worked*/
-                    if ((pipev & 0xFF) == '\n') 
+                else 
+                    *buf++ = (pipev & 0xFF);
+                --nbytes; /* Only decrement if the read worked*/
+                if ((pipev & 0xFF) == '\n') 
                             break;
             }
             return cnt - nbytes;
         }
 #endif
+
     case U_CON:
         if(nbytes > SECSIZE)
             nbytes = SECSIZE;
@@ -62,12 +64,14 @@ char *    buf;
         cnt = (uchar)buffer[1];
 
                 /* [JCE] Return EOF for Ctrl-Z on a line by itself. */
-                if (cnt == 1 && buffer[2] == CPMEOF) return 0;
+                if (cnt == 1 && buffer[2] == CPMEOF) 
+                    return 0;
 
-        if(cnt < nbytes) {
+        if(cnt < nbytes) 
+        {
             bdos(CPMWCON, '\n');
             buffer[cnt+2] = '\n';
-            cnt++;
+            ++cnt;
         }
         bmove(&buffer[2], buf, cnt);
         return cnt;
@@ -78,7 +82,8 @@ char *    buf;
             nbytes = fc->fsize - fc->rwp;
         luid = getuid();
         cnt = nbytes;
-        while(nbytes) {
+        while(nbytes) 
+        {
             _sigchk();
             setuid(fc->uid);
             offs = fc->rwp%SECSIZE;
@@ -91,7 +96,7 @@ char *    buf;
 #ifdef    LARGE_MODEL
                 bdos(CPMDSEG, (int)((long)buf >> 16));    /* set DMA segment */
 #endif
-                if(bdose(CPMRRAN, fc))
+                if(bdos(CPMRRAN, fc))
                     break;
             }
             else
@@ -100,7 +105,7 @@ char *    buf;
 #ifdef    LARGE_MODEL
                 bdos(CPMDSEG, (int)((long)buffer >> 16));    /* set DMA segment */
 #endif
-                if(bdose(CPMRRAN, fc))
+                if(bdos(CPMRRAN, fc))
                     break;
                 bmove(buffer+offs, buf, size);
             }

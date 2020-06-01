@@ -18,19 +18,17 @@ char * fcbname(short i)
 
 
 	fc = &_fcb[i];
-	switch(fc->use) {
-
-	case U_RSX:
-		return "RSX:";
+	switch(fc->use) 
+    {
 	case U_CON:
 		return "CON:";
 	case U_RDR:
-		if ((bdoshl(CPMVERS)&0xFF) < 0x30)
+		if ((bdos(CPMVERS)&0xFF) < 0x30)
 			return "RDR:";
 		else	
             return "AUXIN:";
 	case U_PUN:
-		if ((bdoshl(CPMVERS)&0xFF) < 0x30)
+		if ((bdos(CPMVERS)&0xFF) < 0x30)
 			return "PUN:";
 		else	
             return "AUXOUT:";
@@ -52,7 +50,12 @@ char * fcbname(short i)
 			*cp++ = (*xp++) & 0x7F;
 		*cp = 0;
 		return abuf;
-
+#ifdef _HTC_PIPEMGR_SUPPORT
+	case U_RSX:
+		return "RSX:";
+	case U_ERR:
+		return "ERR:";
+#endif
 	default:
 		return (char *)0;
 	}
