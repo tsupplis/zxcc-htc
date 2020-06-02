@@ -53,8 +53,16 @@ FOBJS=printf.obj fprintf.obj sprintf.obj scanf.obj fscanf.obj sscanf.obj fdoprnt
  frexp.obj fabs.obj ceil.obj floor.obj finc.obj asfloat.obj frndint.obj ftol.obj \
  ltof.obj float.obj
 
+DOCS=htc.txt options.txt z80doc.txt readme.txt
+HEADERS=assert.h cpm.h exec.h hitech.h math.h setjmp.h stat.h stddef.h stdio.h \
+  string.h time.h unixio.h conio.h ctype.h float.h limits.h overlay.h signal.h \
+  stdarg.h stdint.h stdlib.h sys.h unistd.h stdio.i
+ORIGTOOLS=cgen.com cpp.com cref.com debug.com dehuff.com \
+	libr.com link.com objtohex.com optim.com p1.com \
+	zas.com
+
 OVROBJS=ovrload.obj ovrbgn.obj
-CRTOBJS=crt0.obj rrt0.obj wcr0.obj wcr0.obj
+CRTOBJS=crt0.obj rrt0.obj wcr0.obj
 ZCRTOBJS=zcrt0.obj zrrt0.obj
 TOOLSOBJS=ec.obj symtoas.obj exec.obj
 LIBS=libc.lib libovr.lib libf.lib
@@ -169,63 +177,33 @@ test: $(TESTS)
 	zxcc testuid
 	zxcc testrc || echo testrc=$$?
 
-dist: dist/htc.zip
+dist: dist/htc-bin.zip dist/htc-test.zip \
+ dist/htc-bin.lha dist/htc-test.lha
 
-dist/htc.zip: all
+dist/htc-test.zip dist/htc-test.lha: 
 	mkdir -p dist
-	rm -rf htc
-	mkdir htc
-	cp *.h htc
-	cp cgen.com htc
-	cp cpp.com htc
-	cp exec.com htc/\$exec.com
-	cp cref.com htc
-	cp debug.com htc
-	cp dehuff.com htc
-	cp libr.com htc
-	cp link.com htc
-	cp symtoas.com htc
-	cp objtohex.com htc
-	cp c.com htc
-	cp optim.com htc
-	cp p1.com htc
-	cp zas.com htc
-	cp libc.lib htc
-	cp libf.lib htc
-	cp libovr.lib htc
-	cp crt0.obj htc
-	cp rrt0.obj htc
-	cp zcrt0.obj htc
-	cp zrrt0.obj htc
-	cp wcr0.obj htc
-	cp assert.h htc
-	cp conio.h htc
-	cp cpm.h htc
-	cp ctype.h htc
-	cp exec.h htc
-	cp float.h htc
-	cp hitech.h htc
-	cp limits.h htc
-	cp math.h htc
-	cp overlay.h htc
-	cp setjmp.h htc
-	cp signal.h htc
-	cp stat.h htc
-	cp stdarg.h htc
-	cp stddef.h htc
-	cp stdint.h htc
-	cp stdio.h htc
-	cp stdio.i htc
-	cp stdlib.h htc
-	cp string.h htc
-	cp sys.h htc
-	cp unistd.h htc
-	cp time.h htc
-	cp unixio.h htc
-	cp htc.txt htc
-	cp options.txt htc
-	cp readme.txt htc
-	cp z80doc.txt htc
-	(cd htc;zip ../dist/htc.zip *.*)
-	rm -rf htc
+	rm -rf dist/test dist/htc-test.*
+	mkdir -p dist/test
+	cp test*.c dist/test
+	cp test*.sub dist/test
+	(cd dist/test;sh -c 'zip ../htc-test.zip *.*')
+	(cd dist/test;sh -c 'lha a ../htc-test.lha *.*')
+	rm -rf dist/test
+
+dist/htc-bin.zip dist/htc-bin.lha: all
+	mkdir -p dist
+	rm -rf dist/htc dist/htc-test.*
+	mkdir -p dist/htc
+	cp $(LIBS) dist/htc
+	cp $(HEADERS) dist/htc
+	cp $(ORIGTOOLS) dist/htc
+	cp exec.com dist/htc/\$exec.com
+	cp symtoas.com dist/htc
+	cp c.com dist/htc
+	cp $(CRTOBJS) dist/htc
+	#cp $(ZCRTOBJS) dist/htc
+	cp $(DOCS) dist/htc
+	(cd dist/htc;sh -c 'zip ../htc-bin.zip *.*')
+	(cd dist/htc;sh -c 'lha a ../htc-bin.lha *.*')
+	rm -rf dist/htc
 
