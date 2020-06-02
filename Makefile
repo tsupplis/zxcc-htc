@@ -4,6 +4,9 @@ AS=zxcc zas
 CC=zxcc c
 CFLAGS=--o
 ASFLAGS=--j
+TAG=$(shell ((git describe --exact-match --tags $(git log -n1 --pretty='%h') 2>/dev/null) \
+    || (git tag|tail -n 1|sed -e 's/$$/-dev/') || echo "vdev" ) |grep ^v| \
+        sed -e 's/^$$/UNKNOWN/g' -e 's/^v//g')
 
 .c.obj:	
 	$(CC) $(CFLAGS) --c $*.c
@@ -177,22 +180,22 @@ test: $(TESTS)
 	zxcc testuid
 	zxcc testrc || echo testrc=$$?
 
-dist: dist/htc-bin.zip dist/htc-test.zip \
- dist/htc-bin.lha dist/htc-test.lha
+dist: dist/htc-bin-$(TAG).zip dist/htc-test-$(TAG).zip \
+ dist/htc-bin-$(TAG).lha dist/htc-test-$(TAG).lha
 
-dist/htc-test.zip dist/htc-test.lha: 
+dist/htc-test-$(TAG).zip dist/htc-test-$(TAG).lha: 
 	mkdir -p dist
-	rm -rf dist/test dist/htc-test.*
+	rm -rf dist/test dist/htc-test*
 	mkdir -p dist/test
 	cp test*.c dist/test
 	cp test*.sub dist/test
-	(cd dist/test;sh -c 'zip ../htc-test.zip *.*')
-	(cd dist/test;sh -c 'lha a ../htc-test.lha *.*')
+	(cd dist/test;sh -c 'zip ../htc-test-$(TAG).zip *.*')
+	(cd dist/test;sh -c 'lha a ../htc-test-$(TAG).lha *.*')
 	rm -rf dist/test
 
-dist/htc-bin.zip dist/htc-bin.lha: all
+dist/htc-bin-$(TAG).zip dist/htc-bin-$(TAG).lha: all
 	mkdir -p dist
-	rm -rf dist/htc dist/htc-test.*
+	rm -rf dist/htc dist/htc-bin*
 	mkdir -p dist/htc
 	cp $(LIBS) dist/htc
 	cp $(HEADERS) dist/htc
@@ -203,7 +206,7 @@ dist/htc-bin.zip dist/htc-bin.lha: all
 	cp $(CRTOBJS) dist/htc
 	#cp $(ZCRTOBJS) dist/htc
 	cp $(DOCS) dist/htc
-	(cd dist/htc;sh -c 'zip ../htc-bin.zip *.*')
-	(cd dist/htc;sh -c 'lha a ../htc-bin.lha *.*')
+	(cd dist/htc;sh -c 'zip ../htc-bin-$(TAG).zip *.*')
+	(cd dist/htc;sh -c 'lha a ../htc-bin-$(TAG).lha *.*')
 	rm -rf dist/htc
 
