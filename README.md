@@ -2,7 +2,7 @@
 
 Extended htc (c driver + libc + libf). expected to work with zxcc. It is in the process
 of realigning with the content of https://github.com/agn453/HI-TECH-Z80-C. Differences
-and improvement will be submitted up once parity is established.
+and improvements will be submitted up once parity is established.
 
 The HI-TECH Z80 CP/M C compiler V3.09 is provided free of charge for any
 use, private or commercial, strictly as-is. No warranty or product
