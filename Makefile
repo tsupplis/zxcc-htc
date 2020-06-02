@@ -54,7 +54,7 @@ FOBJS=printf.obj fprintf.obj sprintf.obj scanf.obj fscanf.obj sscanf.obj fdoprnt
  ltof.obj float.obj
 
 OVROBJS=ovrload.obj ovrbgn.obj
-CRTOBJS=crt0.obj rrt0.obj rdr0.obj rdr0.obj
+CRTOBJS=crt0.obj rrt0.obj wcr0.obj wcr0.obj
 ZCRTOBJS=zcrt0.obj zrrt0.obj
 TOOLSOBJS=ec.obj symtoas.obj exec.obj
 LIBS=libc.lib libovr.lib libf.lib
@@ -197,7 +197,7 @@ dist/htc.zip: all
 	cp rrt0.obj htc
 	cp zcrt0.obj htc
 	cp zrrt0.obj htc
-	cp rdr0.obj htc
+	cp wcr0.obj htc
 	cp assert.h htc
 	cp conio.h htc
 	cp cpm.h htc

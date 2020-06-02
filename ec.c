@@ -77,7 +77,7 @@ static char *	paths[] =
 	"CRT0.OBJ",
 	"$EXEC",
 	"CREF",
-	"RDR0.OBJ",
+	"WCR0.OBJ",
 };
 
 #define	linker	paths[0]
@@ -101,11 +101,12 @@ static char *	temps[] =
 	"$CTMP2.$$$",
 	"$CTMP3.$$$",
 	"$CTMP4.$$$",
-	"L.OBJ",
+	"$L.OBJ",
 	"$$EXEC.$$$",
 	"CREF.TMP",
     "-Ptext=0%xh,data",
     "-Ptext=0,data,bss",
+    "-Ptext=0%xh,data,bss",
     "$CTMP5.$$$",
 };
 
@@ -118,7 +119,8 @@ static char *	temps[] =
 #define	crtmp	temps[6]
 #define osegs   temps[7]
 #define nsegs   temps[8]
-#define tmpas   temps[9]
+#define rsegs   temps[9]
+#define tmpas   temps[10]
 
 static int cbase=0x100;
 static char *	cppdef[] = { "-DCPM", "-DHI_TECH_C", "-D_HTC_C", "-Dz80" };
@@ -353,8 +355,13 @@ doit()
             segopt=xalloc(strlen(osegs)+10);
             sprintf(segopt,osegs,cbase);
         } else {
-            segopt=xalloc(strlen(nsegs)+1);
-            sprintf(segopt,nsegs);
+            if(reloc) {
+                segopt=xalloc(strlen(rsegs)+10);
+                sprintf(segopt,rsegs,cbase);
+            } else {
+                segopt=xalloc(strlen(nsegs)+1);
+                sprintf(segopt,nsegs);
+            }
         }
         flgs[flg_idx++] = segopt;
         if(!outfile) {
