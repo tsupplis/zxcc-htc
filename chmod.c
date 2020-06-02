@@ -1,4 +1,4 @@
-#include	"cpm.h"
+#include	<cpm.h>
 #include	<stat.h>
 
 chmod(name, mode)

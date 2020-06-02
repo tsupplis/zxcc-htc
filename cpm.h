@@ -50,18 +50,16 @@ extern struct	fcb
 extern short	bdos(int, ...);
 #define bdoshl	   bdos
 #define bdose	   bdos
-
 extern struct fcb *	getfcb(void);
 extern char * fcbname(short i);
-
 extern short	getuid(void);
 extern short	setuid(short);
 extern uchar	setfcb(struct fcb *, char *);
-extern char *   (*_passwd)(struct FCB *);
+extern char *   (*_passwd)(struct fcb *);
 extern short	bios(short fn, ...);
 #define bios3 bios
 
-/*	 flag values in fcb.use */
+/*   flag values in fcb use */
 
 #define	U_READ	1		/* file open for reading */
 #define	U_WRITE	2		/* file open for writing */
@@ -78,6 +76,7 @@ extern short	bios(short fn, ...);
 #define	CPMETX	032		/* ctrl-Z, CP/M end of file for text */
 #define	CPMRBT	003		/* ctrl-C, reboot CPM */
 
+/*	operating systems	*/
 
 #define	MPM	    0x100		/* bit to test for MP/M */
 #define	CCPM	0x400		/* bit to test for CCP/M */
@@ -105,8 +104,6 @@ extern short	bios(short fn, ...);
 #define	CPMRCOB	10		/* read console buffered */
 #define	CPMICON	11		/* interrogate console ready */
 #define	CPMVERS	12		/* return version number */
-
-
 #define	CPMRDS	13		/* reset disk system */
 #define	CPMLGIN	14		/* log in and select disk */
 #define	CPMOPN	15		/* open file */
@@ -127,17 +124,18 @@ extern short	bios(short fn, ...);
 #define	CPMRRAN	33		/* read random record */
 #define	CPMWRAN	34		/* write random record */
 #define	CPMCFS	35		/* compute file size */
-#define CPMERRM  45		/* CP/M+ set error mode */
-#define CPMSCB  49      /* access system control block */
+#define CPMERRM 45		/* CP/M+ set error mode */
+#define CPMSCB  49      /* access CP/M+ system control block */
 #define	CPMDSEG	51		/* set DMA segment */
 #define	CPMRSX	60		/* call RSX */
 #define CPMTRNC  99		/* truncate file */
-#define CPMDLD  101		/* Get directory label data */
-#define CPMGFTS 102     /* file time date */
-#define CPMSDAT 104     /* get time date */
-#define CPMGDAT 105     /* get time date */
+#define CPMDLD  101		/* get directory label data */
+#define CPMGFTS 102     /* get file timestamp and password mode */
+#define CPMSDAT 104     /* set date and time */
+#define CPMGDAT 105     /* get date and time */
 #define CPMRCOD 108     /* get/set return code */
 #define CPMCMOD 109     /* get/set console mode */
+
 
 /* CP/M BIOS functions.  Numbers above 16 pertain to CP/M 3 only.  */
 

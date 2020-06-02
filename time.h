@@ -1,7 +1,7 @@
 #ifndef _HTC_TIME_H
 #define _HTC_TIME_H
 
-#include <hitech.h>
+/* time.h for HI-TECH C Z80 v3.09-4*/
 
 #ifndef	_HTC_TIME_T
 
@@ -18,7 +18,7 @@ struct tm {
 	int	tm_isdst;
 };
 #define	_HTC_TIME_T
-#endif	
+#endif	_HTC_TIME_T
 
 #ifndef _STDDEF
 typedef int	ptrdiff_t;	/* result type of pointer difference */
