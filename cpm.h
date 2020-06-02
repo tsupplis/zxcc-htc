@@ -55,7 +55,7 @@ extern struct fcb *	getfcb(void);
 extern char * fcbname(short i);
 
 extern short	getuid(void);
-extern void		setuid(short);
+extern short	setuid(short);
 extern uchar	setfcb(struct fcb *, char *);
 extern char *   (*_passwd)(struct FCB *);
 extern short	bios(short fn, ...);

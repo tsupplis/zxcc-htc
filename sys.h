@@ -25,7 +25,7 @@ extern int	spawnv(char *, char **);
 extern int	spawnle(char *, char *, char *, char *, ...);
 extern int	spawnve(char *, char **, char *);
 extern short getuid(void);
-extern void	setuid(short);
+extern short setuid(short);
 extern int	chdir(char *);
 extern int	mkdir(char *);
 extern int	rmdir(char *);

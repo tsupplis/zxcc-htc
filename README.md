@@ -192,6 +192,21 @@ Support for read/write files
     Remember to fflush() or fseek() between a read and a write.
     This code is experimental.
 
+CP/M 3 compatible error system
+
+    exit(0) and _exit(0) set the CP/M 3 error code to 0.
+    exit(n) and _exit(n) for non-zero n set the error code to 0xFF00 | (n&0x7F).
+
+    The practical upshot is that exit(0) translates as "OK"; other values 
+    translate as "error". You can use this in conjunction with CP/M 3's
+    SUBMIT features.  If the next command in a .SUB file is preceded by
+    a : character, it will be ignored:
+
+        CPROG 
+        :OTHER
+
+    will only execute OTHER if CPROG exited with the value 0.
+
 PIPEMGR support (CP/M 3)
 
     Programs automatically check for PIPEMGR when they load, and if it
@@ -227,6 +242,13 @@ PIPEMGR support (CP/M 3)
     Remember that when PIPEMGR has parsed the command line, you may have a 
     number of blank (zero-length) arguments.
     
+Graceful exits
+
+    Compiled programs exit gracefully if run on an 8080 or 8086 processor,
+    or if there is not enough memory for the program and its static data.
+    This is done in the CRTCPM.OBJ module.
+
+
 Checks for a ZCPR3 environment
 
     The variable
@@ -248,5 +270,114 @@ Extended getenv()
 
 ```
 
+```
+STRING.H
+    The header file has been changed to reflect the available
+    functions in LIBC.LIB.  There are still missing routines -
+    namely strcoll() strcspn() strpbrk() and strspn() and these
+    have been commented out for now.
+
+strchr() and strrchr()
+        char *strchr(char *s, int c)
+        char *strrchr(char *s, int c)
+    These functions - as well as index() and rindex() (which are identical)
+    previously returned a NULL for no match.  The functions now return
+    a pointer to the character string's ending NUL character.
+
+stricmp() and strnicmp()
+        char stricmp(char *s1, char *s2)
+        char strnicmp(char *s1, char *s2, size_t n)
+    Case-insensitive versions of strcmp() and strncmp() comparison routines.
+    Can also be referenced as strcasecmp() and strncasecmp().
+
+strstr(), strnstr(), stristr() and strnistr()
+        char *strstr(char *t, char *s)
+        char *strnstr(char *t, char *s, unsigned int n)
+        char *strcasestr(char *t, char *s)
+        char *strncasestr(char *t, char *s, unsigned int n)
+    These extra functions locate the first occurrence of string s in
+    string t.  The functions strnstr() and strcasestr() read at most
+    n characters from the string t.  The functions strcasestr() and
+    strncasestr() use case insensitive comparisons.
+    All these functions return a pointer to the first character of
+    the first occurence of string s in string t if found, and NULL
+    otherwise.
+
+strdup()
+        char *strdup(char *s)
+    Allocates a new buffer for and copies the string pointed to
+    by s to it.  Returns a pointer to the copy of the string or NULL
+    if the memory allocation failed. The memory block can be released
+    using free().
+
+strtok()
+        char *strtok(char *s, char *tok, size_t toklen, char *brk)
+    Copies characters from s to tok until it encounters one of the
+    characters in brk or until toklen-1 characters have been copied
+    (whichever comes first).  It then adds a NUL character to the
+    end of the string.  This is a non-conforming POSIX function.
+
+TIME.H
+    Now includes a prototype for strftime() - see below.
+
+strftime()
+        size_t strftime(char *s, size_t maxs, char *f, struct tm *t)
+    Converts a time value t to a string using the format string f
+    into the string s of size maxs (including a terminating NUL).
+    It acts as a sprintf() function for date/time values. The
+    following are valid in the format string -
+
+             %A      full weekday name (Monday)
+             %a      abbreviated weekday name (Mon)
+             %B      full month name (January)
+             %b      abbreviated month name (Jan)
+             %c      standard date and time representation
+             %d      day-of-month (01-31)
+             %H      hour (24 hour clock) (00-23)
+             %I      hour (12 hour clock) (01-12)
+             %j      day-of-year (001-366)
+             %M      minute (00-59)
+             %m      month (01-12)
+             %p      local equivalent of AM or PM
+             %S      second (00-59)
+             %U      week-of-year, first day sunday (00-53)
+             %W      week-of-year, first day monday (00-53)
+             %w      weekday (0-6, sunday is 0)
+             %X      standard time representation
+             %x      standard date representation
+             %Y      year with century
+             %y      year without century (00-99)
+             %Z      timezone name
+             %%      percent sign
+
+    the standard date string is equivalent to:
+
+        %a %b %d %Y
+
+    the standard time string is equivalent to:
+
+        %H:%M:%S
+
+    the standard date and time string is equivalent to:
+
+        %a %b %d %H:%M:%S %Y
+
+    strftime() returns the number of characters placed in the
+    buffer, not including the terminating NUL, or zero if more
+    than maxs characters were produced.
+```
+
+
+The getenv() function was not correctly looking up the location of
+the environment file under CP/M 3 for the "default" entry in the drive
+search chain.  It will now locate the ENVIRON file if you have set-up
+the default search chain with a default entry. For example
+
+```
+; Set search chain to current drive, RAMdisk, C: then A:
+setdef * m: c: a:
+```
+
+in your CP/M 3 PROFILE.SUB file (or manually entered on the command line).
 
 

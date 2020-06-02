@@ -1,17 +1,13 @@
-EXITSTS	equ	80h		;where to store exit status [CP/M 2]
-
 	global	__exit, __cpm_clean
 
 	psect	text
-__exit:
+__exit:	ld	(80h),hl
 	call	__cpm_clean
-	pop	hl		;return address
 	ld	c,0ch
 	call	5		;Get version
 	cp	30h	      
-	pop	hl		;exit status
-	ld	(EXITSTS),hl
 	jp	c,0		;Warm boot CP/M if < CP/M 3
+	ld	hl,(80h)
 	ld	a,l		;For compatibility with conditionals system,
 				;use 7-bit CP/M 3 error codes.
 	and	7fh
@@ -24,5 +20,3 @@ exit0:	ld	d,a
 	ld	c,6ch
 	call	5		;Report error.
 	rst	0
-
-    end

@@ -11,6 +11,10 @@ ASFLAGS=--j
 .as.obj: 
 	$(AS) $(ASFLAGS) $*.as
 
+TESTS=testver.com testio.com testovr.com testovr1.ovr testovr2.ovr teststr.com \
+ testbios.com testbdos.com testtrig.com testftim.com testfile.com testaes.com \
+ testuid.com testrc.com
+
 COBJS=getargs.obj assert.obj printf.obj fprintf.obj sprintf.obj  \
 doprnt.obj gets.obj puts.obj fwrite.obj getw.obj  \
 strtok.obj strdup.obj strstr.obj stristr.obj strnstr.obj strnistr.obj \
@@ -137,6 +141,12 @@ testovr1.ovr: testovr2.obj testovrx.sym
 testbdos.com: testbdos.c  $(LIBS) $(TOOLS) $(CRTOBJS)
 	zxcc c --v --r testbdos.c
 
+testrc.com: testrc.c  $(LIBS) $(TOOLS) $(CRTOBJS)
+	zxcc c --v --r testrc.c
+
+testuid.com: testuid.c  $(LIBS) $(TOOLS) $(CRTOBJS)
+	zxcc c --v --r testuid.c
+
 testbios.com: testbios.c  $(LIBS) $(TOOLS) $(CRTOBJS)
 	zxcc c --v --r testbios.c
 
@@ -146,8 +156,7 @@ testtrig.com: testtrig.c  $(LIBS) $(TOOLS) $(CRTOBJS)
 testftim.com: testftim.c  $(LIBS) $(TOOLS) $(CRTOBJS)
 	zxcc c --v --r testftim.c
 
-test: testver.com testio.com testovr.com testovr1.ovr testovr2.ovr teststr.com \
- testbios.com testbdos.com testtrig.com testftim.com testfile.com testaes.com
+test: $(TESTS)
 	zxcc testver
 	rm -f testio.sta testio.out testio.err
 	zxcc testovr
@@ -157,6 +166,8 @@ test: testver.com testio.com testovr.com testovr1.ovr testovr2.ovr teststr.com \
 	zxcc testbdos
 	zxcc testfile
 	zxcc testaes
+	zxcc testuid
+	zxcc testrc || echo testrc=$$?
 
 dist: dist/htc.zip
 
