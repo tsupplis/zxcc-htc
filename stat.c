@@ -29,7 +29,7 @@ int stat(register char * s, register struct stat * b)
 	if(setfcb(&fc, s))
 		return -1;		/* A device ! */
 	setuid(fc.uid);
-	if(!bdos(CPMGFTS, &fc) || bdos(CPMVERS) < 0x30) 
+	if(!bdos(CPMCFS, &fc) || bdos(CPMVERS) < 0x30) 
     {	
         /* get size */
 		b->st_size = fc.ranrec[0] 
