@@ -14,9 +14,8 @@ macro tolower
 10: 
 endm
 
-global _strnicmp, _strncasecmp, rcsv, cret
+global _strncasecmp, rcsv, cret
 
-_strnicmp:
 _strncasecmp:
  call rcsv ; hl=s1, de=s2, bc=n
  ld b,c ; keep low part of n in reg b,  reg c is used as scratch

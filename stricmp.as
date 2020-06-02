@@ -14,9 +14,7 @@ macro tolower
 10: 
 endm
 
-global _stricmp, _strcasecmp
-
-_stricmp:
+global _strcasecmp
 _strcasecmp:
 
 pop bc
