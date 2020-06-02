@@ -335,7 +335,7 @@
    Verbose,  and  had  it  not been given the compilation would
    have been silent except for the sign on message.  Error mes-
    sages can be redirected to a file by using the standard out-
-   put redirection notation, e.g. > _s_o_m_e_f_i_l_e.
+   put redirection notation, e.g. > somefile.
 
         After completion of compilation, the compiler will exit
    to  command  level.   You will notice that several temporary
@@ -580,9 +580,9 @@
        -CR  Produce a cross reference listing. -CR on its own  will
             leave  the  raw  cross-reference  information in a tem-
             porary file, allowing the user to run CREF  explicitly,
-            while  supplying  a  file  name,  e.g. -CR_F_R_E_D._C_R_F will
+            while  supplying  a  file  name,  e.g. -CRFRED.CRF will
             cause CREF to be invoked to process the raw information
-            into the specified file, in this case _F_R_E_D._C_R_F.
+            into the specified file, in this case FRED.CRF.
 
        -CPM
             For the Z80 cross compiler only,  produce  CP/M-80  COM
@@ -603,19 +603,19 @@
    -O   Invoke  the  optimizer  on  all  compiled  code;   also
         requests the assembler to perform jump optimization.
 
-   -O_O_U_T_F_I_L_E
+   -OOUTFILE
         Specify a name for the executable file to  be  created.
         By  default the name for the executable file is derived
         from the name of the first source or object file speci-
         fied to the compiler. This option allows the default to
         be overridden. If no dot ('.')  appears  in  the  given
         file  name, an extension appropriate for the particular
-        operating system will be added, e.g. -O_F_R_E_D  will  gen-
-        erate a file _F_R_E_D._E_X_E on MS-DOS or _F_R_E_D._C_M_D on CP/M-86.
+        operating system will be added, e.g. -OFRED  will  gen-
+        erate a file FRED.EXE on MS-DOS or FRED.CMD on CP/M-86.
         For cross compilers this  also  provides  a  means  for
         specifying the output format, e.g. specifying an output
-        file _P_R_O_G._B_I_N will make the compiler generate a  binary
-        file, while specifying _P_R_O_G._H_E_X will make it generate a
+        file PROG.BIN will make the compiler generate a  binary
+        file, while specifying PROG.HEX will make it generate a
         hexadecimal file.
 
    -V   Verbose: each step of the compilation will be echoed as
@@ -671,11 +671,11 @@
             For cross compilers this provides a way  of  specifying
             to  the  linker the addresses that the compiled program
             is to be  linked  at.  The  format  of  the  option  is
-            -A_R_O_M_A_D_R,_R_A_M_A_D_R,_R_A_M_S_I_Z_E.  _R_O_M_A_D_R  is the address of the
+            -AROMADR,RAMADR,RAMSIZE.  ROMADR  is the address of the
             ROM in the system, and is where the executable code and
-            initialized  data  will  be placed. _R_A_M_A_D_R is the start
+            initialized  data  will  be placed. RAMADR is the start
             address of RAM, and is where  the  bss  psect  will  be
-            placed,  i.e.  uninitialized data.  _R_A_M_S_I_Z_E is the size
+            placed,  i.e.  uninitialized data.  RAMSIZE is the size
             of RAM available to the program, and is used to set the
             top of the stack.
 
@@ -689,13 +689,13 @@
             0 and start their direct page RAM at address $80.
 
             For the large memory model of the 8051 compiler, the -A
-            option  takes  the form -A_R_O_M_A_D_R,_I_N_T_R_A_M,_E_X_T_R_A_M,_E_X_T_S_I_Z_E.
-            _R_O_M_A_D_R is the address of ROM in the system.  _I_N_T_R_A_M  is
+            option  takes  the form -AROMADR,INTRAM,EXTRAM,EXTSIZE.
+            ROMADR is the address of ROM in the system.  INTRAM  is
             the  start  address  of  internal RAM, and is where the
             rbss psect will be placed.   The  8051  internal  stack
-            will  start after the end of the rbss psect.  _E_X_T_R_A_M is
+            will  start after the end of the rbss psect.  EXTRAM is
             the start address of external RAM, and is where the bss
-            psect  will be placed.  _E_X_T_S_I_Z_E is the size of external
+            psect  will be placed.  EXTSIZE is the size of external
             RAM available to the program, and is used  to  set  the
             top of the external stack.
 
@@ -711,10 +711,10 @@
             select  which  one  of  the three memory models (Small,
             Medium or Large) is to be used.  For the 8051  compiler
             only,  this  option  can  also be used to select static
-            allocation of _a_u_t_o variables by appending an A  to  the
+            allocation of auto variables by appending an A  to  the
             end  of  the -B option.  For example, -Bsa would select
             small model with static allocation  of  all  variables,
-            while -Bm would select medium model with _a_u_t_o variables
+            while -Bm would select medium model with auto variables
             dynamically allocated on the stack.
 
 
@@ -748,8 +748,8 @@
    -H   This option  generates  a  symbol  file  for  use  with
         debuggers.  The  format of the symbol file is described
         elsewhere. The default  name  of  the  symbol  file  is
-        _l._s_y_m.  An  alternate  name  may  be  specfied with the
-        option, e.g. -H_s_y_m_f_i_l_e._a_b_c.
+        l.sym.  An  alternate  name  may  be  specfied with the
+        option, e.g. -Hsymfile.abc.
 
    -G   Like -H, -G also generates a symbol file, but one  that
         contains  line and file number information for a source
@@ -833,7 +833,7 @@
        this file or invoke the linker.  The next  example  compiles
        both  prog.c  and  prog2.c,  invoking  the optimizer on both
        files, but does not perform any linking. A  cross  reference
-       listing will be left in the file _p_r_o_g._c_r_f.
+       listing will be left in the file prog.crf.
 
             The last example pertains to the 8086  version  of  the
        compiler,  It runs the compiler with the verbose option, and
@@ -1239,9 +1239,9 @@
 
 
             The first prototype is an external declaration  of  the
-       function  _f_r_e_d(),  which  accepts  one integer argument, one
+       function  fred(),  which  accepts  one integer argument, one
        long argument, and one argument which is a pointer to  char.
-       Any  usage  of  _f_r_e_d() while the prototype declaration is in
+       Any  usage  of  fred() while the prototype declaration is in
        scope will cause the actual parameters  to  be  checked  for
        number  and  type  against  the  prototype, e.g. if only two
        arguments were supplied or an integral  value  was  supplied
@@ -1255,7 +1255,7 @@
 
    Page 18                              HI-TECH C USER'S MANUAL
 
-        In the second example, the function _b_i_l_l() expects  two
+        In the second example, the function bill() expects  two
    or more arguments. The first and second will be converted to
    int and short respectively, while the remainder (if present)
    may  be  of any type. The ellipsis symbol (...) indicates to
@@ -1275,7 +1275,7 @@
         Access to unspecified arguments  (i.e.  arguments  sup-
    plied where an ellipsis appeared in a prototype) must be via
    the macros defined  in  the  header  file  <stdarg.h>.  This
-   defines the macros _v_a__s_t_a_r_t, _v_a__a_r_g and _v_a__e_n_d. See _v_a__s_t_a_r_t
+   defines the macros va_start, va_arg and va_end. See va_start
    in the library function listing for more information.
 
         NOTE that is is a grave error to use a  function  which
@@ -1292,20 +1292,20 @@
 
    5.10. Void and Pointer to Void
 
-        The _v_o_i_d type may be used to indicate to  the  compiler
+        The void type may be used to indicate to  the  compiler
    that  a  function  does not return a value. Any usage of the
    return value from a void function  will  be  flagged  as  an
    error.
 
-        The type _v_o_i_d *, i.e. pointer to void, may be used as a
+        The type void *, i.e. pointer to void, may be used as a
    "universal"  pointer type. This is intended to assist in the
    writing of general purpose storage allocators and the  like,
    where a pointer is returned which may be assigned to another
    variable of some other pointer type.  The  compiler  permits
    without  typecasting  and  without  reporting  an  error the
-   conversion of _v_o_i_d * to any  other  pointer  type  and  vice
+   conversion of void * to any  other  pointer  type  and  vice
    versa.  The programmer is advised to use this facility care-
-   fully and ensure that any  _v_o_i_d  *  value  is  usable  as  a
+   fully and ensure that any  void  *  value  is  usable  as  a
    pointer  to  any  other type, e.g. the alignment of any such
    pointer should be suitable for storage of any object.
 
@@ -1323,8 +1323,8 @@
 
        5.11. Type qualifiers
 
-            The ANSI C standard  introduced  the  concept  of  _t_y_p_e
-       _q_u_a_l_i_f_i_e_r_s to C; these are keywords that qualify the type to
+            The ANSI C standard  introduced  the  concept  of  type
+       qualifiers to C; these are keywords that qualify the type to
        which they are applied.  The type qualifiers defined by ANSI
        C are const and volatile.  HI-TECH C also implements several
        other type qualifiers.  The extra qualifiers include:
@@ -1355,14 +1355,14 @@
 
             Where a qualifier appears in this context,  it  applies
        to  the  basic  type  of  the declaration. Where a qualifier
-       appears to the right of  one  or  more  '*'  (_s_t_a_r)  pointer
+       appears to the right of  one  or  more  '*'  (star)  pointer
        modifiers,  then  you should read the declaration from right
        to left, e.g.
 
             char * far fred;
 
        should be read as "fred is a  far  pointer  to  char".  This
-       means  that  fred is qualified by _f_a_r, not the char to which
+       means  that  fred is qualified by far, not the char to which
        it points. On the other hand,
 
             char far * bill;
@@ -1395,8 +1395,8 @@
    #endasm  preprocessor  directives.   Any lines between these
    two directives will be copied straight through to the assem-
    bler  file  produced  by the compiler. Alternatively you can
-   use the asm("_s_t_r_i_n_g"); construct anywhere a C  statement  is
-   expected. The _s_t_r_i_n_g will be copied through to the assembler
+   use the asm("string"); construct anywhere a C  statement  is
+   expected. The string will be copied through to the assembler
    file. Care should be  taken  with  using  in-line  assembler
    since it may interact with compiler generated code.
 
@@ -1405,26 +1405,26 @@
         The draft  ANSI  C  standard  provides  for  a  #pragma
    preprocessor  directive that allows compiler implementations
    to control  various  aspects  of  the  compilation  process.
-   Currently  HI-TECH  C  only  supports  one  pragma, the _p_a_c_k
+   Currently  HI-TECH  C  only  supports  one  pragma, the pack
    directive. This allows control  over  the  manner  in  which
    members  are  allocated inside a structure. By default, some
    of the compilers (especially the 8086 and  68000  compilers)
    will  align structure members onto even boundaries to optim-
    ize machine accesses. It is sometimes  desired  to  override
    this  to achieve a particular layout inside a structure. The
-   _p_a_c_k pragma allows specification of a maximum  packing  fac-
+   pack pragma allows specification of a maximum  packing  fac-
    tor.  For  example,  #pragma pack1(1) will instruct the com-
    piler that no additional padding be inserted between  struc-
    ture  members,  i.e.  that  all members should be aligned on
    boundaries divisible by 1. Similarly  #pragma  pack(2)  will
    allow  alignment  on  boundaries  divisible by 2. In no case
-   will use of the _p_a_c_k pragma force a greater  alignment  than
+   will use of the pack pragma force a greater  alignment  than
    would have been used for that data type anyway.
 
-        More that one _p_a_c_k pragma may be used in a program. Any
-   use  will  remain  in force until changed by another _p_a_c_k or
-   until the end of the file. Do not use a _p_a_c_k  pragma  before
-   include files such as <_s_t_d_i_o._h> as this will cause incorrect
+        More that one pack pragma may be used in a program. Any
+   use  will  remain  in force until changed by another pack or
+   until the end of the file. Do not use a pack  pragma  before
+   include files such as <stdio.h> as this will cause incorrect
    declarations of run-time library data structures.
 
 
@@ -1489,7 +1489,7 @@
        significantly between machines. There is no easy approach to
        this  problem  other  than  to avoid code which depends on a
        particular ordering. In particular you should avoid  writing
-       out  whole  structures  to  a file (via _f_w_r_i_t_e()) unless the
+       out  whole  structures  to  a file (via fwrite()) unless the
        file is only to be read by the same  program  then  deleted.
        Different compilers use different amounts of padding between
        structure members, though  this  can  be  modified  via  the
@@ -1521,7 +1521,7 @@
 
 
            ___________________________________________
-          |_M_a_c_r_o_______________D_e_f_i_n_e_d__f_o_r_____________|
+          |_M_a_c_r_o_______________D_e_f_i_n_e_d__f_o_r____________|
           | i8051    8051 processor family           |
           | i8086    8086 processor family           |
           | i8096    8096 processor family           |
@@ -1532,7 +1532,7 @@
           | DOS      MS-DOS and PC-DOS               |
           | CPM      CP/M-80 and CP/M-86             |
           | TOS      Atari ST                        |
-          |___________________________________________|
+          |__________________________________________|
 
 
                     Table 2. Predefined Macros
@@ -1764,8 +1764,8 @@
        get  systems  without  operating  systems, are supplied with
        libraries implementing a subset of the STDIO functions.  Not
        provided  are  those  functions dealing with files. Included
-       are _p_r_i_n_t_f(), _s_c_a_n_f() etc. These operate by calling two  low
-       level  functions  _p_u_t_c_h and _g_e_t_c_h() which typically send and
+       are printf(), scanf() etc. These operate by calling two  low
+       level  functions  putch and getch() which typically send and
        receive characters via a serial port. Where the compiler  is
        aimed  at  a  single-chip  micro  with on-board UART this is
        used.  The source code for all these functions  is  supplied
@@ -1858,8 +1858,8 @@
        featureless sequence of bytes,  originating  from  or  being
        sent  to  a  device or file or even some other indeterminate
        source. A FILE pointer should not be confused with the 'file
-       descriptors'  used  with the low-level I/O functions _o_p_e_n(),
-       _c_l_o_s_e(), _r_e_a_d() and _w_r_i_t_e(). These form an independent group
+       descriptors'  used  with the low-level I/O functions open(),
+       close(), read() and write(). These form an independent group
        of  I/O  functions which perform unbuffered reads and writes
        to files.
 
@@ -2159,16 +2159,16 @@
 
             Each memory model  defines  three  address  spaces
             each  for code and data.  These address spaces are
-            known as the _n_e_a_r, _f_a_r  and  _d_e_f_a_u_l_t  spaces.  Any
+            known as the near, far  and  default  spaces.  Any
             object  qualified  by  the  near  keyword  will be
-            placed in the _n_e_a_r address space, any object qual-
+            placed in the near address space, any object qual-
             ified  by  the  far keyword shall be placed in the
-            _f_a_r address space, and all other objects shall  be
-            placed  in  the  _d_e_f_a_u_l_t  address  space. The _n_e_a_r
+            far address space, and all other objects shall  be
+            placed  in  the  default  address  space. The near
             address space shall be a (possibly improper)  sub-
-            space  of  the  _d_e_f_a_u_l_t  address  space, while the
-            _d_e_f_a_u_l_t  address  space  shall  be   a   (possibly
-            improper) subspace of the _f_a_r address space. There
+            space  of  the  default  address  space, while the
+            default  address  space  shall  be   a   (possibly
+            improper) subspace of the far address space. There
             shall be up to three kinds of pointers correspond-
             ing  to  the three address spaces, each capable of
 
@@ -2183,17 +2183,17 @@
         subspace of that address space.
 
         This implies that the address of an object may be  con-
-   verted to a pointer into a larger address space, e.g. a _n_e_a_r
-   object may have its address converted to a pointer  to  _f_a_r,
-   but  a  _f_a_r  object  may  not  be  able to be addressed by a
-   pointer to _n_e_a_r.
+   verted to a pointer into a larger address space, e.g. a near
+   object may have its address converted to a pointer  to  far,
+   but  a  far  object  may  not  be  able to be addressed by a
+   pointer to near.
 
-        In practice the  _d_e_f_a_u_l_t  address  space  will  usually
-   correspond exactly to either the _n_e_a_r or _f_a_r address spaces.
+        In practice the  default  address  space  will  usually
+   correspond exactly to either the near or far address spaces.
    If all three address spaces correspond to  the  same  memory
    then  there  is  only one memory model possible. This occurs
-   with the 68000 processor. Where the _d_e_f_a_u_l_t  code  and  data
-   spaces may each correspond to either the _n_e_a_r or _f_a_r address
+   with the 68000 processor. Where the default  code  and  data
+   spaces may each correspond to either the near or far address
    spaces then there will be a total  of  four  memory  models.
    This is the case with the 8086 processor.
 
@@ -2443,8 +2443,8 @@
 
    Page 36                              HI-TECH C USER'S MANUAL
 
-   -O_f_i_l_e
-        Place the object code in _f_i_l_e.  The default object file
+   -Ofile
+        Place the object code in file.  The default object file
         name  is  constructed from the name of the first source
         file. Any suffix or file type (i.e. anything  following
         the  rightmost  dot  ('.') in the name is stripped, and
@@ -2461,18 +2461,18 @@
 
         will place the object code in x.obj.
 
-   -L_l_i_s_t
-        Place an assembly listing in the file _l_i_s_t, or on stan-
-        dard  output if _l_i_s_t is null A listfile may be produced
+   -Llist
+        Place an assembly listing in the file list, or on stan-
+        dard  output if list is null A listfile may be produced
         with the -L option. If a file name is supplied  to  the
         option,  the  list file will be created with that name,
         otherwise the listing will be written to standard  out-
         put  (i.e.  the  console). List file names such as CON:
         and LST: are acceptable.
 
-   -W_w_i_d_t_h
+   -Wwidth
         The listing is to be formatted for a printer  of  given
-        _w_i_d_t_h  The  -W  option specifies the width to which the
+        width  The  -W  option specifies the width to which the
         listing is to be formatted. E.g.
 
              ZAS -Llst: -W80 x.as
@@ -2481,8 +2481,8 @@
         printer to the list device.
 
    -C   This options requests ZAS to  produce  cross  reference
-        information  in a file. The file will be called _x_x_x.crf
-        where _x_x_x is the base part of  the  first  source  file
+        information  in a file. The file will be called xxx.crf
+        where xxx is the base part of  the  first  source  file
         name. It will then be necessary to run the CREF utility
         to turn this information into a formatted listing.
 
@@ -3263,7 +3263,7 @@
        | di  |            |  Use after ld a,i for  test-|
        | ei  |            |  ing   state   of  interrupt|
        |     |            |  enable flag  -  enabled  or|
-       ||______||_____________||__d_i_s_a_b_l_e_d__r_e_s_p_e_c_t_i_v_e_l_y_._______||
+       ||_____||____________||__d_i_s_a_b_l_e_d__r_e_s_p_e_c_t_i_v_e_l_y_.______||
 
 
    12.4. Assembler Directives
@@ -4727,7 +4727,7 @@
    of the same name are treated as distinct.  In order to allow
    collective referencing of local psects  via  the  -P  option
    (described  later) a local psect may have a class name asso-
-   ciated with it. This is achieved witht the _C_L_A_S_S flag on the
+   ciated with it. This is achieved witht the CLASS flag on the
    .psect directive.
 
    13.2. Global Symbols
@@ -4870,9 +4870,9 @@
    piler, and have the form of one of a set of alphabetic char-
    acters followed by a digit string.
 
-        The default output file name is _l._o_b_j,  or  _l._b_i_n  when
-   the -C option is used.  This may be overridden by the -O_n_a_m_e
-   option.  The  output  file  will  be  called  _n_a_m_e  in  this
+        The default output file name is l.obj,  or  l.bin  when
+   the -C option is used.  This may be overridden by the -Oname
+   option.  The  output  file  will  be  called  name  in  this
    instance.  Note  that no suffix is appended to the name; the
    file will be called exactly the argument to the option.
 
@@ -4941,8 +4941,8 @@
 
             If it is desired to use the  debugger  on  the  program
        being  linked,  it  is  useful to produce a symbol file. The
-       -D_f_i_l_e option will write such a symbol file onto  the  named
-       _f_i_l_e, or _l._s_y_m if no file is given. The symbol file consists
+       -Dfile option will write such a symbol file onto  the  named
+       file, or l.sym if no file is given. The symbol file consists
 
 
 
@@ -5301,7 +5301,7 @@
 
             The options are:
 
-       -B_a_d_d_r
+       -Baddr
             Produce a binary image output. This is similar  to  the
             -C  option  of  the  linker.   If addr is supplied, the
             start of the image file will be offset by addr. If addr
@@ -5323,7 +5323,7 @@
             The  checksum  specification  is described below. Typi-
             cally the specification will be in a file.
 
-       -E_s_t_a_c_k
+       -Estack
             This option produces an MS-DOS .EXE  format  file.  The
             optional  stack  argument  will  determine  the maximum
             stack size the program will be allocated on  execution.
@@ -5334,7 +5334,7 @@
             of  memory a program will use. The stack argument takes
             the same form as the argument to -B above.
 
-       -8_s_t_a_c_k
+       -8stack
             This option will produce a CP/M-86 .CMD file. The stack
             argument is the same as for the -E option.
 
@@ -5347,7 +5347,7 @@
 
    Page 80                              HI-TECH C USER'S MANUAL
 
-   -A_s_t_a_c_k
+   -Astack
         This is used when producing a.out format files for unix
         systems  (specifically Venix-86). If the stack argument
         is zero, the size of the data segment will be 64k, oth-
@@ -5372,16 +5372,16 @@
         option is followed by a symbol name, then  the  reloca-
         tion   information   will  be  stored  at  the  address
         represented by that symbol in  the  output  file,  e.g.
-        -L___B_b_s_s  will cause it to be stored at the base of the
-        bss psect (___B_b_s_s is defined by the linker  to  be  the
+        -L__Bbss  will cause it to be stored at the base of the
+        bss psect (__Bbss is defined by the linker  to  be  the
         load  address  of the bss psect). If the special symbol
-        _D_o_s__h_d_r is used then the relocation information will be
+        Dos_hdr is used then the relocation information will be
         stored  in the .EXE file header.  This is only valid in
         conjunction with the -E option.
 
    -S   The -S option instructs  objtohex  to  write  a  symbol
         file.  The symbol file name is given after the -S, e.g.
-        -S_x_x._s_y_m.
+        -Sxx.sym.
 
         Unless  another  format  is   specifically   requested,
    objtohex  will  produce  a file in Intel hex format. This is
@@ -5560,38 +5560,38 @@
 
             CREF options files
 
-       where _o_p_t_i_o_n_s is zero or more options as described below and
-       _f_i_l_e_s  is one or more raw cross-reference files.  CREF takes
+       where options is zero or more options as described below and
+       files  is one or more raw cross-reference files.  CREF takes
        the following options:
 
-       -O_o_u_t_f_i_l_e
+       -Ooutfile
             Allows  specification  of  the  output  file  name.  By
             default  the  listing  will  be written to the standard
             output and may  be  redirected  in  the  usual  manner.
             Alternatively  using  the -O option an output file name
-            may be specified, e.g. -O_x_x_x._l_s_t.
+            may be specified, e.g. -Oxxx.lst.
 
-       -P_w_i_d_t_h
+       -Pwidth
             This option allows the specification of  the  width  to
-            which  the  listing is to be formatted, e.g. -P_1_3_2 will
+            which  the  listing is to be formatted, e.g. -P132 will
             format the  listing  for  a  132  column  printer.  The
             default is 80 columns.
 
-       -L_l_e_n_g_t_h
+       -Llength
             Specify the length of the paper on which the listing is
             to  be  produced, e.g.  if the listing is to be printed
-            on 55 line paper you  would  use  a  -L_5_5  option.  The
+            on 55 line paper you  would  use  a  -L55  option.  The
             default is 66 lines.
 
-       -X_p_r_e_f_i_x
+       -Xprefix
             The -X option allows the exclusion of symbols from  the
             listing, based on a prefix given as argument to -X. For
             example if it was desired to exclude all symbols start-
-            ing  with  the  character  sequence _x_y_z then the option
-            -X_x_y_z would be used. If a digit appears in the  charac-
+            ing  with  the  character  sequence xyz then the option
+            -Xxyz would be used. If a digit appears in the  charac-
             ter sequence then this will match any digit in the sym-
             bol, e.g. -XX0 would exclude any symbols starting  with
-            the letter _X followed by a digit.
+            the letter X followed by a digit.
 
        -F   -F will exclude from the listing  any  references  from
             files  with  a  full  path name. A full path name means
@@ -5611,13 +5611,13 @@
 
    Page 84                              HI-TECH C USER'S MANUAL
 
-   -H_s_t_r_i_n_g
+   -Hstring
         The -H option takes a string as an argument which  will
         be used as a header in the listing. The default heading
         is the name of the first raw cross-ref information file
         specified.
 
-   -S_s_t_o_p_l_i_s_t
+   -Sstoplist
         The -S option should have as its argument the name of a
         file  containing  a list of symbols not to be listed in
         the cross-reference. Multiple stoplists may be supplied
@@ -5626,7 +5626,7 @@
         Cref will accept wild card filenames and  I/O  redirec-
    tion.  Long  command  lines may be supplied by invoking CREF
    with no arguments and typing the command line in response to
-   the _c_r_e_f> prompt. A backslash at the end of the line will be
+   the cref> prompt. A backslash at the end of the line will be
    interpreted to mean that more command lines follow.
 
 
@@ -6621,20 +6621,20 @@
        be necessary for an extern declaration of the function to be
        included in any source module using it, to ensure  that  the
        type  of the function is correct.  For example, if the func-
-       tion _l_s_e_e_k() was to be used, a declaration of the form
+       tion lseek() was to be used, a declaration of the form
 
             extern long  lseek();
 
        should be in either the source file  itself  or  an  include
        file included in the source file. This ensures that the com-
-       piler knows that _l_s_e_e_k() returns a long value  and  not  the
+       piler knows that lseek() returns a long value  and  not  the
        default int.
 
             Where reference is made to STDIO, this means the  group
        of functions under the heading STANDARD I/O below. These all
        have one thing in common; they  operate  on  pointers  to  a
        defined  data  type  called  FILE.  Such  a pointer is often
-       referred to as a _s_t_r_e_a_m pointer. The concept of a stream  is
+       referred to as a stream pointer. The concept of a stream  is
        central  to these routines. Essentially a stream is a source
        or sink of data bytes. To the operating system  and  library
        routines  this  stream is featureless, i.e. no record struc-
@@ -6897,8 +6897,8 @@
             functions cos, sin and tan. Acos and asin are undefined
             for arguments whose absolute value is greater than 1.0.
             The  returned  value  is  in radians, and always in the
-            range -pi/2 to +pi/2, except for _c_o_s(), which returns a
-            value  in  the  range  0  to  pi.   _A_t_a_n_2() returns the
+            range -pi/2 to +pi/2, except for cos(), which returns a
+            value  in  the  range  0  to  pi.   Atan2() returns the
             inverse tan of x/y but uses the signs of its  arguments
             to return a value in the range -pi to +pi.
 
@@ -6940,11 +6940,11 @@
 
 
    DESCRIPTION
-        The _a_t_e_x_i_t() function registers the function pointed to
+        The atexit() function registers the function pointed to
         by  func, to be called without arguments at normal pro-
-        gram termination.  _A_t_e_i_x_t() returns zero if the  regis-
+        gram termination.  Ateixt() returns zero if the  regis-
         tration succeeds, nonzero if it fails.  On program ter-
-        mination, all  functions  registered  by  _a_t_e_x_i_t()  are
+        mination, all  functions  registered  by  atexit()  are
         called, in the reverse order of their registration.
 
    SEE ALSO
@@ -6964,7 +6964,7 @@
 
 
    DESCRIPTION
-        _A_s_c_t_i_m_e() takes the broken down time pointed to by  its
+        Asctime() takes the broken down time pointed to by  its
         argument,  and returns a 26 character string describing
         the current date and time in the format
 
@@ -7010,7 +7010,7 @@
             method  of  usage  is  to  place  assertions  liberally
             throughout your code at points where correct  operation
             of  the code depends upon certain conditions being true
-            initially. An _a_s_s_e_r_t() may be used  to  ensure  at  run
+            initially. An assert() may be used  to  ensure  at  run
             time  that that assumption holds. For example, the fol-
             lowing statement asserts that the pointer  tp  is  non-
             null:
@@ -7045,7 +7045,7 @@
             These routines convert a decimal number in the argument
             string  s  into a double float, integer or long integer
             respectively. Leading blanks are skipped over.  In  the
-            case  of  _a_t_o_f(), the number may be in scientific nota-
+            case  of  atof(), the number may be in scientific nota-
             tion.
 
 
@@ -7074,10 +7074,10 @@
 
 
    DESCRIPTION
-        _B_d_o_s() calls the CP/M BDOS with func in register C  (CL
+        Bdos() calls the CP/M BDOS with func in register C  (CL
         for  CP/M-86)  and  arg in register DE (DX). The return
         value is the byte returned by the BDOS  in  register  A
-        (AX).   _B_d_o_s_h_l()  is  the  same, except that the return
+        (AX).   Bdoshl()  is  the  same, except that the return
         value is the value returned by the BDOS  in  HL.   Con-
         stant  values  for the various BDOS function values are
         defined in cpm.h.
@@ -7138,7 +7138,7 @@
 
 
        DESCRIPTION
-            _C_a_l_l_o_c() attempts  to  obtain  a  contiguous  block  of
+            Calloc() attempts  to  obtain  a  contiguous  block  of
             dynamic  memory  which  will  hold cnt objects, each of
             length size.  The  block  is  filled  with  zeroes.   A
             pointer  to  the  block is returned, or 0 if the memory
@@ -7163,11 +7163,11 @@
 
 
        DESCRIPTION
-            _C_p_u_t_s() will read one line of input  from  the  console
+            Cputs() will read one line of input  from  the  console
             into  the  buffer  passed as an argument. It does so by
-            repeated calls to _g_e_t_c_h_e().  _C_p_u_t_s() writes  its  argu-
+            repeated calls to getche().  Cputs() writes  its  argu-
             ment string to the console, outputting carriage returns
-            before each newline in the  string.  It  calls  _p_u_t_c_h()
+            before each newline in the  string.  It  calls  putch()
             repeatedly.
 
        SEE ALSO
@@ -7233,12 +7233,12 @@
         This function changes the file attributes (or modes) of
         the  named  file.   The  argument name may be any valid
         file name. The  mode  argument  may  include  all  bits
-        defined  in _s_t_a_t._h except those relating to the type of
+        defined  in stat.h except those relating to the type of
         the file, e.g. S_IFDIR. Note however that not all  bits
         may  be  changed under all operating systems, e.g. nei-
         ther DOS nor CP/M permit a file to be made  unreadable,
         thus  even  if  mode  does not include S_IREAD the file
-        will still be readable (and _s_t_a_t()  will  still  return
+        will still be readable (and stat()  will  still  return
         S_IREAD in flags).
 
    SEE ALSO
@@ -7272,7 +7272,7 @@
        DESCRIPTION
             This routine closes the file associated with  the  file
             descriptor fd, which will have been previously obtained
-            from a call to _o_p_e_n(). _C_l_o_s_e() returns 0 for a success-
+            from a call to open(). Close() returns 0 for a success-
             ful close, or -1 otherwise.
 
        SEE ALSO
@@ -7409,11 +7409,11 @@
             This number is a valuable token which must be  used  to
             write  to or close the file subsequently.  Mode is used
             to initialize the attributes of the created file.   The
-            allowable  bits  are  the  same as for _c_h_m_o_d(), but for
+            allowable  bits  are  the  same as for chmod(), but for
             Unix compatibility it is recommended  that  a  mode  of
             0666  or 0600 be used. Under CP/M the mode is ignored -
             the only way to set  a  files  attributes  is  via  the
-            _c_h_m_o_d() function.
+            chmod() function.
 
        SEE ALSO
 
@@ -7432,7 +7432,7 @@
 
 
        DESCRIPTION
-            _C_t_i_m_e() converts the time in seconds pointed to by  its
+            Ctime() converts the time in seconds pointed to by  its
             argument  to a string of the same form as described for
             asctime.  Thus the following program prints the current
             time and date:
@@ -7477,10 +7477,10 @@
 
 
    DESCRIPTION
-        The _d_i_v() function computes the quotient and  remainder
-        of  the  divison of numer by denom.  The _d_i_v() function
+        The div() function computes the quotient and  remainder
+        of  the  divison of numer by denom.  The div() function
         returns a structure of type div_t, containing both  the
-        quotient  and  remainder.   _l_d_i_v()  is similar to _d_i_v()
+        quotient  and  remainder.   ldiv()  is similar to div()
         except it takes arguments of type long  and  returns  a
         structure  of  type ldiv_t.  The types div_t and ldiv_t
         are defined in <stdlib.h> as follows:
@@ -7533,7 +7533,7 @@
 
 
        DESCRIPTION
-            _E_i() and _d_i() enable  and  disable  interrupts  respec-
+            Ei() and di() enable  and  disable  interrupts  respec-
             tivly.
 
 
@@ -7548,7 +7548,7 @@
 
 
        DESCRIPTION
-            Given a file descriptor, such as  returned  by  _o_p_e_n(),
+            Given a file descriptor, such as  returned  by  open(),
             this  routine will return another file descriptor which
             will refer to the same open file.  -1  is  returned  if
             the  fd  argument is a bad descriptor or does not refer
@@ -7601,10 +7601,10 @@
 
 
    DESCRIPTION
-        _E_x_e_c_l() and _e_x_e_c_v() load and execute the program speci-
-        fied  by  the  string name. _E_x_e_c_l() takes the arguments
+        Execl() and execv() load and execute the program speci-
+        fied  by  the  string name. Execl() takes the arguments
         for the program from the zero-terminated list of string
-        arguments.  _E_x_e_c_v()  is passed a pointer to an array of
+        arguments.  Execv()  is passed a pointer to an array of
         strings.  The array must  be  zero-terminated.  If  the
         named  program  is found and can be read, the call does
         not return. Thus any return from these routines may  be
@@ -7667,7 +7667,7 @@
        DESCRIPTION
             This function will cause an  immediate  exit  from  the
             program,  without  the normal flushing of stdio buffers
-            that is performed by _e_x_i_t().
+            that is performed by exit().
 
        SEE ALSO
 
@@ -7689,9 +7689,9 @@
 
 
        DESCRIPTION
-            _E_x_p() returns the exponential function of its argument,
-            _l_o_g() the natural logarithm of f, and _l_o_g_1_0() the loga-
-            rithm to base 10. _P_o_w() returns the value of  x  raised
+            Exp() returns the exponential function of its argument,
+            log() the natural logarithm of f, and log10() the loga-
+            rithm to base 10. Pow() returns the value of  x  raised
             to the y'th power.
 
 
@@ -7752,7 +7752,7 @@
    DESCRIPTION
         This routine closes the specified  i/o  stream.  Stream
         should  be  a  token  returned  by  a  previous call to
-        _f_o_p_e_n().  NULL is returned on a successful  close,  EOF
+        fopen().  NULL is returned on a successful  close,  EOF
         otherwise.
 
    SEE ALSO
@@ -7803,7 +7803,7 @@
             respectively  for  the  specified  stream. Each will be
             true if the corresponding flag is set. The  macros  are
             defined  in stdio.h. Stream must be a token returned by
-            a previous _f_o_p_e_n() call.
+            a previous fopen() call.
 
        SEE ALSO
 
@@ -7822,7 +7822,7 @@
 
 
        DESCRIPTION
-            _F_f_l_u_s_h() will output to the disk file or  other  device
+            Fflush() will output to the disk file or  other  device
             currently  open on the specified stream the contents of
             the associated  buffer.  This  is  typically  used  for
             flushing buffered standard output in interactive appli-
@@ -7864,13 +7864,13 @@
 
 
    DESCRIPTION
-        _F_g_e_t_c() returns  the  next  character  from  the  input
+        Fgetc() returns  the  next  character  from  the  input
         stream.   If  end-of-file  is  encountered  EOF will be
         returned instead. It is for this reason that the  func-
         tion is declared as int. The integer EOF is not a valid
         byte, thus end-of-file is distinguishable from  reading
-        a  byte  of  all  1 bits from the file.  _F_g_e_t_c() is the
-        non-macro version of _g_e_t_c().
+        a  byte  of  all  1 bits from the file.  Fgetc() is the
+        non-macro version of getc().
 
    SEE ALSO
 
@@ -7889,12 +7889,12 @@
 
 
    DESCRIPTION
-        _F_g_e_t_s() places in the buffer s  up  to  n-1  characters
+        Fgets() places in the buffer s  up  to  n-1  characters
         from  the  input  stream.  If  a newline is seen in the
         input before the correct number of characters is  read,
-        then  _f_g_e_t_s() will return immediately. The newline will
+        then  fgets() will return immediately. The newline will
         be left in the buffer. The buffer  will  be  null  ter-
-        minated  in any case.  A successful _f_g_e_t_s() will return
+        minated  in any case.  A successful fgets() will return
         its first argument; NULL is returned on end-of-file  or
         error.
 
@@ -7928,7 +7928,7 @@
 
 
        DESCRIPTION
-            _F_i_l_e_n_o() is a macro from stdio.h which yields the  file
+            Fileno() is a macro from stdio.h which yields the  file
             descriptor  associated  with  stream. It is mainly used
             when it is desired to perform some low-level  operation
             on a file opened as a stdio stream.
@@ -7953,7 +7953,7 @@
 
 
        DESCRIPTION
-            _F_o_p_e_n() attempts to open file for  reading  or  writing
+            Fopen() attempts to open file for  reading  or  writing
             (or  both)  according to the mode string supplied.  The
             mode string is interpreted as follows:
 
@@ -7973,7 +7973,7 @@
        a    The file is created if it does not already  exist,  and
             opened  for  writing.   All  writes will be dynamically
             forced to the end of file, thus this mode is  known  as
-            _a_p_p_e_n_d mode.
+            append mode.
 
        a+   The file is created if it does not already  exist,  and
             opened  for reading and writing. All writes to the file
@@ -7988,7 +7988,7 @@
    Page 120                             HI-TECH C USER'S MANUAL
 
         will take place at the end of the  file  and  will  not
-        overwrite  any  existing  data.   Calling _f_s_e_e_k() in an
+        overwrite  any  existing  data.   Calling fseek() in an
         attempt to write at any other place in  the  file  will
         not be effective.
 
@@ -8015,7 +8015,7 @@
         Opening a file in binary mode will allow each character
         to  be read just as written, but because the exact size
         of a file is not known to CP/M, the  file  may  contain
-        more  bytes  than were written to it.  See _o_p_e_n() for a
+        more  bytes  than were written to it.  See open() for a
         description of what constitutes a file name.
 
         When using one of the  read/write  modes  (with  a  '+'
@@ -8025,13 +8025,13 @@
    any given time a stream opened with a "+" mode  will  be  in
    either  an  input  or  output  state.  The state may only be
    changed when the associated buffer is empty, which  is  only
-   guaranteed  immediately  after  a call to _f_f_l_u_s_h() or one of
-   the file positioning  functions  _f_s_e_e_k()  or  _r_e_w_i_n_d().  The
+   guaranteed  immediately  after  a call to fflush() or one of
+   the file positioning  functions  fseek()  or  rewind().  The
    buffer will also be empty after encountering EOF while read-
    ing a binary stream, but it is recommended that an  explicit
-   call  to  _f_f_l_u_s_h()  be  used  to ensure this situation. Thus
-   after reading from a stream  you  should  call  _f_f_l_u_s_h()  or
-   _f_s_e_e_k()  before attempting to write on that stream, and vice
+   call  to  fflush()  be  used  to ensure this situation. Thus
+   after reading from a stream  you  should  call  fflush()  or
+   fseek()  before attempting to write on that stream, and vice
    versa.
 
    SEE ALSO
@@ -8063,11 +8063,11 @@
 
 
        DESCRIPTION
-            _F_p_r_i_n_t_f() performs formatted printing on the  specified
-            stream. Refer to _p_r_i_n_t_f() for the details of the avail-
-            able formats.  _V_f_p_r_i_n_t_f() is similar to  _f_p_r_i_n_t_f()  but
+            Fprintf() performs formatted printing on the  specified
+            stream. Refer to printf() for the details of the avail-
+            able formats.  Vfprintf() is similar to  fprintf()  but
             takes  a  variable  argument list pointer rather than a
-            list of arguments. See the  description  of  _v_a__s_t_a_r_t()
+            list of arguments. See the  description  of  va_start()
             for more information on variable argument lists.
 
        SEE ALSO
@@ -8088,7 +8088,7 @@
 
        DESCRIPTION
             The character c is written to the supplied stream. This
-            is  the  non-macro  version of _p_u_t_c(). The character is
+            is  the  non-macro  version of putc(). The character is
             returned  if  it  was  successfully  written,  EOF   is
             returned  otherwise.  Note that "written to the stream"
             may mean only placing the character in the buffer asso-
@@ -8129,7 +8129,7 @@
 
    DESCRIPTION
         The null-terminated string s is written to the  stream.
-        No  newline is appended (cf. _p_u_t_s() ). The error return
+        No  newline is appended (cf. puts() ). The error return
         is EOF.
 
    SEE ALSO
@@ -8155,8 +8155,8 @@
         number of objects read. If none  is  read,  0  will  be
         returned.   Note that a return value less than cnt, but
         greater  than  0,  may  not  represent  an  error  (cf.
-        _f_w_r_i_t_e() ).  No word alignment in the stream is assumed
-        or necessary. The read is done via successive _g_e_t_c()'s.
+        fwrite() ).  No word alignment in the stream is assumed
+        or necessary. The read is done via successive getc()'s.
 
    SEE ALSO
 
@@ -8194,9 +8194,9 @@
 
 
        DESCRIPTION
-            _F_r_e_e() deallocates the block of memory  at  ptr,  which
-            must have been obtained from a call to _m_a_l_l_o_c() or _c_a_l_-
-            _l_o_c().
+            Free() deallocates the block of memory  at  ptr,  which
+            must have been obtained from a call to malloc() or cal-
+            loc().
 
        SEE ALSO
 
@@ -8215,11 +8215,11 @@
 
 
        DESCRIPTION
-            _F_r_e_o_p_e_n() closes the given stream (if  open)  then  re-
+            Freopen() closes the given stream (if  open)  then  re-
             opens  the  stream  attached  to  the file described by
             name. The mode of opening is given by mode.  It  either
             returns  the stream argument, if successful, or NULL if
-            not. See _f_o_p_e_n() for more information.
+            not. See fopen() for more information.
 
        SEE ALSO
 
@@ -8262,13 +8262,13 @@
 
 
    DESCRIPTION
-        _F_r_e_x_p() breaks a floating point number into  a  normal-
+        Frexp() breaks a floating point number into  a  normal-
         ized  fraction  and an integral power of 2. The integer
         is stored into the int object pointed  to  by  p.   Its
         return  value  x is in the interval [0.5, 1.0) or zero,
         and f equals x times 2 raised to the  power  stored  in
         *p.   If  f is zero, both parts of the result are zero.
-        _L_d_e_x_p() performs the reverse operation; the  integer  i
+        Ldexp() performs the reverse operation; the  integer  i
         is  added  to  the exponent of the floating point f and
         the resultant value returned.
 
@@ -8285,11 +8285,11 @@
 
    DESCRIPTION
         This routine performs formatted input from  the  speci-
-        fied  stream. See _s_c_a_n_f() for a full description of the
-        behaviour of the  routine.   _V_f_s_c_a_n_f()  is  similar  to
-        _f_s_c_a_n_f()  but  takes  a  variable argument list pointer
+        fied  stream. See scanf() for a full description of the
+        behaviour of the  routine.   Vfscanf()  is  similar  to
+        fscanf()  but  takes  a  variable argument list pointer
         rather than a list of arguments. See the description of
-        _v_a__s_t_a_r_t()  for  more  information on variable argument
+        va_start()  for  more  information on variable argument
         lists.
 
    SEE ALSO
@@ -8326,16 +8326,16 @@
 
 
        DESCRIPTION
-            _F_s_e_e_k() positions the "file pointer" (i.e. a pointer to
+            Fseek() positions the "file pointer" (i.e. a pointer to
             the next character to be read or written) of the speci-
             fied stream as follows:
 
                          _____________________________
-                        |_w_h__|____r_e_s_u_l_t_a_n_t__l_o_c_a_t_i_o_n____|
+                        |_w_h_|____r_e_s_u_l_t_a_n_t__l_o_c_a_t_i_o_n___|
                         | 0 |  offs                  |
                         | 1 |  offs+previous location|
                         | 2 |  offs+length of file   |
-                        |____|_________________________|
+                        |___|________________________|
 
 
             It should be noted that offs is a  signed  value.  Thus
@@ -8347,7 +8347,7 @@
             legal, but will result  in  an  EOF  indication  if  an
             attempt  is  made  to  read  data there. It is quite in
             order to write data beyond the previous  end  of  file.
-            _F_s_e_e_k() correctly accounts for any buffered data.
+            Fseek() correctly accounts for any buffered data.
 
        SEE ALSO
 
@@ -8420,7 +8420,7 @@
         memory  at  buf, to the specified stream. The number of
         whole objects written will be returned, or  0  if  none
         could  be  written.  Any  return value not equal to cnt
-        should be treated as an error (cf. _f_r_e_a_d() ).
+        should be treated as an error (cf. fread() ).
 
    SEE ALSO
 
@@ -8550,7 +8550,7 @@
    DESCRIPTION
         One character is read from  the  specified  stream  and
         returned. EOF will be returned on end-of-file or error.
-        This is the macro version of _f_g_e_t_c(), and is defined in
+        This is the macro version of fgetc(), and is defined in
         stdio.h.
 
 
@@ -8592,12 +8592,12 @@
 
 
        DESCRIPTION
-            _G_e_t_c_h() reads a single character from the console  key-
-            board  and  returns  it  without  echoing.  _G_e_t_c_h_e() is
-            similar but does echo the character  typed.   _U_n_g_e_t_c_h()
+            Getch() reads a single character from the console  key-
+            board  and  returns  it  without  echoing.  Getche() is
+            similar but does echo the character  typed.   Ungetch()
             will push back one character such that the next call to
-            _g_e_t_c_h()  or  _g_e_t_c_h_e()  will  return   that   character.
-            _P_u_t_c_h()  outputs the character c to the console screen,
+            getch()  or  getche()  will  return   that   character.
+            Putch()  outputs the character c to the console screen,
             prepending a carriage return if the character is a new-
             line.
 
@@ -8618,12 +8618,12 @@
 
 
        DESCRIPTION
-            _G_e_t_c_h_a_r() is a _g_e_t_c(_s_t_d_i_n) operation.  It  is  a  macro
+            Getchar() is a getc(stdin) operation.  It  is  a  macro
             defined   in  stdio.h.  Note  that  under  normal  cir-
             cumstances getchar() will NOT return unless a  carriage
             return  has  been typed on the console. To get a single
             character immediately from the console, use the routine
-            _g_e_t_c_h().
+            getch().
 
        SEE ALSO
 
@@ -8656,12 +8656,12 @@
 
 
    DESCRIPTION
-        _G_e_t_c_w_d() returns the path name of the  current  working
+        Getcwd() returns the path name of the  current  working
         directory  on  the  specified  drive,  where drive == 0
         represents the current drive, drive == 1 represents A:,
         drive  ==  2  represents B: etc.  The return value is a
         pointer to a  static  area  of  memory  which  will  be
-        overwritten on the next call to _g_e_t_c_w_d().
+        overwritten on the next call to getcwd().
 
    SEE ALSO
 
@@ -8681,20 +8681,20 @@
 
 
    DESCRIPTION
-        _G_e_t_e_n_v() will search the vector of environment  strings
+        Getenv() will search the vector of environment  strings
         for  one matching the argument supplied, and return the
         value part of that environment string. For example,  if
         the environment contains the string
 
              COMSPEC=A:\COMMAND.COM
 
-        then _g_e_t_e_n_v("_C_O_M_S_P_E_C") will return A:\COMMAND.COM.  The
+        then getenv("COMSPEC") will return A:\COMMAND.COM.  The
         global  variable  environ  is  a pointer to an array of
         pointers to environment strings, terminated by  a  null
         pointer.  This  array  is  initialized  at startup time
         under MS-DOS from the environment pointer supplied when
         the  program was executed.  Under CP/M no such environ-
-        ment is supplied, so the first call  to  _g_e_t_e_n_v()  will
+        ment is supplied, so the first call  to  getenv()  will
         attempt  to  open  a file in the current user number on
         the current drive called ENVIRON. This file should con-
         tain  definitions for any environment variables desired
@@ -8728,8 +8728,8 @@
 
 
        DESCRIPTION
-            _G_e_t_s() reads a line from standard input into the buffer
-            at  s,  deleting the newline (cf. _f_g_e_t_s() ). The buffer
+            Gets() reads a line from standard input into the buffer
+            at  s,  deleting the newline (cf. fgets() ). The buffer
             is null terminated. It returns its argument, or NULL on
             end-of-file.
 
@@ -8750,7 +8750,7 @@
 
 
        DESCRIPTION
-            _G_e_t_u_i_d() returns the current user number.  On CP/M, the
+            Getuid() returns the current user number.  On CP/M, the
             current  user number determines the user number associ-
             ated with an opened or created file, unless  overridden
             by an explicit user number prefix in the file name.
@@ -8788,15 +8788,15 @@
 
 
    DESCRIPTION
-        _G_e_t_w() returns one word (16 bits for the Z80 and  8086)
+        Getw() returns one word (16 bits for the Z80 and  8086)
         from  the  nominated stream. EOF is returned on end-of-
         file, but since this is  a  perfectly  good  word,  the
-        _f_e_o_f()  macro  should  be  used for testing for end-of-
+        feof()  macro  should  be  used for testing for end-of-
         file.  When reading the word, no special  alignment  in
         the  file is necessary, as the read is done by two con-
-        secutive _g_e_t_c()'s.  The byte ordering is however  unde-
+        secutive getc()'s.  The byte ordering is however  unde-
         fined.  The word read should in general have been writ-
-        ten by _p_u_t_w().
+        ten by putw().
 
    SEE ALSO
 
@@ -8819,13 +8819,13 @@
         These functions convert the time pointed to by t  which
         is  in  seconds  since  00:00:00 on Jan 1, 1970, into a
         broken down time stored in a structure  as  defined  in
-        _t_i_m_e._h.  _G_m_t_i_m_e() performs a straight conversion, while
-        _l_o_c_a_l_t_i_m_e() takes into account the contents of the glo-
+        time.h.  Gmtime() performs a straight conversion, while
+        localtime() takes into account the contents of the glo-
         bal  integer time_zone.  This should contain the number
         of minutes that the local  time  zone  is  WESTWARD  of
         Greenwich.  Since there is no way under MS-DOS of actu-
-        ally pre-determining this value, by default _l_o_c_a_l_t_i_m_e()
-        will return the same result as _g_m_t_i_m_e().
+        ally pre-determining this value, by default localtime()
+        will return the same result as gmtime().
 
    SEE ALSO
 
@@ -8855,8 +8855,8 @@
 
        DESCRIPTION
             These routines read and write bytes  to  and  from  I/O
-            ports.   _I_n_p()  returns  the  data  byte  read from the
-            specified port, and _o_u_t_p() outputs the data byte to the
+            ports.   Inp()  returns  the  data  byte  read from the
+            specified port, and outp() outputs the data byte to the
             specified port.
 
 
@@ -8878,15 +8878,15 @@
 
        DESCRIPTION
             These functions allow calling  of  software  interrupts
-            from  C  programs.   _I_n_t_8_6()  and  _i_n_t_8_6_x() execute the
-            software interrupt specified by  _i_n_t_n_o  while  _i_n_t_d_o_s()
-            and  _i_n_t_d_o_s_x()  execute interrupt 21(hex), which is the
+            from  C  programs.   Int86()  and  int86x() execute the
+            software interrupt specified by  intno  while  intdos()
+            and  intdosx()  execute interrupt 21(hex), which is the
             MS-DOS  system  call  interrupt.   The  inregs  pointer
             should  point  to a union containing values for each of
             the general purpose registers to be set when  executing
             the  interrupt,  and  the  values  of  the registers on
             return are copied into the union pointed to by outregs.
-            The  _x  versions  of the calls also take a pointer to a
+            The  x  versions  of the calls also take a pointer to a
             union defining the segment register values to be set on
             execution  of  the interrupt, though only ES and DS are
             actually set from this structure.
@@ -8934,7 +8934,7 @@
         These macros, defined in  ctype.h,  test  the  supplied
         character  for membership in one of several overlapping
         groups of characters. Note that all except isascii  are
-        defined for _c iff _i_s_a_s_c_i_i(_c) is true.
+        defined for c iff isascii(c) is true.
 
              isalnum(c)      c is alphanumeric
              isalpha(c)      c is in A-Z or a-z
@@ -8990,7 +8990,7 @@
             returns true if the file is attached to a tty-like dev-
             ice. This would normally be used for testing  if  stan-
             dard  input  is  coming from a file or the console. For
-            testing STDIO streams, use _i_s_a_t_t_y(_f_i_l_e_n_o(_s_t_r_e_a_m)).
+            testing STDIO streams, use isatty(fileno(stream)).
 
 
 
@@ -9006,7 +9006,7 @@
        DESCRIPTION
             This function returns 1 if a character has been pressed
             on  the  console  keyboard,  0  otherwise. Normally the
-            character would then be read via _g_e_t_c_h().
+            character would then be read via getch().
 
        SEE ALSO
 
@@ -9052,20 +9052,20 @@
 
 
    DESCRIPTION
-        _L_o_n_g_j_m_p(), in conjunction  with  _s_e_t_j_m_p(),  provides  a
+        Longjmp(), in conjunction  with  setjmp(),  provides  a
         mechanism  for  non-local  gotos. To use this facility,
-        _s_e_t_j_m_p() should be called with a  jmp_buf  argument  in
-        some  outer level function. The call from _s_e_t_j_m_p() will
+        setjmp() should be called with a  jmp_buf  argument  in
+        some  outer level function. The call from setjmp() will
         return  0.  To  return  to  this  level  of  execution,
-        _l_o_n_j_m_p()  may  be called with the same jmp_buf argument
+        lonjmp()  may  be called with the same jmp_buf argument
         from an inner level of execution. Note however that the
-        function  which  called  _s_e_t_j_m_p()  must still be active
-        when _l_o_n_g_j_m_p() is called.  Breach  of  this  rule  will
+        function  which  called  setjmp()  must still be active
+        when longjmp() is called.  Breach  of  this  rule  will
         cause  disaster,  due  to the use of a stack containing
-        invalid data. The val argument to _l_o_n_g_j_m_p() will be the
-        value  apparently  returned  from  the  _s_e_t_j_m_p().  This
+        invalid data. The val argument to longjmp() will be the
+        value  apparently  returned  from  the  setjmp().  This
         should normally be non-zero, to distinguish it from the
-        genuine _s_e_t_j_m_p() call. For example:
+        genuine setjmp() call. For example:
 
         #include <setjmp.h>
 
@@ -9089,10 +9089,10 @@
         }
 
 
-        The calls to _l_o_n_g_j_m_p() above will never return;  rather
-        the  call to _s_e_t_j_m_p() will appear to return, but with a
+        The calls to longjmp() above will never return;  rather
+        the  call to setjmp() will appear to return, but with a
         return  value  equal  to  the  argument   supplied   to
-        _l_o_n_g_j_m_p().
+        longjmp().
 
    SEE ALSO
 
@@ -9119,10 +9119,10 @@
 
        DESCRIPTION
             This  function  operates  in  an  analogous  manner  to
-            _f_s_e_e_k(), however it does so on unbuffered low-level i/o
+            fseek(), however it does so on unbuffered low-level i/o
             file descriptors, rather than on STDIO streams. It also
-            returns  the resulting pointer location. Thus _l_s_e_e_k(_f_d,
-            _0_L, _1) returns the  current  pointer  location  without
+            returns  the resulting pointer location. Thus lseek(fd,
+            0L, 1) returns the  current  pointer  location  without
             moving it.  -1 is returned on error.
 
        SEE ALSO
@@ -9142,13 +9142,13 @@
 
 
        DESCRIPTION
-            _M_a_l_l_o_c() attempts to allocate cnt bytes of memory  from
+            Malloc() attempts to allocate cnt bytes of memory  from
             the "heap", the dynamic memory allocation area. If suc-
             cessful, it returns a pointer to the block, otherwise 0
             is  returned. The memory so allocated may be freed with
-            _f_r_e_e(), or changed  in  size  via  _r_e_a_l_l_o_c().  _M_a_l_l_o_c()
-            calls _s_b_r_k() to obtain memory, and is in turn called by
-            _c_a_l_l_o_c().  _M_a_l_l_o_c()  does  not  clear  the  memory   it
+            free(), or changed  in  size  via  realloc().  Malloc()
+            calls sbrk() to obtain memory, and is in turn called by
+            calloc().  Malloc()  does  not  clear  the  memory   it
             obtains.
 
        SEE ALSO
@@ -9188,20 +9188,20 @@
 
 
    DESCRIPTION
-        _M_e_m_s_e_t() initializes n bytes of memory starting at  the
-        location pointed to by s with the character c. _M_e_m_c_p_y()
+        Memset() initializes n bytes of memory starting at  the
+        location pointed to by s with the character c. Memcpy()
         copies n bytes of memory  starting  from  the  location
         pointed to by s to the block of memory pointed to by d.
         The result of copying overlapping blocks is  undefined.
-        _M_e_m_c_m_p()  compares  two  blocks of memory, of length n,
-        and returns a signed value similar to _s_t_r_n_c_m_p(). Unlike
-        _s_t_r_n_c_m_p() the comparision does not stop on a null char-
+        Memcmp()  compares  two  blocks of memory, of length n,
+        and returns a signed value similar to strncmp(). Unlike
+        strncmp() the comparision does not stop on a null char-
         acter. The ascii collating sequence  is  used  for  the
         comparision,  but  the  effect  of  including non-ascii
         characters in the memory blocks on  the  sense  of  the
-        return  value is indeterminate. _M_e_m_m_o_v_e() is similar to
-        _m_e_m_c_p_y() except copying of overlapping blocks  is  han-
-        dled correctly. The _m_e_m_c_h_r() function locates the first
+        return  value is indeterminate. Memmove() is similar to
+        memcpy() except copying of overlapping blocks  is  han-
+        dled correctly. The memchr() function locates the first
         occurence of c (converted to unsigned char) in the ini-
         tial n characters of the object pointed to by s.
 
@@ -9251,8 +9251,8 @@
 
 
        DESCRIPTION
-            These functions allow the creation (_m_k_d_i_r()) and  dele-
-            tion  (_r_m_d_i_r())  of  sub-directories  under  the MS-DOS
+            These functions allow the creation (mkdir()) and  dele-
+            tion  (rmdir())  of  sub-directories  under  the MS-DOS
             operating system. The argument s may  be  an  arbitrary
             pathname,  and the return value will be -1 if the crea-
             tion or removal was unsuccessful.
@@ -9280,8 +9280,8 @@
             These functions allow direct access  to  MS-DOS  system
             calls.  The  arguments  will be placed in the registers
             implied by their names, while the return value will  be
-            the contents of AX and DX (for _m_s_d_o_s()) or the contents
-            of DX and CX (for _m_s_d_o_s_c_x()).  Only as  many  arguments
+            the contents of AX and DX (for msdos()) or the contents
+            of DX and CX (for msdoscx()).  Only as  many  arguments
             as  necessary  need be supplied, e.g. if only AH and DX
             need have specified valued, then only 2 argument  would
             be  required.  The  following  piece  of code outputs a
@@ -9316,7 +9316,7 @@
 
 
    DESCRIPTION
-        _O_p_e_n() is the fundamental means of  opening  files  for
+        Open() is the fundamental means of  opening  files  for
         reading  and  writing.   The  file specified by name is
         sought, and if found is opened for reading, writing  or
         both. Mode is encoded as follows:
@@ -9327,7 +9327,7 @@
              2   Open for both reading and writing
 
 
-        The file must already exist - if it does  not,  _c_r_e_a_t()
+        The file must already exist - if it does  not,  creat()
         should  be  used to create it.  On a successful open, a
         file descriptor is returned.  This  is  a  non-negative
         integer  which  may  be  used to refer to the open file
@@ -9418,7 +9418,7 @@
             information relating to the error, except in  the  case
             of a random read or write. Thus this routine is of lim-
             ited usefulness under CP/M. MS-DOS provides  much  more
-            information  however,  and use of _p_e_r_r_o_r() after MS-DOS
+            information  however,  and use of perror() after MS-DOS
             file handling calls will certainly give useful diagnos-
             tics.
 
@@ -9449,10 +9449,10 @@
 
 
    DESCRIPTION
-        _P_r_i_n_t_f() is a formatted output  routine,  operating  on
+        Printf() is a formatted output  routine,  operating  on
         stdout. There are corresponding routines operating on a
-        given  stream  (_f_p_r_i_n_t_f())  or  into  a  string  buffer
-        (_s_p_r_i_n_t_f()).  _P_r_i_n_t_f()  is passed a format string, fol-
+        given  stream  (fprintf())  or  into  a  string  buffer
+        (sprintf()).  Printf()  is passed a format string, fol-
         lowed by a list of zero or more arguments. In the  for-
         mat string are conversion specifications, each of which
         is used to print out one of the argument  list  values.
@@ -9494,8 +9494,8 @@
         digits  in  an  8 wide field.  Preceding the key letter
         with an l indicates that the value argument is  a  long
         integer  or  unsigned  value.   The letter X prints out
-        hexadecimal numbers using the upper  case  letters  _A-_F
-        rather than _a-_f as would be printed when using x.
+        hexadecimal numbers using the upper  case  letters  A-F
+        rather than a-f as would be printed when using x.
 
 
 
@@ -9527,10 +9527,10 @@
                 yields 'xx  4'
 
 
-            Printf returns EOF on error, 0 otherwise.  _V_p_r_i_n_t_f() is
-            similar  to _p_r_i_n_t_f() but takes a variable argument list
+            Printf returns EOF on error, 0 otherwise.  Vprintf() is
+            similar  to printf() but takes a variable argument list
             pointer rather  than  a  list  of  arguments.  See  the
-            description of _v_a__s_t_a_r_t() for more information on vari-
+            description of va_start() for more information on vari-
             able argument lists.
 
        SEE ALSO
@@ -9580,8 +9580,8 @@
 
 
    DESCRIPTION
-        _P_u_t_c() is the macro version of _f_p_u_t_c() and  is  defined
-        in  stdio.h.  See  _f_p_u_t_c()  for  a  description  of its
+        Putc() is the macro version of fputc() and  is  defined
+        in  stdio.h.  See  fputc()  for  a  description  of its
         behaviour.
 
    SEE ALSO
@@ -9601,7 +9601,7 @@
 
 
    DESCRIPTION
-        _P_u_t_c_h_a_r() is a _p_u_t_c() operation on stdout,  defined  in
+        Putchar() is a putc() operation on stdout,  defined  in
         stdio.h.
 
    SEE ALSO
@@ -9646,7 +9646,7 @@
 
 
        DESCRIPTION
-            _P_u_t_s() writes  the  string  s  to  the  stdout  stream,
+            Puts() writes  the  string  s  to  the  stdout  stream,
             appending a newline. The null terminating the string is
             not copied.  EOF is returned on error.
 
@@ -9667,9 +9667,9 @@
 
 
        DESCRIPTION
-            _P_u_t_w() copies the  word  w  to  the  given  stream.  It
+            Putw() copies the  word  w  to  the  given  stream.  It
             returns  w,  except  on  error,  in  which  case EOF is
-            returned. Since this is a good integer, _f_e_r_r_o_r() should
+            returned. Since this is a good integer, ferror() should
             be used to check for errors.
 
        SEE ALSO
@@ -9713,14 +9713,14 @@
 
 
    DESCRIPTION
-        _Q_s_o_r_t() is an implementation  of  the  quicksort  algo-
+        Qsort() is an implementation  of  the  quicksort  algo-
         rithm.  It  sorts an array of nel items, each of length
         width bytes, located contiguously in  memory  at  base.
-        Func is a pointer to a function used by _q_s_o_r_t() to com-
+        Func is a pointer to a function used by qsort() to com-
         pare items. It calls func with pointers to two items to
         be  compared.   If  the  first item is considered to be
         greater than, equal to or less  than  the  second  then
-        _f_u_n_c()  should  return a value greater than zero, equal
+        func()  should  return a value greater than zero, equal
         to zero or less than zero respectively.
 
         static short    array[100];
@@ -9778,7 +9778,7 @@
 
 
        DESCRIPTION
-            _R_a_n_d() is a pseudo-random number generator. It  returns
+            Rand() is a pseudo-random number generator. It  returns
             an  integer in the range 0 to 32767, which changes in a
             pseudo-random fashion on each call.
 
@@ -9799,14 +9799,14 @@
 
 
        DESCRIPTION
-            _R_e_a_d() will read from the file associated with fd up to
+            Read() will read from the file associated with fd up to
             cnt  bytes into a buffer located at buf. It returns the
             number of bytes actually read. A zero return  indicates
             end-of-file.  A  negative  return  indicates  error. Fd
             should have been  obtained  from  a  previous  call  to
-            _o_p_e_n().  It is possible for _r_e_a_d() to return less bytes
+            open().  It is possible for read() to return less bytes
             than requested, e.g. when reading from the console,  in
-            which case _r_e_a_d() will read one line of input.
+            which case read() will read one line of input.
 
        SEE ALSO
 
@@ -9842,12 +9842,12 @@
 
 
    DESCRIPTION
-        _R_e_a_l_l_o_c() frees the  block  of  memory  at  ptr,  which
-        should  have  been  obtained by a previous call to _m_a_l_-
-        _l_o_c(), _c_a_l_l_o_c() or _r_e_a_l_l_o_c(), then attempts to allocate
+        Realloc() frees the  block  of  memory  at  ptr,  which
+        should  have  been  obtained by a previous call to mal-
+        loc(), calloc() or realloc(), then attempts to allocate
         cnt  bytes  of dynamic memory, and if successful copies
         the contents of the block of memory located at ptr into
-        the new block.  At most, _r_e_a_l_l_o_c() will copy the number
+        the new block.  At most, realloc() will copy the number
         of bytes which were in the old block, but  if  the  new
         block  is  smaller,  will  only copy cnt bytes.  If the
         block could not be allocated, 0 is returned.
@@ -9869,7 +9869,7 @@
 
 
    DESCRIPTION
-        _R_e_m_o_v_e() will attempt to remove the file named  by  the
+        Remove() will attempt to remove the file named  by  the
         argument  s  from  the  directory. A return value of -1
         indicates that the attempt failed.
 
@@ -9974,9 +9974,9 @@
 
 
    DESCRIPTION
-        _S_b_r_k() increments the current highest  memory  location
+        Sbrk() increments the current highest  memory  location
         allocated  to  the program by incr bytes.  It returns a
-        pointer to the previous highest location. Thus  _s_b_r_k(_0)
+        pointer to the previous highest location. Thus  sbrk(0)
         returns  a  pointer  to  the  current highest location,
         without altering its value.  If there  is  insufficient
         memory to satisfy the request, -1 is returned.
@@ -9999,12 +9999,12 @@
 
 
    DESCRIPTION
-        _S_c_a_n_f() performs formatted  input  ("de-editing")  from
+        Scanf() performs formatted  input  ("de-editing")  from
         the  stdin  stream. Similar functions are available for
         streams in general,  and  for  strings.   The  function
-        _v_s_c_a_n_f() is similar, but takes a pointer to an argument
+        vscanf() is similar, but takes a pointer to an argument
         list rather than a series of additional arguments. This
-        pointer  should  have been initialized with _v_a__s_t_a_r_t().
+        pointer  should  have been initialized with va_start().
         The input conversions are performed  according  to  the
         fmt string; in general a character in the format string
         must match a character in the input;  however  a  space
@@ -10058,7 +10058,7 @@
             appropriate.  A  preceding  h  will  indicate  that the
             pointer argument is a pointer to short rather than int.
 
-            _S_c_a_n_f() returns the number of  successful  conversions;
+            Scanf() returns the number of  successful  conversions;
             EOF  is  returned  if  end-of-file  was seen before any
             conversions were performed. Some examples are:
 
@@ -10107,7 +10107,7 @@
 
 
    DESCRIPTION
-        _S_e_g_r_e_a_d() copies the values of  the  segment  registers
+        Segread() copies the values of  the  segment  registers
         into the structure pointed to by segregs.
 
    SEE ALSO
@@ -10126,8 +10126,8 @@
 
 
    DESCRIPTION
-        _S_e_t_j_m_p() is used with _l_o_n_g_j_m_p()  for  non-local  gotos.
-        See _l_o_n_g_j_m_p() for further information.
+        Setjmp() is used with longjmp()  for  non-local  gotos.
+        See longjmp() for further information.
 
    SEE ALSO
 
@@ -10174,7 +10174,7 @@
 
 
        DESCRIPTION
-            _S_e_t_u_i_d() will set the current user number to  uid.  Uid
+            Setuid() will set the current user number to  uid.  Uid
             should be a number in the range 0-15.
 
        SEE ALSO
@@ -10196,10 +10196,10 @@
 
 
        DESCRIPTION
-            The _s_e_t_v_b_u_f() function allows the  buffering  behaviour
+            The setvbuf() function allows the  buffering  behaviour
             of  a  STDIO  stream  to  be altered. It supersedes the
-            function _s_e_t_b_u_f() which is retained for backwards  com-
-            patibility.  The arguments to _s_e_t_v_b_u_f() are as follows:
+            function setbuf() which is retained for backwards  com-
+            patibility.  The arguments to setvbuf() are as follows:
             stream designates the STDIO stream to be affected;  buf
             is  a  pointer  to  a buffer which will be used for all
             subsequent I/O operations on this  stream.  If  buf  is
@@ -10217,8 +10217,8 @@
               setvbuf(stdout, my_buf, _IOLBF, sizeof my_buf);
 
             If a buffer is supplied by the caller, that buffer will
-            remain  associated  with that stream even over_f_c_l_o_s_e(),
-            _f_o_p_e_n() calls until another _s_e_t_v_b_u_f() changes it.
+            remain  associated  with that stream even overfclose(),
+            fopen() calls until another setvbuf() changes it.
 
 
 
@@ -10251,12 +10251,12 @@
         This routine allows an interrupt vector to be  initial-
         ized.  The  first argument should be the address of the
         interrupt vector (not the vector number but the  actual
-        address) cast to a pointer to _i_s_r, which is a typedef'd
+        address) cast to a pointer to isr, which is a typedef'd
         pointer to an interrupt function. The  second  argument
         should  be  the  function  which you want the interrupt
         vector to point to. This must  be  declared  using  the
-        _i_n_t_e_r_r_u_p_t   type   qualifier.   The   return  value  of
-        _s_e_t__v_e_c_t_o_r() is the previous contents of the vector.
+        interrupt   type   qualifier.   The   return  value  of
+        set_vector() is the previous contents of the vector.
 
    SEE ALSO
 
@@ -10305,14 +10305,14 @@
 
 
        DESCRIPTION
-            _S_i_g_n_a_l() provides a mechanism for catching  control-C's
+            Signal() provides a mechanism for catching  control-C's
             (ctrl-BREAK  for  MS-DOS)  typed  on the console during
             I/O. Under CP/M the console is polled whenever  an  I/O
             call is performed, while for MS-DOS the polling depends
             on the setting of the BREAK command.  If a control-C is
             detected  certain action will be performed. The default
             action is to exit summarily; this may be modified  with
-            _s_i_g_n_a_l(). The sig argument to signal may at the present
+            signal(). The sig argument to signal may at the present
             time be only SIGINT, signifying an interrupt condition.
             The  func  argument may be one of SIG_DFL, representing
             the default action, SIG_IGN, to ignore control-C's com-
@@ -10374,11 +10374,11 @@
    DESCRIPTION
         These functions will load and  execute  a  sub-program,
         named  by  the  argument n. The calling conventions are
-        similar to  the  functions  _e_x_e_c_l()  and  _e_x_e_c_v(),  the
+        similar to  the  functions  execl()  and  execv(),  the
         difference being that the spawn functions return to the
         calling program after termination of  the  sub-program,
         while  the  exec  functions  return only if the program
-        could not be executed.  _S_p_a_w_n_v_e() takes an  environment
+        could not be executed.  Spawnve() takes an  environment
         list in the same format as the argument list which will
         be supplied to the executed program as its environment.
 
@@ -10400,12 +10400,12 @@
 
 
    DESCRIPTION
-        _S_p_r_i_n_t_f() operates in a similar  fashion  to  _p_r_i_n_t_f(),
+        Sprintf() operates in a similar  fashion  to  printf(),
         except  that instead of placing the converted output on
         the stdout stream, the characters  are  placed  in  the
         buffer  at  buf.  The  resultant  string  will be null-
         terminated, and the number of characters in the  buffer
-        will  be  returned.  _V_s_p_r_i_n_t_f takes an argument pointer
+        will  be  returned.  Vsprintf takes an argument pointer
         rather than a list of arguments.
 
    SEE ALSO
@@ -10438,7 +10438,7 @@
 
 
        DESCRIPTION
-            _S_q_r_t() implements a square root function using Newton's
+            Sqrt() implements a square root function using Newton's
             approximation.
 
        SEE ALSO
@@ -10459,7 +10459,7 @@
 
 
        DESCRIPTION
-            _S_s_c_a_n_f() operates  in  a  similar  manner  to  _s_c_a_n_f(),
+            Sscanf() operates  in  a  similar  manner  to  scanf(),
             except that instead of the conversions being taken from
             stdin, they are taken from the string at buf.
 
@@ -10504,10 +10504,10 @@
 
 
    DESCRIPTION
-        _S_r_a_n_d()  initializes  the   random   number   generator
-        accessed by _r_a_n_d() with the given seed. This provides a
+        Srand()  initializes  the   random   number   generator
+        accessed by rand() with the given seed. This provides a
         mechanism  for  varying  the  starting  point  of   the
-        pseudo-random sequence yielded by _r_a_n_d(). On the z80, a
+        pseudo-random sequence yielded by rand(). On the z80, a
         good place to get a  truly  random  seed  is  from  the
         refresh  register. Otherwise timing a response from the
         console will do.
@@ -10536,9 +10536,9 @@
         access times.  The argument name should be the name  of
         the  file,  and  may include path names under DOS, user
         numbers under CP/M, etc.  The argument  statbuf  should
-        be  the  address  of  a  structure as defined in _s_t_a_t._h
+        be  the  address  of  a  structure as defined in stat.h
         which will be filled in with the information about  the
-        file. The structure of _s_t_r_u_c_t _s_t_a_t is as follows:
+        file. The structure of struct stat is as follows:
 
         struct stat
         {
@@ -10552,7 +10552,7 @@
         The access and modification times (under DOS these
         are  both  set  to  the  modification time) are in
         seconds since 00:00:00 Jan 1  1970.  The  function
-        _c_t_i_m_e()  may be used to convert this to a readable
+        ctime()  may be used to convert this to a readable
 
 
 
@@ -10577,7 +10577,7 @@
                    S_ARCHIVE   file has been written to
 
 
-            _S_t_a_t returns 0 on success, -1 on failure, e.g.  if
+            Stat returns 0 on success, -1 on failure, e.g.  if
             the file could not be found.
 
        SEE ALSO
@@ -10604,21 +10604,21 @@
 
        DESCRIPTION
             These functions provide operations  on  null-terminated
-            strings.  _S_t_r_c_a_t()  appends the string s2 to the end of
+            strings.  Strcat()  appends the string s2 to the end of
             the string s1.  The string at  s1  will  be  null  ter-
             minated.  Needless  to say the buffer at s1 must be big
-            enough. _S_t_r_c_m_p() compares the two strings and returns a
+            enough. Strcmp() compares the two strings and returns a
             number  greater  than  0,  0  or  a  number less than 0
             according to whether s1 is greater than,  equal  to  or
             less  than s2. The comparision is via the ascii collat-
             ing order, with the first character the  most  signifi-
-            cant.   _S_t_r_c_p_y()  copies s2 into the buffer at s1, null
-            terminating it.  _S_t_r_l_e_n() returns the length of s1, not
-            including  the  terminating null.  _S_t_r_n_c_a_t(), _s_t_r_n_c_m_p()
-            and _s_t_r_n_c_p_y() will catenate, compare and copy s2 and s1
+            cant.   Strcpy()  copies s2 into the buffer at s1, null
+            terminating it.  Strlen() returns the length of s1, not
+            including  the  terminating null.  Strncat(), strncmp()
+            and strncpy() will catenate, compare and copy s2 and s1
             in  the  same  manner as their similarly named counter-
             parts above, but involving at most  n  characters.  For
-            _s_t_r_n_c_p_y(),  the  resulting  string may not be null ter-
+            strncpy(),  the  resulting  string may not be null ter-
             minated.
 
 
@@ -10638,10 +10638,10 @@
 
    DESCRIPTION
         These functions locate an instance of the  character  c
-        in the string s. In the case of _s_t_r_c_h_r() a pointer will
+        in the string s. In the case of strchr() a pointer will
         be returned to the  first  instance  of  the  character
         found  be  searching  from the beginning of the string,
-        while _s_t_r_r_c_h_r() searches backwards from the end of  the
+        while strrchr() searches backwards from the end of  the
         string.  A  null  pointer  is returned if the character
         does not exist in the string.
 
@@ -10661,7 +10661,7 @@
 
 
    DESCRIPTION
-        When executed under MS-DOS _s_y_s_t_e_m() will pass the argu-
+        When executed under MS-DOS system() will pass the argu-
         ment  string  to the command processor, located via the
         environment string COMSPEC,  for  execution.  The  exit
         status  of  the command processor will be returned from
@@ -10770,10 +10770,10 @@
 
 
    DESCRIPTION
-        _T_o_u_p_p_e_r() converts its lower case  alphabetic  argument
-        to  upper  case, _t_o_l_o_w_e_r() performs the reverse conver-
-        sion, and _t_o_a_s_c_i_i() returns a result that is guaranteed
-        in the range 0-0177. _T_o_u_p_p_e_r() and _t_o_l_o_w_e_r return their
+        Toupper() converts its lower case  alphabetic  argument
+        to  upper  case, tolower() performs the reverse conver-
+        sion, and toascii() returns a result that is guaranteed
+        in the range 0-0177. Toupper() and tolower return their
         arguments if it is not an alphabetic character.
 
    SEE ALSO
@@ -10793,12 +10793,12 @@
 
 
    DESCRIPTION
-        _U_n_g_e_t_c() will attempt to push back the character c onto
-        the  named stream, such that a subsequent _g_e_t_c() opera-
+        Ungetc() will attempt to push back the character c onto
+        the  named stream, such that a subsequent getc() opera-
         tion will return the character. At most  one  level  of
         pushback will be allowed, and if the stream is not buf-
         fered, even this may not be possible. EOF  is  returned
-        if the _u_n_g_e_t_c() could not be performed.
+        if the ungetc() could not be performed.
 
    SEE ALSO
 
@@ -10832,8 +10832,8 @@
 
 
        DESCRIPTION
-            _U_n_l_i_n_k() will remove (delete) the named file,  that  is
-            erase  the  file  from  its directory. See _o_p_e_n() for a
+            Unlink() will remove (delete) the named file,  that  is
+            erase  the  file  from  its directory. See open() for a
             description of the file name construction.   Zero  will
             be returned if successful, -1 if the file did not exist
             or it could not be removed.
@@ -10851,8 +10851,8 @@
 
             #include  <stdarg.h>
 
-            void      va_start(va_list ap, _p_a_r_m_N);
-            _t_y_p_e      va_arg(ap, _t_y_p_e);
+            void      va_start(va_list ap, parmN);
+            type      va_arg(ap, type);
             void      va_end(va_list ap);
 
 
@@ -10862,22 +10862,22 @@
             type by the  ellipsis  symbol  (...),  where  type  and
             number  of  arguments  supplied to the function are not
             known at compile time. The rightmost parameter  to  the
-            function  (shown  as  _p_a_r_m_N) plays an important role in
+            function  (shown  as  parmN) plays an important role in
             these macros, as it is the starting point for access to
             further  parameters.  In  a  function  taking  variable
             numbers of arguments, a variable of type va_list should
             be  declared, then the macro va_start invoked with that
-            variable and the name of _p_a_r_m_N.  This  will  initialize
+            variable and the name of parmN.  This  will  initialize
             the  variable  to  allow  subsequent calls of the macro
             va_arg to access successive parameters.  Each  call  to
             va_arg  requires two arguments; the variable previously
             defined and a type name which is the type that the next
             parameter  is  expected  to be. Note that any arguments
             thus accessed will have been  widened  by  the  default
-            conventions  to _i_n_t, _u_n_s_i_g_n_e_d _i_n_t or _d_o_u_b_l_e.  For exam-
+            conventions  to int, unsigned int or double.  For exam-
             ple if a character argument has been passed, it  should
             be accessed by va_arg(ap, int) since the char will have
-            been widened to _i_n_t.  An example is given  below  of  a
+            been widened to int.  An example is given  below  of  a
             function  taking  one  integer parameter, followed by a
             number of other parameters. In this example  the  func-
             tion  expects  the subsequent parameters to be pointers
@@ -10917,12 +10917,12 @@
 
 
    DESCRIPTION
-        _W_r_i_t_e() will write from the buffer at  buf  up  to  cnt
+        Write() will write from the buffer at  buf  up  to  cnt
         bytes  to  the file associated with the file descriptor
         fd. The  number  of  bytes  actually  written  will  be
         returned. EOF or a value less than cnt will be returned
         on error.  In any case, any return value not  equal  to
-        cnt should be treated as an error (cf. _r_e_a_d() ).
+        cnt should be treated as an error (cf. read() ).
 
    SEE ALSO
 
