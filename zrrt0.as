@@ -42,7 +42,8 @@ begin:	sub	a		;Stop 8080 processors running this.
 	ld	c,9		;Print error message
 	jp	5
 
-okver:	push	hl		;HL holds possible Z3ENV address
+okver:	
+    push	hl		;HL holds possible Z3ENV address
 	ld	hl,(6)		;get base of fdos
 	ld	de,__Hstack
 	or	a
@@ -135,15 +136,24 @@ noz3:	ld	hl,0
 yesz3:	ld	(__z3env),hl
 ;
 memok:	
-;
-;If the PIPEMGR RSX is loaded, initialise it.
-;
+ 
+    ld	c,12
+ 	call    5		;Check CP/M version
+ 	ld	a,l
+ 	cp	30h
+ 	jr	nc,iscpm3
+ 	xor	a		; CP/M 2.2 has no RSX
+ 	jr	norsx
+
+    ;If the PIPEMGR RSX is loaded, initialise it.
+iscpm3:
 	ld	c,3Ch
 	ld	de,rsxpb
 	call	5
 	ld	a,h
 	inc	l	;HL=00FFh if no PIPEMGR present.
 	or	l
+norsx:
 	ld	(__piped),a
 	ld	hl,(6)			;base address of fdos
 
