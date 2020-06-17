@@ -10,7 +10,7 @@ typedef	int		ptrdiff_t;	/* result type of pointer difference */
 typedef	unsigned	size_t;		/* type yielded by sizeof */
 #define	_STDDEF
 #define	offsetof(ty, mem)	((int)&(((ty *)0)->mem))
-#endif	
+#endif	_STDDEF
 
 #ifndef	NULL
 #define	NULL	((void *)0)
@@ -25,7 +25,6 @@ extern int	dup(int);
 extern long	lseek(int, long, int);
 extern int	read(int, void *, int);
 extern int	unlink(char *);
-extern int	rename(char *,char*);
 extern int	write(int, void *, int);
 extern int	isatty(int);
 extern int	chmod(char *, int);

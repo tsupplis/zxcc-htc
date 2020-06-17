@@ -56,18 +56,18 @@
 #define	REG1	register
 #define	REG2	auto
 #define	REG3	auto
-#endif
+#endif	z80
 
 #if	i8086		/* only has two register variable */
 #define	REG1	register
 #define	REG2	register
 #define	REG3	auto
-#endif
+#endif	i8086
 
 #if	i8096 || m68k	/* lots of registers! */
 #define	REG1	register
 #define	REG2	register
 #define	REG3	register
-#endif	
+#endif	i8096 || m68k
 
 #endif

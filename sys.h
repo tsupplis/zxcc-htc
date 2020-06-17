@@ -24,14 +24,15 @@ extern int	spawnl(char *, char *, char *, ...);
 extern int	spawnv(char *, char **);
 extern int	spawnle(char *, char *, char *, char *, ...);
 extern int	spawnve(char *, char **, char *);
-extern short getuid(void);
-extern short setuid(short);
+extern short	getuid(void);
+extern short	setuid(short);
 extern int	chdir(char *);
 extern int	mkdir(char *);
 extern int	rmdir(char *);
 extern int	getcwd(int);
-extern char **	_getargs(char *, char *);
+extern char   **_getargs(char *, char *);
 extern int	_argc_;
 extern int	inp(int);
 extern void	outp(int, int);
+
 #endif
