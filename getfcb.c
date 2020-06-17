@@ -3,20 +3,20 @@
 #include    <sys.h>
 
 /*
- *    Syntax of CP/M file names is:
+ *  Syntax of CP/M file names is:
  *
- *    [[0-9]+[:]][[a-pA-P]:]name[.ext] | [[a-pA-p][[0-9]+]:]name[.ext]
+ *  [[0-9]+[:]][[a-pA-P]:]name[.ext] | [[a-pA-p][[0-9]+]:]name[.ext]
  *
- *    E.g.
- *        file.txt
- *        a:file
- *        10:b:READ-ME.doc
+ *  E.g.
+ *      file.txt
+ *      a:file
+ *      10:b:READ-ME.doc
  */
 
 
-#define    DNAMLEN    4    /* length of device names */
+#define DNAMLEN 4   /* length of device names */
 
-static char    dnames[][DNAMLEN] =
+static char dnames[][DNAMLEN] =
 {
     "CON:",
     "RDR:",
@@ -26,24 +26,24 @@ static char    dnames[][DNAMLEN] =
     "ERR:"
 };
 
-#define    NDNAMES    6
+#define NDNAMES 6
 
-extern int    atoi(char *);
+extern int  atoi(char *);
 static void fc_parse(struct fcb *, char *);
 
 static char upcase(char c)
 {
-    if(islower(c))
+    if (islower(c))
         return toupper(c);
     return c;
 }
 
 struct fcb *getfcb()
 {
-    register struct fcb *    fp;
+    register struct fcb *fp;
 
-    for(fp = _fcb ; fp < &_fcb[MAXFILE] ; fp++)
-        if(!fp->use) 
+    for (fp = _fcb ; fp < &_fcb[MAXFILE] ; fp++)
+        if (!fp->use)
         {
             fp->use = U_READ;
             fp->rwp = 0;
@@ -59,16 +59,16 @@ void putfcb(struct fcb *fc)
 
 uchar setfcb(struct fcb *fc, char *name)
 {
-    uchar            i,j;
+    uchar           i,j;
 
-    while(isspace(*name))
+    while (isspace(*name))
         ++name;
     /* Check device names */
-    for(i = 0 ; i < NDNAMES ; ++i)
-        for(j = 0 ; ;)
-            if(dnames[i][j] != upcase(name[j]))
+    for (i = 0 ; i < NDNAMES ; ++i)
+        for (j = 0; ;)
+            if (dnames[i][j] != upcase(name[j]))
                 break;
-            else if(++j == DNAMLEN) 
+            else if (++j == DNAMLEN)
             {
                 fc->use = i+U_CON;
                 return 1;
@@ -80,9 +80,11 @@ uchar setfcb(struct fcb *fc, char *name)
 
 static void fc_parse(struct fcb *fc, char *name)
 {
-    register char *    cp;
-    char        c;
-    char        num[3], *np;
+    char
+        *cp,
+        *np,
+         c,
+         num[3];
 
     fc->dr = 0;
     fc->uid = getuid();
@@ -90,8 +92,8 @@ static void fc_parse(struct fcb *fc, char *name)
     cp = name;
     if (cp[1]==':'  || cp[2]==':' || cp[3]==':')  /* Drive/user */
     {
-        np=num;
-        while(*cp != ':')
+        np = num;
+        while (*cp != ':')
         {
             if (isdigit(*cp)) 
                 *np++ = *cp;
@@ -99,8 +101,8 @@ static void fc_parse(struct fcb *fc, char *name)
                 fc->dr = upcase(*cp) - 'A' + 1;  
             ++cp;
         }
-        *np=0;
-        if (num[0]) 
+        *np = 0;
+        if (num[0])
             fc->uid=atoi(num);
         ++cp;
     }
@@ -109,25 +111,25 @@ static void fc_parse(struct fcb *fc, char *name)
         fc->dr=upcase(*cp) - 'A' + 1;
         cp += 2;
     }
-    name=cp;
+    name = cp;
     cp = fc->name;
-    while(*name != '.' && *name != '*' && *name > ' ' && cp < &fc->name[8])
-        *cp++ = upcase(*name++);
-    if(*name == '*')
-        c = '?';
-    else
-        c = ' ';
-    while(cp < &fc->name[8])
-        *cp++ = c;
-    while(*name && *name++ != '.')
-        continue;
-    while(*name > ' ' && *name != '*' && cp < &fc->ft[3])
+    while (*name != '.' && *name != '*' && *name > ' ' && cp < &fc->name[8])
         *cp++ = upcase(*name++);
     if (*name == '*')
         c = '?';
     else
         c = ' ';
-    while(cp < &fc->ft[3])
+    while (cp < &fc->name[8])
+        *cp++ = c;
+    while (*name && *name++ != '.')
+        continue;
+    while (*name > ' ' && *name != '*' && cp < &fc->ft[3])
+        *cp++ = upcase(*name++);
+    if (*name == '*')
+        c = '?';
+    else
+        c = ' ';
+    while (cp < &fc->ft[3])
         *cp++ = c;
     fc->ex = fc->nr = 0;
 }
