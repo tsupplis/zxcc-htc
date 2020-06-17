@@ -66,7 +66,7 @@ ORIGTOOLS=cgen.com cpp.com cref.com debug.com dehuff.com \
 
 OVROBJS=ovrload.obj ovrbgn.obj
 CRTOBJS=crt0.obj rrt0.obj wcr0.obj
-ZCRTOBJS=zcrt0.obj zrrt0.obj
+ZCRTOBJS=zcrtcpm.obj zrrtcpm.obj
 TOOLSOBJS=ec.obj symtoas.obj exec.obj
 LIBS=libc.lib libovr.lib libf.lib
 TOOLS=c.com symtoas.com exec.com
@@ -93,17 +93,17 @@ libc.lib: $(COBJS)
 	rm -f libc.lib
 	for o in $(COBJS); do echo $$o;$(LIBR) -r libc.lib -$$o;done
 
-zcrt0.obj: zcrt0.as
-	zxcc zas zcrt0.as
+zcrtcpm.obj: zcrtcpm.as
+	zxcc zas zcrtcpm.as
 
-zrrt0.obj: zrrt0.as
-	zxcc zas zrrt0.as
+zrrtcpm.obj: zrrtcpm.as
+	zxcc zas zrrtcpm.as
 
-rrt0.obj: zrrt0.obj
-	cp zrrt0.obj rrt0.obj
+rrt0.obj: zrrtcpm.obj
+	cp zrrtcpm.obj rrt0.obj
 
-crt0.obj: zcrt0.obj
-	cp zcrt0.obj crt0.obj
+crt0.obj: zcrtcpm.obj
+	cp zcrtcpm.obj crt0.obj
 
 clean:
 	-rm -f $(TOOLS) $(LIBS) $(COBJS) $(CRTOBJS) $(ZCRTOBJS) $(OVROBJS) $(TOOLSOBJS) \
@@ -204,7 +204,6 @@ dist/htc-bin-$(TAG).zip dist/htc-bin-$(TAG).lha: all
 	cp symtoas.com dist/htc
 	cp c.com dist/htc
 	cp $(CRTOBJS) dist/htc
-	#cp $(ZCRTOBJS) dist/htc
 	cp $(DOCS) dist/htc
 	(cd dist/htc;sh -c 'zip ../htc-bin-$(TAG).zip *.*')
 	(cd dist/htc;sh -c 'lha a ../htc-bin-$(TAG).lha *.*')
