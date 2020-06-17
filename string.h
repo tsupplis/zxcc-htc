@@ -1,7 +1,7 @@
 #ifndef _HTC_STRING_H
 #define _HTC_STRING_H
 
-/*	String functions */
+/*	String functions v3.09-4 */
 
 #ifndef	_STDDEF
 typedef	int		ptrdiff_t;	/* result type of pointer difference */
@@ -25,10 +25,9 @@ extern char	*strncat(char *, char *, size_t);
 extern int	 memcmp(void *, void *, size_t);
 extern int	 strcmp(char *, char *);
 extern int	 strcasecmp(char *, char *);
-#define stricmp	strcasecmp
 extern int	 strncmp(char *, char *, size_t);
-#define strnicmp	strncasecmp
-extern int	 strnicmp(char *, char *, size_t);
+extern int	 strncasecmp(char *, char *, size_t);
+#define strnicmp strncasecmp
 /* extern size_t	 strcoll(char *, size_t, char *); */ /* missing */
 extern void	*memchr(void *, int, size_t);
 /* extern size_t	 strcspn(char *, char *); */ /* missing */
@@ -49,4 +48,5 @@ extern char	*strcasestr(char *, char *);
 #define stristr	strcasestr
 extern char	*strncasestr(char *, char *, size_t);
 #define	strnistr strncasestr
+
 #endif
