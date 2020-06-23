@@ -12,4 +12,4 @@ test*.com
 **/.*.swp
 **/*.obj
 dist
-test.dat
+test*.dat

@@ -16,7 +16,7 @@ TAG=$(shell ((git describe --exact-match --tags $(git log -n1 --pretty='%h') 2>/
 
 TESTS=testver.com testio.com testovr.com testovr1.ovr testovr2.ovr teststr.com \
  testbios.com testbdos.com testtrig.com testftim.com testfile.com testaes.com \
- testuid.com testrc.com
+ testuid.com testrc.com testrel.com testargs.com testfsiz.com
 
 COBJS=getargs.obj assert.obj printf.obj fprintf.obj sprintf.obj  \
 doprnt.obj gets.obj puts.obj fwrite.obj getw.obj  \
@@ -111,6 +111,7 @@ clean:
         test*.com test*.obj test*.out test*.sta test*.err test*.sym \
         testovrx.* test*.ovr
 	-rm -rf libf
+	-rm -rf *.dat
 
 exec.com: exec.obj
 	zxcc link --l --ptext=0,bss exec.obj
@@ -125,6 +126,9 @@ c.com: ec.obj $(LIBS) $(CRTOBJS)
 
 testfile.com: testfile.c $(LIBS) $(TOOLS) $(CRTOBJS)
 	zxcc c --v --r testfile.c --lc
+
+testfsiz.com: testfsiz.c $(LIBS) $(TOOLS) $(CRTOBJS)
+	zxcc c --v --r testfsiz.c --lc
 
 testaes.com: testaes.c $(LIBS) $(TOOLS) $(CRTOBJS)
 	zxcc c --v --r testaes.c --lc
@@ -151,6 +155,12 @@ testovr1.ovr: testovr2.obj testovrx.sym
 
 testbdos.com: testbdos.c  $(LIBS) $(TOOLS) $(CRTOBJS)
 	zxcc c --v --r testbdos.c
+
+testargs.com: testrel.c  $(LIBS) $(TOOLS) $(CRTOBJS)
+	zxcc c --v --r testargs.c
+
+testrel.com: testrel.c  $(LIBS) $(TOOLS) $(CRTOBJS)
+	zxcc c --A --v --r testrel.c
 
 testrc.com: testrc.c  $(LIBS) $(TOOLS) $(CRTOBJS)
 	zxcc c --v --r testrc.c
@@ -179,6 +189,8 @@ test: $(TESTS)
 	zxcc testaes
 	zxcc testuid
 	zxcc testrc || echo testrc=$$?
+	zxcc testargs -*.i
+	zxcc testfsiz
 
 dist: dist/htc-bin-$(TAG).zip dist/htc-test-$(TAG).zip \
  dist/htc-bin-$(TAG).lha dist/htc-test-$(TAG).lha
