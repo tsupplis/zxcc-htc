@@ -69,7 +69,7 @@ CRTOBJS=crt0.obj rrt0.obj wcr0.obj
 ZCRTOBJS=zcrtcpm.obj zrrtcpm.obj
 TOOLSOBJS=ec.obj symtoas.obj exec.obj
 LIBS=libc.lib libovr.lib libf.lib
-TOOLS=c.com symtoas.com exec.com
+TOOLS=c.com symtoas.com exec.com dehuff.com enhuff.com
 
 all: $(LIBS) $(CRTOBJS) $(TOOLS)
 
@@ -123,6 +123,12 @@ symtoas.com: symtoas.obj $(LIBS) $(CRTOBJS) c.com
 
 c.com: ec.obj $(LIBS) $(CRTOBJS)
 	zxcc link --z --Ptext=0,data,bss --C100h --oc.com crt0.obj ec.obj libc.lib
+
+enhuff.com: enhuff.c encode.c hmisc.c $(LIBS) c.com $(CRTOBJS)
+	zxcc c --v --r --oenhuff.com enhuff.c encode.c hmisc.c --lc
+
+dehuff.com: dehuff.c decode.c hmisc.c $(LIBS) c.com $(CRTOBJS)
+	zxcc c --v --r --odehuff.com dehuff.c decode.c hmisc.c --lc
 
 testfile.com: testfile.c $(LIBS) $(TOOLS) $(CRTOBJS)
 	zxcc c --v --r testfile.c --lc
