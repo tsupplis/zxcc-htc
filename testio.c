@@ -7,13 +7,11 @@ int main(int argc, char ** argv)
     int i;
     int minor=0;
     int major=0;
-    extern int _piped_r;
     FILE *f;
     char c=34;
 
     fprintf(stderr,"%s,%02x\n","hexa",c);
     freopen("testio.err","w",stderr);
-    fprintf(stderr,"piped(%c)=%02x\n",_piped_r?'Y':'N',_piped_r);
     fprintf(stderr,"argc=%d\n",argc);
     for(i=0;i<argc;i++) {
         fprintf(stderr,"argv=%s\n",argv[i]);
