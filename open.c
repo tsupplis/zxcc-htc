@@ -1,7 +1,7 @@
 #include    "cpm.h"
 
 extern int errno;
-int _new_fsize=0;
+extern int _new_fsize;
 
 long _fsize(uchar fd)
 {
