@@ -18,7 +18,9 @@ that the copyright to this software remains with HI-TECH Software.
 - Added overlays
 - Extended libraries and headers
 
-The sources of the fixes needs to be documented ... It constantly aligns with (https://github.com/agn453/HI-TECH-Z80-C). Still a few differences but they are going t be cleaned out
+The sources of the fixes needs to be documented ... It constantly aligns with (https://github.com/agn453/HI-TECH-Z80-C). Still a few differences but they are going to be cleaned out
+
+# Initial History (New Release details will be on a per release basis in Git)
 
 ## Release 3.09-P005 
 
