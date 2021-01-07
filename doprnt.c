@@ -40,7 +40,7 @@ int *		a;
 	uchar	fill, left;
 	unsigned int	i;
 	unsigned char	base, width, prec, sign;
-    unsigned int    len;
+	unsigned int    len;
 
 	ffile = file;
 	while(c = *f++)

@@ -48,7 +48,8 @@ swap.obj aslr.obj bmove.obj imul.obj rand.obj  \
 alrsh.obj lmul.obj rindex.obj strrchr.obj sbrk.obj  \
 shar.obj shll.obj shlr.obj strcat.obj strcmp.obj  \
 strcpy.obj strlen.obj stricmp.obj stristr.obj strncat.obj \
-strncmp.obj strnicmp.obj strncpy.obj csv.obj rcsv.obj tolower.obj toupper.obj xtoi.obj 
+strncmp.obj strnicmp.obj strncpy.obj csv.obj rcsv.obj tolower.obj toupper.obj xtoi.obj \
+newfsiz.obj
 
 FOBJS=printf.obj fprintf.obj sprintf.obj scanf.obj fscanf.obj sscanf.obj fdoprnt.obj \
  fdoscan.obj atof.obj fnum.obj fbcd.obj tan.obj acos.obj asin.obj atan2.obj atan.obj \
@@ -110,8 +111,11 @@ clean:
         $(FOBJS) \
         test*.com test*.obj test*.out test*.sta test*.err test*.sym \
         testovrx.* test*.ovr
+	-rm -f encode.obj decode.obj enhuff.obj dehuff.obj hmisc.obj
+	-rm -f enhuff.com dehuff.com
 	-rm -rf libf
 	-rm -rf *.dat
+	-rm -rf pipemrg.rel
 
 exec.com: exec.obj
 	zxcc link --l --ptext=0,bss exec.obj
@@ -218,12 +222,13 @@ dist/htc-bin-$(TAG).zip dist/htc-bin-$(TAG).lha: all
 	cp $(LIBS) dist/htc
 	cp $(HEADERS) dist/htc
 	cp $(ORIGTOOLS) dist/htc
-	cp exec.com dist/htc/\$exec.com
+	cp exec.com dist/htc/'$$exec.com'
 	cp symtoas.com dist/htc
 	cp c.com dist/htc
 	cp $(CRTOBJS) dist/htc
 	cp $(DOCS) dist/htc
+	cp pipemgr/pipemgr.rsx pipemgr/tee.com dist/htc
 	(cd dist/htc;sh -c 'zip ../htc-bin-$(TAG).zip *.*')
 	(cd dist/htc;sh -c 'lha a ../htc-bin-$(TAG).lha *.*')
-	rm -rf dist/htc
+
 
