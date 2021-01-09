@@ -1,1 +1,1 @@
-int _new_fsize=0;
+int _new_fsize=1;

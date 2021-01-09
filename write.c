@@ -87,8 +87,8 @@ write(uchar fd, char *buf, ushort nbytes)
                 break;
             buf += size;
             fc->rwp += size;
-            if (fc->fsize < fc->rwp) 
-                fc->fsize = fc->rwp;
+/*            if (fc->fsize < fc->rwp) 
+                fc->fsize = fc->rwp;*/
             nbytes -= size;
             setuid(luid);
         }
