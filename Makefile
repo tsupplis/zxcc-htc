@@ -115,7 +115,6 @@ clean:
 	-rm -f enhuff.com dehuff.com
 	-rm -rf libf
 	-rm -rf *.dat
-	-rm -rf pipemrg.rel
 
 exec.com: exec.obj
 	zxcc link --l --ptext=0,bss exec.obj
