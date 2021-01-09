@@ -25,6 +25,7 @@ extern int	dup(int);
 extern long	lseek(int, long, int);
 extern int	read(int, void *, int);
 extern int	unlink(char *);
+extern int	rename(char *, char *);
 extern int	write(int, void *, int);
 extern int	isatty(int);
 extern int	chmod(char *, int);
