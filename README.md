@@ -272,19 +272,24 @@ bdos()
     have been commented out for now.
 
 strchr() and strrchr()
+````
         char *strchr(char *s, int c)
         char *strrchr(char *s, int c)
     These functions - as well as index() and rindex() (which are identical)
     previously returned a NULL for no match.  The functions now return
     a pointer to the character string's ending NUL character.
+```
 
 stricmp() and strnicmp()
+```
         char stricmp(char *s1, char *s2)
         char strnicmp(char *s1, char *s2, size_t n)
     Case-insensitive versions of strcmp() and strncmp() comparison routines.
     Can also be referenced as strcasecmp() and strncasecmp().
+```
 
 strstr(), strnstr(), stristr() and strnistr()
+```
         char *strstr(char *t, char *s)
         char *strnstr(char *t, char *s, unsigned int n)
         char *strcasestr(char *t, char *s)
@@ -296,25 +301,30 @@ strstr(), strnstr(), stristr() and strnistr()
     All these functions return a pointer to the first character of
     the first occurence of string s in string t if found, and NULL
     otherwise.
+```
 
 strdup()
-        char *strdup(char *s)
+```
+         char *strdup(char *s)
     Allocates a new buffer for and copies the string pointed to
     by s to it.  Returns a pointer to the copy of the string or NULL
     if the memory allocation failed. The memory block can be released
     using free().
 
 strtok()
+```
         char *strtok(char *s, char *tok, size_t toklen, char *brk)
     Copies characters from s to tok until it encounters one of the
     characters in brk or until toklen-1 characters have been copied
     (whichever comes first).  It then adds a NUL character to the
     end of the string.  This is a non-conforming POSIX function.
+```
 
 ### TIME.H
     Now includes a prototype for strftime() - see below.
 
 strftime()
+```
         size_t strftime(char *s, size_t maxs, char *f, struct tm *t)
     Converts a time value t to a string using the format string f
     into the string s of size maxs (including a terminating NUL).
@@ -359,6 +369,7 @@ strftime()
     strftime() returns the number of characters placed in the
     buffer, not including the terminating NUL, or zero if more
     than maxs characters were produced.
+```
 
 ### Fix to Environment Location
 
