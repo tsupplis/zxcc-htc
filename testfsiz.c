@@ -1,13 +1,11 @@
 #include <stdio.h>
 
-extern int _new_fsize;
 
 char buffer[257];
 
 int main() {
     FILE *f;   
     memset(buffer,' ',sizeof(buffer));
-    _new_fsize=0;
 
     buffer[0]='0';
     buffer[127]='1';

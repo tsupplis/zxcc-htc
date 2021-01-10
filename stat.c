@@ -2,8 +2,6 @@
 #include    <cpm.h>
 #include    <time.h>
 
-extern int _new_fsize;
-
 /*
  *  int stat(char * s, struct stat * b);
  *
@@ -57,11 +55,10 @@ int stat(register char * s, register struct stat * b)
             Changed to interpret last record byte count as the number of
             UNUSED bytes.  Slightly simpler, historically correct and
             consistent with other tools that I use.  [jrs 2014-04-08]
- */
 
-            if (d && !_new_fsize)
+            if (d)
                 d=0x80-d;
-
+*/
             b->st_size-=d;
         }
 	/* Corrected to account for directory code return [jrs 2014-04-20] */
