@@ -1,18 +1,15 @@
 .SUFFIXES: .obj .c .as
-LIBR=zxcc libr
-AS=zxcc zas
-CC=zxcc c
 CFLAGS=--o
 ASFLAGS=--j
 TAG=$(shell ((git describe --exact-match --tags $(git log -n1 --pretty='%h') 2>/dev/null) \
     || (git tag|tail -n 1|sed -e 's/$$/-dev/') || echo "vdev" ) |grep ^v| \
         sed -e 's/^$$/UNKNOWN/g' -e 's/^v//g')
 
-.c.obj:	
-	$(CC) $(CFLAGS) --c $*.c
+.c.obj:
+	zxcc oc -c $(CFLAGS) --c $*.c
 
 .as.obj: 
-	$(AS) $(ASFLAGS) $*.as
+	zxcc zas $(ASFLAGS) $*.as
 
 TESTS=testver.com testio.com testovr.com testovr1.ovr testovr2.ovr teststr.com \
  testbios.com testbdos.com testtrig.com testftim.com testfile.com testaes.com \
@@ -70,29 +67,21 @@ CRTOBJS=crt0.obj rrt0.obj wcr0.obj
 ZCRTOBJS=zcrtcpm.obj zrrtcpm.obj
 TOOLSOBJS=ec.obj symtoas.obj exec.obj
 LIBS=libc.lib libovr.lib libf.lib
-TOOLS=c.com symtoas.com exec.com dehuff.com enhuff.com dehuff.com
+TOOLS=c.com symtoas.com $$exec.com dehuff.com enhuff.com dehuff.com
 
 all: $(LIBS) $(CRTOBJS) $(TOOLS)
 
 libovr.lib:	$(OVROBJS)
 	rm -f libovr.lib
-	for o in $(OVROBJS); do echo $$o;$(LIBR) -r libovr.lib -$$o;done
-
-#libf.lib: libf.org $(FOBJS)
-#	rm -f libf.lib
-#	cp libf.org libf.lib
-#	$(LIBR) -r libf.lib -fprintf.obj
-#	$(LIBR) -r libf.lib -fscanf.obj
-#	$(LIBR) -r libf.lib -printf.obj
-#	$(LIBR) -r libf.lib -scanf.obj
+	for o in $(OVROBJS); do echo $$o;zxcc libr -r libovr.lib -$$o;done
 
 libf.lib: $(FOBJS)
 	rm -f libf.lib
-	for o in $(FOBJS); do echo $$o;$(LIBR) -r libf.lib -$$o;done
+	for o in $(FOBJS); do echo $$o;zxcc libr -r libf.lib -$$o;done
 
 libc.lib: $(COBJS)
 	rm -f libc.lib
-	for o in $(COBJS); do echo $$o;$(LIBR) -r libc.lib -$$o;done
+	for o in $(COBJS); do echo $$o;zxcc libr -r libc.lib -$$o;done
 
 zcrtcpm.obj: zcrtcpm.as
 	zxcc zas zcrtcpm.as
@@ -116,15 +105,16 @@ clean:
 	-rm -rf libf
 	-rm -rf *.dat
 
-exec.com: exec.obj
+$$exec.com: exec.obj
 	zxcc link --l --ptext=0,bss exec.obj
 	zxcc objtohex --R --B100H l.obj exec.com
+	mv exec.com '$$exec.com'
 	-rm l.obj
 
 symtoas.com: symtoas.obj $(LIBS) $(CRTOBJS) c.com
 	zxcc c --v --r symtoas.obj
 
-c.com: ec.obj $(LIBS) $(CRTOBJS)
+c.com: ec.obj $(LIBS) $(CRTOBJS) $$exec.com
 	zxcc link --z --Ptext=0,data,bss --C100h --oc.com crt0.obj ec.obj libc.lib
 
 enhuff.com: enhuff.c encode.c hmisc.c $(LIBS) c.com $(CRTOBJS)
@@ -225,7 +215,7 @@ dist/htc-bin-$(TAG).zip dist/htc-bin-$(TAG).lbr: all
 	cp $(LIBS) dist/htc
 	cp $(HEADERS) dist/htc
 	cp $(ORIGTOOLS) dist/htc
-	cp exec.com dist/htc/'$$exec.com'
+	cp '$$exec.com' dist/htc/'$$exec.com'
 	cp symtoas.com dist/htc
 	cp c.com dist/htc
 	cp enhuff.com dehuff.com dist/htc
