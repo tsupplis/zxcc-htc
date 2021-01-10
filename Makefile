@@ -6,10 +6,10 @@ TAG=$(shell ((git describe --exact-match --tags $(git log -n1 --pretty='%h') 2>/
         sed -e 's/^$$/UNKNOWN/g' -e 's/^v//g')
 
 .c.obj:
-	zxcc oc -v -c $(CFLAGS) --c $*.c
+	zxcc oc --v $(CFLAGS) --c $*.c
 
 .as.obj: 
-	zxcc zas -v $(ASFLAGS) $*.as
+	zxcc zas $(ASFLAGS) $*.as
 
 TESTS=testver.com testio.com testovr.com testovr1.ovr testovr2.ovr teststr.com \
  testbios.com testbdos.com testtrig.com testftim.com testfile.com testaes.com \
@@ -106,7 +106,7 @@ clean:
 	-rm -rf *.dat
 
 $$exec.com: exec.obj
-	zxcc link --l --ptext=0,bss exec.obj
+	zxcc link --l --ptext=0,bss exec.obj libc.lib
 	zxcc objtohex --R --B100H l.obj exec.com
 	mv exec.com '$$exec.com'
 	-rm l.obj
@@ -118,25 +118,25 @@ c.com: ec.obj $(LIBS) $(CRTOBJS) $$exec.com
 	zxcc link --z --Ptext=0,data,bss --C100h --oc.com crt0.obj ec.obj libc.lib
 
 enhuff.com: enhuff.c encode.c hmisc.c $(LIBS) c.com $(CRTOBJS)
-	zxcc c --v --r --oenhuff.com enhuff.c encode.c hmisc.c --lc
+	zxcc c --v --r --oenhuff.com enhuff.c encode.c hmisc.c
 
 dehuff.com: dehuff.c decode.c hmisc.c $(LIBS) c.com $(CRTOBJS)
-	zxcc c --v --r --odehuff.com dehuff.c decode.c hmisc.c --lc
+	zxcc c --v --r --odehuff.com dehuff.c decode.c hmisc.c
 
 testfile.com: testfile.c $(LIBS) $(TOOLS) $(CRTOBJS)
-	zxcc c --v --r testfile.c --lc
+	zxcc c --v --r testfile.c
 
 testfsiz.com: testfsiz.c $(LIBS) $(TOOLS) $(CRTOBJS)
-	zxcc c --v --r testfsiz.c --lc
+	zxcc c --v --r testfsiz.c
 
 testaes.com: testaes.c $(LIBS) $(TOOLS) $(CRTOBJS)
-	zxcc c --v --r testaes.c --lc
+	zxcc c --v --r testaes.c
 
 teststr.com: teststr.c $(LIBS) $(TOOLS) $(CRTOBJS)
-	zxcc c --v --r teststr.c --lc
+	zxcc c --v --r teststr.c
 
 testver.com: testver.c $(LIBS) $(TOOLS) $(CRTOBJS)
-	zxcc c --v --r testver.c --lc
+	zxcc c --v --r testver.c
 
 testio.com: testio.c $(LIBS) $(TOOLS) $(CRTOBJS)
 	zxcc c --v --r testio.c 
@@ -149,8 +149,6 @@ testovr2.ovr: testovr2.obj testovrx.sym
 
 testovr1.ovr: testovr2.obj testovrx.sym
 	zxcc c --y --r --v testovr1.c testovrx.sym
-	#o=`grep __ovrbgn testovr.sym |sed -e 's/ .*//g'`;\
-	#xcc link --c"$$o"h --ptext=0"$$o"h,data --otestovr1.ovr testovr1.obj testovrx.obj 
 
 testbdos.com: testbdos.c  $(LIBS) $(TOOLS) $(CRTOBJS)
 	zxcc c --v --r testbdos.c
