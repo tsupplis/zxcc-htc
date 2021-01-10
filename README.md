@@ -381,4 +381,31 @@ setdef * m: c: a:
 
 in your CP/M 3 PROFILE.SUB file (or manually entered on the command line).
 
+### Source for DEHUFF and ENHUFF
+
+Andrey Nikitin has contributed the sources for the DEHUFF and ENHUFF programs that were used by HI-TECH Software to distribute the library source files. I've placed the extracted source files and the resulting binary produced by the latest compiler in the huff folder. Also, the Huffman-encoded archive containing these sources has been placed in the dist folder as HUFF.HUF. 
+
+These sources may be built using the HI-TECH C compiler or using the gcc compiler under Linux or macOS. I built them natively under CP/M using -
+
+c -O -v enhuff.c encode.c misc.c
+c -O -v dehuff.c decode.c misc.c
+
+### Change supported string length in printf() routine
+
+Merged a minor change into stdio/DOPRNT.C from @tupplis so that various printf() routines can now output strings greater than 255 characters.
+
+### PIPEMGR sources
+
+Included Jon Saxton's version of the PIPEMGR RSX for handling pipes under CP/M 3.
+
+This is a modified version of the original by John Elliot that's detected and used by each of the releases of HI-TECH C available from this repository.
+
+Also included is the source and executable for TEE which has the PIPEMGR RSX attached and behaves like its namesake in the Unix world, along with missing files from the original Van Nuys tools (PIPEMGR.H and PIPEMGR.C).
+
+The rest of the Van Nuys tools are available from John Elliot's original PIPEMGR page at
+
+http://www.seasip.info/Cpm/software/Pipemgr/index.html
+
+
+
 
