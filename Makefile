@@ -14,7 +14,7 @@ TAG=$(shell ((git describe --exact-match --tags $(git log -n1 --pretty='%h') 2>/
 
 TESTS=testver.com testio.com testovr.com testovr1.ovr testovr2.ovr teststr.com \
  testbios.com testbdos.com testtrig.com testftim.com testfile.com testaes.com \
- testuid.com testrc.com testrel.com testargs.com testfsiz.com
+ testuid.com testrc.com testrel.com testargs.com testfsiz.com testsub.com
 
 COBJS=getargs.obj assert.obj printf.obj fprintf.obj sprintf.obj  \
 doprnt.obj gets.obj puts.obj fwrite.obj getw.obj  \
@@ -160,7 +160,10 @@ testovr1.ovr: testovr2.obj testovrx.sym
 testbdos.com: testbdos.c  $(LIBS) $(TOOLS) $(CRTOBJS)
 	zxcc c --v --r testbdos.c
 
-testargs.com: testrel.c  $(LIBS) $(TOOLS) $(CRTOBJS)
+testsub.com: testsub.c  $(LIBS) $(TOOLS) $(CRTOBJS)
+	zxcc c --v --r testsub.c
+
+testargs.com: testargs.c  $(LIBS) $(TOOLS) $(CRTOBJS)
 	zxcc c --v --r testargs.c
 
 testrel.com: testrel.c  $(LIBS) $(TOOLS) $(CRTOBJS)
