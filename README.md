@@ -44,6 +44,7 @@ The sources of the fixes needs to be documented ... It constantly aligns with (h
 
 ### Z80 CP/M C compiler options:
 
+```
 -A      Generate a self-relocating .COM program
 -R      Link in command line wild card expansion code
 -V      Be verbose during compilation
@@ -61,7 +62,7 @@ The sources of the fixes needs to be documented ... It constantly aligns with (h
 -X      Suppress local symbols in symbol tables
 -M      Generate a map file, e.g. -Mfile.map
 -Y      Compile as Overlay
-
+```
 
 ### Miscellaneouse Function Changes
 
