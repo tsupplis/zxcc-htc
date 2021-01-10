@@ -61,7 +61,7 @@ DOCS=htc.txt options.txt z80doc.txt readme.txt
 HEADERS=assert.h cpm.h exec.h hitech.h math.h setjmp.h stat.h stddef.h stdio.h \
   string.h time.h unixio.h conio.h ctype.h float.h limits.h overlay.h signal.h \
   stdarg.h stdint.h stdlib.h sys.h unistd.h stdio.i
-ORIGTOOLS=cgen.com cpp.com cref.com debug.com dehuff.com \
+ORIGTOOLS=cgen.com cpp.com cref.com debug.com  \
 	libr.com link.com objtohex.com optim.com p1.com \
 	zas.com
 
@@ -70,7 +70,7 @@ CRTOBJS=crt0.obj rrt0.obj wcr0.obj
 ZCRTOBJS=zcrtcpm.obj zrrtcpm.obj
 TOOLSOBJS=ec.obj symtoas.obj exec.obj
 LIBS=libc.lib libovr.lib libf.lib
-TOOLS=c.com symtoas.com exec.com dehuff.com enhuff.com
+TOOLS=c.com symtoas.com exec.com dehuff.com enhuff.com dehuff.com
 
 all: $(LIBS) $(CRTOBJS) $(TOOLS)
 
@@ -202,9 +202,10 @@ test: $(TESTS)
 	zxcc testfsiz
 
 dist: dist/htc-bin-$(TAG).zip dist/htc-test-$(TAG).zip \
- dist/htc-bin-$(TAG).lha dist/htc-test-$(TAG).lha
+ dist/htc-bin-$(TAG).lha dist/htc-test-$(TAG).lha \
+ dist/htc-bin-$(TAG).lbr dist/htc-test-$(TAG).lbr
 
-dist/htc-test-$(TAG).zip dist/htc-test-$(TAG).lha: 
+dist/htc-test-$(TAG).zip dist/htc-test-$(TAG).lha dist/htc-test-$(TAG).lbr:
 	mkdir -p dist
 	rm -rf dist/test dist/htc-test*
 	mkdir -p dist/test
@@ -212,6 +213,11 @@ dist/htc-test-$(TAG).zip dist/htc-test-$(TAG).lha:
 	cp test*.sub dist/test
 	(cd dist/test;sh -c 'zip ../htc-test-$(TAG).zip *.*')
 	(cd dist/test;sh -c 'lha a ../htc-test-$(TAG).lha *.*')
+	(cd dist/test; \
+        cp ../../empty.lbr temp.lbr ;\
+        zxcc lu --O temp.lbr --A 'TEST*.*' --C ;\
+        mv temp.lbr ../htc-test-$(TAG).lbr ;\
+    )
 	rm -rf dist/test
 
 dist/htc-bin-$(TAG).zip dist/htc-bin-$(TAG).lha: all
@@ -224,10 +230,23 @@ dist/htc-bin-$(TAG).zip dist/htc-bin-$(TAG).lha: all
 	cp exec.com dist/htc/'$$exec.com'
 	cp symtoas.com dist/htc
 	cp c.com dist/htc
+	cp enhuff.com dehuff.com dist/htc
 	cp $(CRTOBJS) dist/htc
 	cp $(DOCS) dist/htc
 	cp pipemgr/pipemgr.rsx pipemgr/tee.com dist/htc
 	(cd dist/htc;sh -c 'zip ../htc-bin-$(TAG).zip *.*')
 	(cd dist/htc;sh -c 'lha a ../htc-bin-$(TAG).lha *.*')
+	(cd dist/htc; \
+        cp ../../empty.lbr temp.lbr ;\
+        zxcc lu --O temp.lbr --A '*.COM' --C ;\
+        zxcc lu --O temp.lbr --A '*.H' --C ;\
+        zxcc lu --O temp.lbr --A '*.I' --C ;\
+        zxcc lu --O temp.lbr --A '*.LIB' --C ;\
+        zxcc lu --O temp.lbr --A '*.OBJ' --C ;\
+        zxcc lu --O temp.lbr --A '*.RSX' --C ;\
+        zxcc lu --O temp.lbr --A '*.TXT' --C ;\
+        mv temp.lbr ../htc-bin-$(TAG).lbr ;\
+    )
+	rm -rf dist/htc
 
 
