@@ -6,10 +6,10 @@ TAG=$(shell ((git describe --exact-match --tags $(git log -n1 --pretty='%h') 2>/
         sed -e 's/^$$/UNKNOWN/g' -e 's/^v//g')
 
 .c.obj:
-	zxcc oc -c $(CFLAGS) --c $*.c
+	zxcc oc -v -c $(CFLAGS) --c $*.c
 
 .as.obj: 
-	zxcc zas $(ASFLAGS) $*.as
+	zxcc zas -v $(ASFLAGS) $*.as
 
 TESTS=testver.com testio.com testovr.com testovr1.ovr testovr2.ovr teststr.com \
  testbios.com testbdos.com testtrig.com testftim.com testfile.com testaes.com \
@@ -67,9 +67,9 @@ CRTOBJS=crt0.obj rrt0.obj wcr0.obj
 ZCRTOBJS=zcrtcpm.obj zrrtcpm.obj
 TOOLSOBJS=ec.obj symtoas.obj exec.obj
 LIBS=libc.lib libovr.lib libf.lib
-TOOLS=c.com symtoas.com $$exec.com dehuff.com enhuff.com dehuff.com
+TOOLS=c.com symtoas.com dehuff.com enhuff.com dehuff.com
 
-all: $(LIBS) $(CRTOBJS) $(TOOLS)
+all: $(LIBS) $(CRTOBJS) $(TOOLS) $$exec.com
 
 libovr.lib:	$(OVROBJS)
 	rm -f libovr.lib
@@ -96,7 +96,7 @@ crt0.obj: zcrtcpm.obj
 	cp zcrtcpm.obj crt0.obj
 
 clean:
-	-rm -f $(TOOLS) $(LIBS) $(COBJS) $(CRTOBJS) $(ZCRTOBJS) $(OVROBJS) $(TOOLSOBJS) \
+	-rm -f $(TOOLS) '$$exec.com' $(LIBS) $(COBJS) $(CRTOBJS) $(ZCRTOBJS) $(OVROBJS) $(TOOLSOBJS) \
         $(FOBJS) \
         test*.com test*.obj test*.out test*.sta test*.err test*.sym \
         testovrx.* test*.ovr
