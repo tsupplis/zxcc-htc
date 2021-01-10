@@ -272,24 +272,22 @@ bdos()
     have been commented out for now.
 
 strchr() and strrchr()
-```
+
         char *strchr(char *s, int c)
         char *strrchr(char *s, int c)
     These functions - as well as index() and rindex() (which are identical)
     previously returned a NULL for no match.  The functions now return
     a pointer to the character string's ending NUL character.
-```
 
 stricmp() and strnicmp()
-```
+
         char stricmp(char *s1, char *s2)
         char strnicmp(char *s1, char *s2, size_t n)
     Case-insensitive versions of strcmp() and strncmp() comparison routines.
     Can also be referenced as strcasecmp() and strncasecmp().
-```
 
 strstr(), strnstr(), stristr() and strnistr()
-```
+
         char *strstr(char *t, char *s)
         char *strnstr(char *t, char *s, unsigned int n)
         char *strcasestr(char *t, char *s)
@@ -301,7 +299,6 @@ strstr(), strnstr(), stristr() and strnistr()
     All these functions return a pointer to the first character of
     the first occurence of string s in string t if found, and NULL
     otherwise.
-```
 
 strdup()
 ```
