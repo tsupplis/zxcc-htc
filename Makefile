@@ -202,17 +202,15 @@ test: $(TESTS)
 	zxcc testfsiz
 
 dist: dist/htc-bin-$(TAG).zip dist/htc-test-$(TAG).zip \
- dist/htc-bin-$(TAG).lha dist/htc-test-$(TAG).lha \
  dist/htc-bin-$(TAG).lbr dist/htc-test-$(TAG).lbr
 
-dist/htc-test-$(TAG).zip dist/htc-test-$(TAG).lha dist/htc-test-$(TAG).lbr:
+dist/htc-test-$(TAG).zip dist/htc-test-$(TAG).lbr:
 	mkdir -p dist
 	rm -rf dist/test dist/htc-test*
 	mkdir -p dist/test
 	cp test*.c dist/test
 	cp test*.sub dist/test
 	(cd dist/test;sh -c 'zip ../htc-test-$(TAG).zip *.*')
-	(cd dist/test;sh -c 'lha a ../htc-test-$(TAG).lha *.*')
 	(cd dist/test; \
         cp ../../empty.lbr temp.lbr ;\
         zxcc lu --O temp.lbr --A 'TEST*.*' --C ;\
@@ -220,7 +218,7 @@ dist/htc-test-$(TAG).zip dist/htc-test-$(TAG).lha dist/htc-test-$(TAG).lbr:
     )
 	rm -rf dist/test
 
-dist/htc-bin-$(TAG).zip dist/htc-bin-$(TAG).lha: all
+dist/htc-bin-$(TAG).zip dist/htc-bin-$(TAG).lbr: all
 	mkdir -p dist
 	rm -rf dist/htc dist/htc-bin*
 	mkdir -p dist/htc
@@ -235,7 +233,6 @@ dist/htc-bin-$(TAG).zip dist/htc-bin-$(TAG).lha: all
 	cp $(DOCS) dist/htc
 	cp pipemgr/pipemgr.rsx pipemgr/tee.com dist/htc
 	(cd dist/htc;sh -c 'zip ../htc-bin-$(TAG).zip *.*')
-	(cd dist/htc;sh -c 'lha a ../htc-bin-$(TAG).lha *.*')
 	(cd dist/htc; \
         cp ../../empty.lbr temp.lbr ;\
         zxcc lu --O temp.lbr --A '*.COM' --C ;\
