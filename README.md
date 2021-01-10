@@ -1,4 +1,4 @@
-# zxcc-htc
+# HTC 3.09 Patched and Compiled on Unix using ZXCC
 
 Extended htc (c driver + libc + libf). expected to work with zxcc. It is in the process
 of realigning with the content of https://github.com/agn453/HI-TECH-Z80-C. Differences
