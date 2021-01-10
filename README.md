@@ -11,6 +11,8 @@ support is offered or implied.
 You may use this software for whatever you like, providing you acknowledge
 that the copyright to this software remains with HI-TECH Software.
 
+*Current Version zxcc-htc 3.09-P008 includes all the changes of HI-TECH-Z80-C v3.09-6*
+
 ## Features and patches incorporated
 
 - Collection of fixes
