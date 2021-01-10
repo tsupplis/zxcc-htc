@@ -17,6 +17,7 @@
 #include    <sys.h>
 #include    <stdlib.h>
 #include    <unixio.h>
+#include    <signal.h>
 
 /*
  *	C command
@@ -154,13 +155,18 @@ main(int argc, char ** argv)
 	register char *	cp, * xp;
 	short		i;
 
-	fprintf(stderr, "HI-TECH C COMPILER (CP/M-80) V@@TAG@@\n");
-    fprintf(stderr, "Copyright (C) 1984-2021 HI-TECH SOFTWARE\n");
+    if (isatty(fileno(stdin))) {
+        signal_t prev=signal(SIGINT,SIG_IGN);
+        fprintf(stderr, "HI-TECH C COMPILER (CP/M-80) V@@TAG@@\n");
+        fprintf(stderr, "Copyright (C) 1984-2021 HI-TECH SOFTWARE\n");
 #if	EDUC
-	fprintf(stderr, "Licensed for Educational purposes only\n");
+        fprintf(stderr, "Licensed for Educational purposes only\n");
 #endif	EDUC
-	if(argc == 1)
+        signal(SIGINT,prev);
+    }
+	if(argc == 1) {
 		argv = _getargs((char *)0, PROMPT);
+    }
 	setup();
 	while(*++argv) {
 		if((argv)[0][0] == '-') {
