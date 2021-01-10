@@ -1,7 +1,7 @@
 #include	"cpm.h"
 #include	<signal.h>
 
-static signal_t where;
+static signal_t where=SIG_IGN;
 
 signal_t signal(int sig, signal_t action) 
 {
@@ -26,5 +26,5 @@ _sigchk()
 		return;
 	if(where == SIG_DFL)
 		exit(0);
-	(*where)(0);
+	((int(*)())where)(0);
 }
