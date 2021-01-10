@@ -1,6 +1,7 @@
 all: pipemgr.rsx tee.com
 
 pipemgr.rsx: pipemgr.rel
+	#drlink is digital link renamed for avoiding clash with htc link
 	zxcc drlink -"pipemgr[op nr]"
 	mv pipemgr.prl pipemgr.rsx
 
@@ -15,6 +16,7 @@ tee.obj: tee.c
 
 tee.com: tee.obj pipemgr.obj
 	zxc -otee.com tee.obj pipemgr.obj
+	zxcc gencom tee.com pipemgr.rsx
 
 clean:
 	rm -f pipemgr.rel
