@@ -61,10 +61,9 @@ The sources of the fixes needs to be documented ... It constantly aligns with (h
 -Y      Compile as Overlay
 
 
-### Function Change Details
+### Miscellaneouse Function Changes
 
 
-```
 memset()
 
      The Hi-Tech C implementation of memset() is seriously broken and is
@@ -124,10 +123,8 @@ bdos()
     standard errno global item.)  Always use the third form when checking
     for an error result.  The compiler is quite clever and doesn't make your
     program work harder ... it just uses the L register.
-```
 
-```
-Wildcard expansion
+### Wildcard expansion
 
     Programs compiled with this update get wildcard expansion of the CP/M
     command line automatically.  There is no longer any need to call
@@ -147,7 +144,7 @@ Wildcard expansion
     modules in LIBC.LIB.  That entailed rebuilding the entire library from
     scratch.  A script to do that is supplied.
 
-Filename drive and user number prefixes
+### Filename drive and user number prefixes
 
     The format of file name prefixes indicating drive letter and/or user
     number is now much more liberal.  If a file "sample.txt" is on drive
@@ -164,7 +161,7 @@ Filename drive and user number prefixes
     Note that any of these forms is acceptable for program arguments, even
     those containng wildcard characters (?, *).
 
-strcasecmp()
+### strcasecmp()
 
     The case-insensitive string comparison function strcasecmp() has been
     implemented.  Its function prototype is in string.h.  It works just like
@@ -173,7 +170,7 @@ strcasecmp()
     allows one to limit the comparison to a certain number of characters.
     stricmp is also defined as a symbol.
 
-toupper() and tolower()
+### toupper() and tolower()
 
     The functions toupper() and tolower() were implemented as macros which
     added a case-shift value to the character parameter without checking to
@@ -186,14 +183,14 @@ toupper() and tolower()
     These operations now invoke the correspondingly named routines in LIBC.LIB
     and it is no longer necessary to pre-test the character.
 
-Support for read/write files
+### Support for read/write files
 
     The stdio functions now allow files to be opened in modes "r+" and "w+" - 
     ie, reading and writing are supported on the same file.
     Remember to fflush() or fseek() between a read and a write.
     This code is experimental.
 
-CP/M 3 compatible error system
+### CP/M 3 compatible error system
 
     exit(0) and _exit(0) set the CP/M 3 error code to 0.
     exit(n) and _exit(n) for non-zero n set the error code to 0xFF00 | (n&0x7F).
@@ -208,7 +205,7 @@ CP/M 3 compatible error system
 
     will only execute OTHER if CPROG exited with the value 0.
 
-PIPEMGR support (CP/M 3)
+### PIPEMGR support (CP/M 3)
 
     Programs automatically check for PIPEMGR when they load, and if it
     is present the C streams stdin, stdout and stderr are routed to their
@@ -243,14 +240,13 @@ PIPEMGR support (CP/M 3)
     Remember that when PIPEMGR has parsed the command line, you may have a 
     number of blank (zero-length) arguments.
     
-Graceful exits
+### Graceful exits
 
     Compiled programs exit gracefully if run on an 8080 or 8086 processor,
     or if there is not enough memory for the program and its static data.
     This is done in the CRTCPM.OBJ module.
 
-
-Checks for a ZCPR3 environment
+### Checks for a ZCPR3 environment
 
     The variable
 
@@ -263,16 +259,13 @@ Checks for a ZCPR3 environment
 
     The Z3 environment address must be passed to the program in HL.
 
-Extended getenv()
+### Extended getenv()
 
     Under CP/M 3, getenv() uses the search path set by SETDEF to locate the
     ENVIRON file. So if you like to keep ENVIRON on a drive that isn't A:, 
     programs will still find it.
 
-```
-
-```
-STRING.H
+### STRING.H
     The header file has been changed to reflect the available
     functions in LIBC.LIB.  There are still missing routines -
     namely strcoll() strcspn() strpbrk() and strspn() and these
@@ -318,7 +311,7 @@ strtok()
     (whichever comes first).  It then adds a NUL character to the
     end of the string.  This is a non-conforming POSIX function.
 
-TIME.H
+### TIME.H
     Now includes a prototype for strftime() - see below.
 
 strftime()
@@ -366,18 +359,16 @@ strftime()
     strftime() returns the number of characters placed in the
     buffer, not including the terminating NUL, or zero if more
     than maxs characters were produced.
-```
 
+### Fix to Environment Location
 
 The getenv() function was not correctly looking up the location of
 the environment file under CP/M 3 for the "default" entry in the drive
 search chain.  It will now locate the ENVIRON file if you have set-up
 the default search chain with a default entry. For example
 
-```
 ; Set search chain to current drive, RAMdisk, C: then A:
 setdef * m: c: a:
-```
 
 in your CP/M 3 PROFILE.SUB file (or manually entered on the command line).
 
@@ -387,8 +378,10 @@ Andrey Nikitin has contributed the sources for the DEHUFF and ENHUFF programs th
 
 These sources may be built using the HI-TECH C compiler or using the gcc compiler under Linux or macOS. I built them natively under CP/M using -
 
+```
 c -O -v enhuff.c encode.c misc.c
 c -O -v dehuff.c decode.c misc.c
+```
 
 ### Change supported string length in printf() routine
 
