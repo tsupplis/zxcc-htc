@@ -154,8 +154,8 @@ main(int argc, char ** argv)
 	register char *	cp, * xp;
 	short		i;
 
-	fprintf(stderr, "HI-TECH C COMPILER (CP/M-80) V3.09-P009\n");
-	fprintf(stderr, "Copyright (C) 1984-2021 HI-TECH SOFTWARE\n");
+	fprintf(stderr, "HI-TECH C COMPILER (CP/M-80) V@@TAG@@\n");
+    fprintf(stderr, "Copyright (C) 1984-2021 HI-TECH SOFTWARE\n");
 #if	EDUC
 	fprintf(stderr, "Licensed for Educational purposes only\n");
 #endif	EDUC

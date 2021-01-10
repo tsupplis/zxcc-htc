@@ -3,7 +3,8 @@ CFLAGS=--o
 ASFLAGS=--j
 TAG=$(shell ((git describe --exact-match --tags $(git log -n1 --pretty='%h') 2>/dev/null) \
     || (git tag|tail -n 1|sed -e 's/$$/-dev/') || echo "vdev" ) |grep ^v| \
-        sed -e 's/^$$/UNKNOWN/g' -e 's/^v//g')
+        sed -e 's/\|/-/g' | \
+        sed -e 's/^$$/UNKNOWN/g' -e 's/^v//g' )
 
 .c.obj:
 	zxcc oc --v $(CFLAGS) --c $*.c
@@ -112,6 +113,13 @@ $$exec.com: exec.obj
 
 symtoas.com: symtoas.obj $(LIBS) $(CRTOBJS) c.com
 	zxcc c --v --r symtoas.obj
+
+ec.obj: ec.c
+	echo TAG=$(TAG)
+	cat ec.c|sed -e 's|@@TAG@@|$(TAG)|' > '$$c.c'
+	zxcc oc --DTAG=$(TAG) --v $(CFLAGS) --c '$$c.c'
+	rm -f '$$c.c'
+	mv '$$c.obj' ec.obj
 
 c.com: ec.obj $(LIBS) $(CRTOBJS) $$exec.com
 	zxcc link --z --Ptext=0,data,bss --C100h --oc.com crt0.obj ec.obj libc.lib
