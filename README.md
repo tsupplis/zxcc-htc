@@ -272,7 +272,7 @@ bdos()
     have been commented out for now.
 
 strchr() and strrchr()
-````
+```
         char *strchr(char *s, int c)
         char *strrchr(char *s, int c)
     These functions - as well as index() and rindex() (which are identical)
