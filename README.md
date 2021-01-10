@@ -22,9 +22,9 @@ that the copyright to this software remains with HI-TECH Software.
 
 The sources of the fixes needs to be documented ... It constantly aligns with (https://github.com/agn453/HI-TECH-Z80-C). Still a few differences but they are going to be cleaned out
 
-# Initial History (New Release details will be on a per release basis in Git)
+# Initial History 
 
-## Release 3.09-P005 
+## Extras from Release 3.09-P005 
 
 - Trigonometry Functions Fixed (https://github.com/agn453/HI-TECH-Z80-C v3.09-1)
 - Pipe Manager Integration (http://www.seasip.info/Cpm/software/index.html)
