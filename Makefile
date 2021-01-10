@@ -197,7 +197,7 @@ dist/htc-test-$(TAG).zip dist/htc-test-$(TAG).lbr:
 	mkdir -p dist/test
 	cp test*.c dist/test
 	cp test*.sub dist/test
-	(cd dist/test;sh -c 'zip ../htc-test-$(TAG).zip *.*')
+	(cd dist;sh -c 'zip -r htc-test-$(TAG).zip test')
 	(cd dist/test; \
         cp ../../empty.lbr temp.lbr ;\
         zxcc lu --O temp.lbr --A 'TEST*.*' --C ;\
@@ -219,7 +219,21 @@ dist/htc-bin-$(TAG).zip dist/htc-bin-$(TAG).lbr: all
 	cp $(CRTOBJS) dist/htc
 	cp $(DOCS) dist/htc
 	cp pipemgr/pipemgr.rsx pipemgr/tee.com dist/htc
-	(cd dist/htc;sh -c 'zip ../htc-bin-$(TAG).zip *.*')
+	rm -rf dist/cpm
+	mkdir -p dist/cpm/bin80
+	mkdir -p dist/cpm/lib80
+	mkdir -p dist/cpm/include80
+	cp $(LIBS) dist/cpm/lib80
+	cp $(HEADERS) dist/cpm/include80
+	cp $(ORIGTOOLS) dist/cpm/bin80
+	cp '$$exec.com' dist/cpm/bin80/'$$exec.com'
+	cp symtoas.com dist/cpm/bin80
+	cp c.com dist/cpm/bin80
+	cp enhuff.com dehuff.com dist/cpm/bin80
+	cp $(CRTOBJS) dist/cpm/lib80
+	cp $(DOCS) dist/cpm
+	cp pipemgr/pipemgr.rsx pipemgr/tee.com dist/cpm/bin80
+	(cd dist;sh -c 'zip -r htc-bin-$(TAG).zip cpm')
 	(cd dist/htc; \
         cp ../../empty.lbr temp.lbr ;\
         zxcc lu --O temp.lbr --A '*.COM' --C ;\
