@@ -1,11 +1,13 @@
-			** Overlays with Hi-Tech C **
+# Overlays with Hi-Tech C
 
 	The following procedure may be used to create overlays for use
 with Hi-Tech C. Although messy to compile and link, it results in a smaller
 TPA being used by a given program. Thus larger programs can be created: the
 only penalty is the time taken to load the overlay from disk.
 
-1. Creating the source files.
+The option y on the c front end simplifies the creation of overlays.
+
+## 1. Creating the source files.
 	An overlay can be called from the main program using
 
 	[value = ]ovloader(filename,argument);
@@ -19,7 +21,7 @@ function.
 program, but otherwise appears as a normal C program, except that the main
 function must be called ovmain() instead of main().
 
-2. Linking and producing the overlays.
+## 2. Linking and producing the overlays.
 
 	The main function must be linked first. Ensure that the modules
 ovloader.c and ovbgn.as (in that order) are linked as well, and request the
@@ -37,10 +39,10 @@ Do not invoke the linker as this will result in many errors! When you have
 done this, make up a small ascii file (with wordstar etc.) to direct the
 linker. The format of this file should be as follows (NOTE: MUST be in lower
 case!):
-
+```
 -c01234h -ptext=01234h,data -otest1.ovr test1.obj <other modules as reqd> \
 main.obj 0:a:libc.lib
-
+```
 (assuming the overlay is to be test1.ovr, the source was test1.c). Other
 modules may be linked in as well. Note the use of the \ character to
 continue input onto the next line. Naturally, you should replace the '01234h'
@@ -48,9 +50,9 @@ with the actual value of _ovbgn as obtained from the MAIN.AS file.
 
 	Assume this file is named TEST.LNK. You are now ready to link the
 overlay. Use the command
-
+```
 LINK <TEST.LNK
-
+```
 	and it should rumble away to itself and complete. Note that you do
 not have to repeat the linking and loading of the main segment if you only
 change the overlay source: the same main.obj file may be used each time the
@@ -69,5 +71,14 @@ C. This compiler does seem to produce small, fast code for Z80 machines,
 and is probably worth persevering with.
 
 			-- Ron Murray, 25/8/88
+# 3. Example
+
+Looking at the test program in the repository. One caller and 2 overlays:
+
+```
+c -ftestovrx.sym -v -r testovr.c -lovr
+c -y -r -v testovr2.c testovrx.sym
+c -y -r -v testovr1.c testovrx.sym
+```
 
 
