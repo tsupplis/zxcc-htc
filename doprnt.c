@@ -1,20 +1,22 @@
 #include	<stdio.h>
 #include	<ctype.h>
+#include	<string.h>
 
 
 /*
- *	doprnt for 8086
+ *	doprnt for Z80
  */
+
+extern int	atoi(char *);
+extern int	_pnum();
 
 static uchar	ival;
 static char *	x;
 static FILE *	ffile;
-extern int	atoi(char *);
-extern int	strlen(char *);
 
 static
 pputc(c)
-int	c;
+char	c;
 {
 	putc(c, ffile);
 }
@@ -34,12 +36,11 @@ FILE *	file;
 register char *		f;
 int *		a;
 {
-	char	c, prec;
+	char	c;
 	uchar	fill, left;
-	unsigned int i, len;
-	uchar	base, width, sign;
-	uchar	ftype;
-	extern	short _pnum(), _fnum();
+	unsigned	i;
+	uchar	base, width, prec, sign;
+	unsigned	len;
 
 	ffile = file;
 	while(c = *f++)
@@ -50,7 +51,6 @@ int *		a;
 			width = 0;
 			sign = 0;
 			left = 0;
-			ftype = 0;
 			len = sizeof(int)/sizeof *a;
 			if(*f == '-') {
 				f++;
@@ -73,7 +73,7 @@ int *		a;
 					prec = ival;
 				}
 			else
-				prec = fill ? width : -1;
+				prec = fill ? width : 0;
 			if(*f == 'l') {
 				f++;
 				len = sizeof(long)/sizeof *a;
@@ -103,8 +103,6 @@ int *		a;
 					x = "(null)";
 				i = strlen(x);
 dostring:
-				if(prec < 0)
-					prec = 0;
 				if(prec && prec < i)
 					i = prec;
 				if(width > i)
@@ -128,22 +126,6 @@ dostring:
 				goto dostring;
 
 			case 'u':
-			case 'U':
-				break;
-
-			case 'e':
-			case 'E':
-				sign++;
-
-			case 'g':
-			case 'G':
-				sign++;
-
-			case 'f':
-			case 'F':
-				if(prec < 0)
-					prec = 6;
-				ftype = 1;
 				break;
 			}
 			if(left) {
@@ -152,15 +134,8 @@ dostring:
 			}
 			if(isupper(c))
 				len = sizeof(long)/sizeof *a;
-			if(prec < 0)
-				prec = 0;
-			if(ftype) {
-				width = _fnum(*(double *)a, prec, width, sign, pputc);
-				a += sizeof(double)/sizeof(*a);
-			} else {
-				width = _pnum((len == sizeof(int)/sizeof *a ? (sign ? (long)*a : (unsigned long)*a) : *(long *)a), prec, width, sign, base, pputc);
-				a += len;
-			}
+			width = _pnum((len == sizeof(int)/sizeof *a ? (sign ? (long)*a : (unsigned long)*a) : *(long *)a), prec, width, sign, base, pputc);
+			a += len;
 			while(left-- > width)
 				pputc(' ');
 		}

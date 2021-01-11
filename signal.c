@@ -1,7 +1,7 @@
 #include	"cpm.h"
 #include	<signal.h>
 
-static signal_t where=SIG_IGN;
+static signal_t where;
 
 signal_t signal(int sig, signal_t action) 
 {
