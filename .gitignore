@@ -12,7 +12,7 @@ $exec.com
 test*.com
 *.ovr
 *.lib
-**/.*.swp
+**/.*.sw*
 **/*.obj
 dist
 test*.dat
