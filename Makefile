@@ -67,7 +67,7 @@ CRTOBJS=crtcpm.obj rrtcpm.obj
 ZCRTOBJS=zcrtcpm.obj zrrtcpm.obj
 TOOLSOBJS=ec.obj symtoas.obj exec.obj
 LIBS=libc.lib libovr.lib libf.lib
-TOOLS=c.com symtoas.com dehuff.com enhuff.com dehuff.com
+TOOLS=c.com symtoas.com enhuff.com dehuff.com
 
 all: $(LIBS) $(CRTOBJS) $(TOOLS) $$exec.com
 
@@ -124,11 +124,11 @@ ec.obj: ec.c
 c.com: ec.obj $(LIBS) $(CRTOBJS) $$exec.com
 	zxcc link --z --Ptext=0,data,bss --C100h --oc.com crtcpm.obj ec.obj libc.lib
 
-enhuff.com: enhuff.c encode.c hmisc.c $(LIBS) c.com $(CRTOBJS)
-	zxcc c --v --r --oenhuff.com enhuff.c encode.c hmisc.c
+enhuff.com: enhuff.obj encode.obj hmisc.obj $(LIBS) c.com $(CRTOBJS)
+	zxcc c --v --r --oenhuff.com enhuff.obj encode.obj hmisc.onj
 
-dehuff.com: dehuff.c decode.c hmisc.c $(LIBS) c.com $(CRTOBJS)
-	zxcc c --v --r --odehuff.com dehuff.c decode.c hmisc.c
+dehuff.com: dehuff.obj decode.obj hmisc.obj $(LIBS) c.com $(CRTOBJS)
+	zxcc c --v --r --odehuff.com dehuff.obj decode.obj hmisc.obj
 
 testfile.com: testfile.c $(LIBS) $(TOOLS) $(CRTOBJS)
 	zxcc c --v --r testfile.c

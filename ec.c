@@ -300,7 +300,7 @@ int main(int argc, char **argv)
                 exit(0); /* Ignore all other options for HELP */
 
 			default:
-                error("Unknown flag %s - use -H for HELP\n", argv[0]);
+                error("Unknown flag %s - use -H for HELP", argv[0]);
 			}
 			continue;
 		}
@@ -489,7 +489,7 @@ void doit()
 		if (xrname) 
 		{
 			flgs[0] = xrname;
-			strcat(strcpy(tmpbuf, "-h"), outfile);
+			strcat(strcpy(tmpbuf, "-H"), outfile);
 			if(cp = rindex(tmpbuf, '.'))
 				strcpy(cp, ".CRF");
 			else
@@ -759,6 +759,10 @@ void compile(char *s)
 	vec[i++] = tmpf2;
 	vec[i++] = tmpf3;
 	vec[i++] = (char *)0;
+
+    /* vec[0] is junk.  Move everything down one slot.  */
+    for (i=0; vec[i]; ++i)
+		vec[i] = vec[i+1];
 	doexec(pass1, vec);
 	vec[0] = tmpf2;
 	vec[1] = keepas && !optimize ? strcat(strcpy(tmpbuf, s), ".AS") : tmpf1;
@@ -789,7 +793,7 @@ void compile(char *s)
 	if (optimize && !speed)
 		vec[i++] = "-J";
 	vec[i++] = "-N";
-	vec[i++] = strcat(strcat(strcpy(tmpbuf, "-o"), s), ".OBJ");
+    vec[i++] = strcat(strcat(strcpy(tmpbuf, "-O"), s), ".OBJ");
 	vec[i++] = cp;
 	vec[i] = (char *)0;
 	doexec(assem, vec);
@@ -859,7 +863,8 @@ void viewfile(char *fn)
     FILE  *f;
     char  *bp, buf[200];
 
-    f = fopen(fn, "r");
+    if (!(f = fopen(fn, "r")))
+        error("Unable to open help file %s", fn);
     while (bp=fgets(buf, 200, f))
         printf("%s", bp);
     fclose(f);
