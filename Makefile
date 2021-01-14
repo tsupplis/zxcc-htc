@@ -63,7 +63,7 @@ ORIGTOOLS=cgen.com cpp.com cref.com debug.com  \
 	zas.com
 
 OVROBJS=ovrload.obj ovrbgn.obj
-CRTOBJS=crt0.obj rrt0.obj wcr0.obj
+CRTOBJS=crtcpm.obj rrtcpm.obj
 ZCRTOBJS=zcrtcpm.obj zrrtcpm.obj
 TOOLSOBJS=ec.obj symtoas.obj exec.obj
 LIBS=libc.lib libovr.lib libf.lib
@@ -89,11 +89,11 @@ zcrtcpm.obj: zcrtcpm.as
 zrrtcpm.obj: zrrtcpm.as
 	zxcc zas zrrtcpm.as
 
-rrt0.obj: zrrtcpm.obj
-	cp zrrtcpm.obj rrt0.obj
+rrtcpm.obj: zrrtcpm.obj
+	cp zrrtcpm.obj rrtcpm.obj
 
-crt0.obj: zcrtcpm.obj
-	cp zcrtcpm.obj crt0.obj
+crtcpm.obj: zcrtcpm.obj
+	cp zcrtcpm.obj crtcpm.obj
 
 clean:
 	-rm -f $(TOOLS) '$$exec.com' $(LIBS) $(COBJS) $(CRTOBJS) $(ZCRTOBJS) $(OVROBJS) $(TOOLSOBJS) \
@@ -122,7 +122,7 @@ ec.obj: ec.c
 	mv '$$c.obj' ec.obj
 
 c.com: ec.obj $(LIBS) $(CRTOBJS) $$exec.com
-	zxcc link --z --Ptext=0,data,bss --C100h --oc.com crt0.obj ec.obj libc.lib
+	zxcc link --z --Ptext=0,data,bss --C100h --oc.com crtcpm.obj ec.obj libc.lib
 
 enhuff.com: enhuff.c encode.c hmisc.c $(LIBS) c.com $(CRTOBJS)
 	zxcc c --v --r --oenhuff.com enhuff.c encode.c hmisc.c
@@ -229,6 +229,7 @@ dist/htc-bin-$(TAG).zip dist/htc-bin-$(TAG).lbr: all
 	cp enhuff.com dehuff.com dist/htc
 	cp $(CRTOBJS) dist/htc
 	cp $(DOCS) dist/htc
+	cp options.txt dist/htc/options
 	cp pipemgr/pipemgr.rsx pipemgr/tee.com dist/htc
 	rm -rf dist/cpm
 	mkdir -p dist/cpm/bin80
@@ -239,6 +240,7 @@ dist/htc-bin-$(TAG).zip dist/htc-bin-$(TAG).lbr: all
 	cp $(ORIGTOOLS) dist/cpm/bin80
 	cp '$$exec.com' dist/cpm/bin80/'$$exec.com'
 	cp symtoas.com dist/cpm/bin80
+	cp options.txt dist/cpm/options
 	cp c.com dist/cpm/bin80
 	cp enhuff.com dehuff.com dist/cpm/bin80
 	cp $(CRTOBJS) dist/cpm/lib80

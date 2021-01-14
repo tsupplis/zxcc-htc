@@ -36,32 +36,32 @@ The sources of the fixes needs to be documented ... It constantly aligns with (h
 
 ### File Name Changes
 
-- crtcpm.obj has been renamed crt0.obj to win some command line space
-- rrtcpm.obj has been renamed rrt0.obj to win some command line space
-- wcr0.obj has been added to add expansion of wild card (-R option)
 - libovl.lib has been added for overlay support
-- stdint.h/unistd.h have been added
+- stdint.h&unistd.h have been added
 
 ### Z80 CP/M C compiler options:
 
 ```
--A      Generate a self-relocating .COM program
--R      Link in command line wild card expansion code
--V      Be verbose during compilation
--S      Generate assembler code in a .AS file; don't assemble or link
--C      Generate object code only; don't link.
--E      Name of the executable output
--O      Invoke the peephole optimizer
--I      Specify an include directory, e.g. -I1:B:
--U      Undefine a predefined symbol, e.g. -UDEBUG
--D      Define a symbol, e.g. -DDEBUG=1
--L      Scan a library, e.g. -LF scans the floating point library
--F      Generate a symbol file suitable for use with debug.com, e.g.
-                -Ffile.sym; default file name is L.SYM.
--W      Set warning level, e.g. -w5 or -w-2
--X      Suppress local symbols in symbol tables
--M      Generate a map file, e.g. -Mfile.map
--Y      Compile as Overlay
+-A	Generate a self-relocating .COM program.
+-C	Generate object code only; don't link.
+-CR     Produce a cross-reference listing e.g. -CRfile.crf
+-D	Define a symbol, e.g. -DDEBUG=1
+-E	Name of the executable output.
+-F	Generate a symbol file suitable for use with debug.com,
+		e.g. -Ffile.sym; default file name is L.SYM.
+-H      Output help (the OPTIONS file) and exit.
+-I	Specify an include directory, e.g. -I1:B:
+-L	Scan a library, e.g. -LF scans the floating point library.
+-M	Generate a map file, e.g. -Mfile.map
+-O	Invoke the peephole optimizer (reduced code-size)
+-OF	Invoke the optimizer for speed (Fast)
+-R	Link in command line wild card expansion code.
+-S	Generate assembler code in a .AS file; don't assemble or link.
+-U	Undefine a predefined symbol, e.g. -UDEBUG
+-V	Be verbose during compilation.
+-W	Set warning level, e.g. -w5 or -w-2
+-X	Suppress local symbols in symbol tables.
+-Y	Compile as Overlay.
 ```
 
 ### Miscellaneouse Function Changes

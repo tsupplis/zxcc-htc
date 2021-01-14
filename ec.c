@@ -1,71 +1,93 @@
 /*
- *	Copyright (C) 1984-1897 HI-TECH SOFTWARE
+ *  Copyright (C) 1984-1987 HI-TECH SOFTWARE
  *
- *	This software remains the property of HI-TECH SOFTWARE and is
- *	supplied under licence only. The use of this software is
- *	permitted under the terms of that licence only. Copying of
- *	this software except for the purpose of making backup or
- *	working copies for the use of the licensee on a single
- *	processor is prohibited.
+ *  This software remains the property of HI-TECH SOFTWARE and is
+ *  supplied under licence only. The use of this software is
+ *  permitted under the terms of that licence only. Copying of
+ *  this software except for the purpose of making backup or
+ *  working copies for the use of the licensee on a single
+ *  processor is prohibited.
  */
-#include	<stdio.h>
-#include	<ctype.h>
-#include	<string.h>
-#include	<cpm.h>
-#include	<exec.h>
-#include	<stat.h>
+
+/*----------------------------------------------------------------------*\
+ | Note by Jon Saxton, 3 May 2014.					|
+ |									|
+ | It appears that the source file C.C distributed with Hi-Tech C 3.09	|
+ | for CP/M-80 does not quite match the C.COM in the same distribution.	|
+ |									|
+ | This is a slightly modified version of C.C which yields a C.COM that	|
+ | seems to work and so could probably replace the standard compiler	|
+ | driver.  I use this version but just in case there is a bug which I	|
+ | have not yet discovered, I am leaving the original C.COM unchanged.	|
+ |									|
+ | Updates by Tony Nicholson (@agn453) and Thierry Supplisson		|
+ | (@tsupplis), 14 January 2021.					|
+ |									|
+ | Revised to better support building self-relocating .COM files and	|
+ | overlays by automating the building of the resident and overlay	|
+ | portions (new -Y compiler flag).					|
+\*----------------------------------------------------------------------*/
+
+#include    <stdio.h>
+#include    <ctype.h>
+#include    <string.h>
+#include    <cpm.h>
+#include    <exec.h>
+#include    <stat.h>
 #include    <sys.h>
 #include    <stdlib.h>
 #include    <unixio.h>
 #include    <signal.h>
 
 /*
- *	C command
- *	CP/M-80 version
+ * C command
+ * CP/M-80 version
  *
- *	C [-Y] [-C] [-O] [-I] [-F] [-U] [-D] [-S] [-X] [-P] [-W] [-M] files {-Llib}
+ * C [-C] [-O] [-I] [-F] [-U] [-D] [-S] [-X] [-P] [-W] [-M] [-V] [-Y] files {-Llib}
  */
 
-#define	DFCB	((struct fcb *)0x5C)
+#define DFCB    ((struct fcb *)0x5C)
 
-#define	MAXLIST	60		/* max arg list */
-#define	BIGLIST	120		/* room for much more */
+#define MAXLIST 60      /* max arg list */
+#define BIGLIST 120     /* room for much more */
 
-#define	HITECH	"HITECH"
-#define	PROMPT	"c"
-#define	TEMP	"TMP"
-#define	DEFPATH	"0:A:"
-#define	DEFTMP	""
+#define HITECH  "HITECH"
+#define PROMPT  "c"
+#define TEMP    "TMP"
+#define DEFPATH "0:A:"
+#define DEFTMP  ""
 
-#define	LIBSUFF	".LIB"		/* library suffix */
+#define LIBSUFF ".LIB"      /* library suffix */
 
-#define	LFLAGS		"-Z"
-#define	STDLIB		"C"
-/*#define	GETARGS		"-U__getargs"*/
-#define CPPGET  "-D_HTC_REDIR"
+#define LFLAGS      "-Z"
+#define STDLIB      "C"
 
-static char	keep,		/* retain .obj files, don't link */
-		keepas,		/* retain .as files, don't assemble */
-		verbose,	/* verbose - echo all commands */
-		optimize,	/* invoke optimizer */
-		speed,		/* optimize for speed */
-		reloc,		/* auto-relocate program at run time */
-		xref,		/* generate cross reference listing */
-		nolocal;	/* strip local symbols */
-static char overlay=0;
+static char
+    keep,       /* retain .obj files, don't link */
+    keepas,     /* retain .as files, don't assemble */
+    verbose,    /* verbose - echo all commands */
+    optimize,   /* invoke optimizer */
+    speed,      /* optimize for speed */
+    reloc,      /* auto-relocate program at run time */
+    xref,       /* generate cross reference listing */
+    nolocal,    /* strip local symbols */
+    overlay=0;  /* build with overlays */
 
-static char *	iuds[MAXLIST],	/* -[IUD] args to preprocessor */
-	    *	objs[MAXLIST],	/* .obj files and others for linker */
-	    *	flgs[BIGLIST],	/* flags etc for linker */
-	    *	libs[MAXLIST],	/* .lib files for linker */
-	    *	c_as[MAXLIST];	/* .c files to compile or .as to assemble */
+static char
+    *iuds[MAXLIST],  /* -[IUD] args to preprocessor */
+    *objs[MAXLIST],  /* .obj files and others for linker */
+    *flgs[BIGLIST],  /* flags etc for linker */
+    *libs[MAXLIST],  /* .lib files for linker */
+    *c_as[MAXLIST];  /* .c files to compile or .as to assemble */
 
-static uchar	iud_idx,	/* index into uids[] */
-		obj_idx,	/*   "     "  objs[] */
-		flg_idx,	/*   "     "  flgs[] */
-		lib_idx,	/*   "     "  libs[] */
-		c_as_idx;	/*   "     "  c_as[] */
-static char *	paths[] =
+static uchar
+    iud_idx,    /* index into uids[] */
+    obj_idx,    /*   "     "  objs[] */
+    flg_idx,    /*   "     "  flgs[] */
+    lib_idx,    /*   "     "  libs[] */
+    c_as_idx;   /*   "     "  c_as[] */
+
+static char *paths[] =
 {
 	"LINK",
 	"OBJTOHEX",
@@ -75,109 +97,132 @@ static char *	paths[] =
 	"ZAS",
 	"LIB",
 	"P1",
-	"CRT0.OBJ",
+	"CRTCPM.OBJ",
 	"$EXEC",
 	"CREF",
-	"WCR0.OBJ",
+    "SYMTOAS",
+    "OPTIONS",
 };
 
-#define	linker	paths[0]
-#define	objto	paths[1]
-#define	cgen	paths[2]
-#define	optim	paths[3]
-#define	cpp	paths[4]
-#define	assem	paths[5]
-#define	libpath	paths[6]
-#define	pass1	paths[7]
-#define	strtoff	paths[8]
-#define	execprg	paths[9]
-#define	cref	paths[10]
-#define	rdr0 paths[11]
+#define linker  paths[0]
+#define objto   paths[1]
+#define cgen    paths[2]
+#define optim   paths[3]
+#define cpp     paths[4]
+#define assem   paths[5]
+#define libpath paths[6]
+#define pass1   paths[7]
+#define strtoff paths[8]
+#define execprg paths[9]
+#define cref    paths[10]
+#define symtoas paths[11]
+#define options	paths[12]
 
-#define	RELSTRT	strtoff[plen]
+#define RELSTRT strtoff[plen]
 
-static char *	temps[] =
+static char *temps[] =
 {
-	"$CTMP1.$$$",
-	"$CTMP2.$$$",
-	"$CTMP3.$$$",
-	"$CTMP4.$$$",
-	"$L.OBJ",
-	"$$EXEC.$$$",
-	"CREF.TMP",
-    "-Ptext=0%xh,data",
-    "-Ptext=0,data,bss",
-    "-Ptext=0%xh,data,bss",
+    "$CTMP1.$$$",
+    "$CTMP2.$$$",
+    "$CTMP3.$$$",
+    "$CTMP4.$$$",
+    "$L.OBJ",
+    "$$EXEC.$$$",
+    "CREF.TMP",
     "$CTMP5.$$$",
 };
 
-#define	tmpf1	temps[0]
-#define	tmpf2	temps[1]
-#define	tmpf3	temps[2]
-#define	redname	temps[3]
-#define	l_dot_obj	temps[4]
-#define	execmd	temps[5]
-#define	crtmp	temps[6]
-#define osegs   temps[7]
-#define nsegs   temps[8]
-#define rsegs   temps[9]
-#define tmpas   temps[10]
-
-static int cbase=0x100;
-static char *	cppdef[] = { "-DCPM", "-DHI_TECH_C", "-D_HTC_C", "-Dz80" };
-static char *	cpppath = "-I";
-
-
-static char	tmpbuf[128];	/* gen. purpose buffer */
-static char	single[40];	/* single object file to be deleted */
-static short	nfiles;		/* number of source or object files seen */
-static char *	outfile;	/* output file name for objtohex */
-static FILE *	cmdfile;	/* command file */
-static short	plen;		/* length of path */
-static char	ebuf[22];	/* error listing file */
-static char *	xrname;
-static struct stat	statbuf;
-
-extern char **	_getargs();
-
-static char *	xalloc();
-
-
-int sym2as(char * iname);
-void doexec(char * name, char ** vec);
-void assemble_sym(char *s);
-void assemble(char *s);
-void compile(char *s);
-
-
-main(int argc, char ** argv)
+static char *tempm[] =
 {
-	register char *	cp, * xp;
-	short		i;
+    "-Ptext=0%xh,data",
+    "-Ptext=0,data,bss",
+    "-Ptext=0%xh,data,bss",
+};
 
-    if (isatty(fileno(stdin))) {
-        signal_t prev=signal(SIGINT,SIG_IGN);
-        fprintf(stderr, "HI-TECH C COMPILER (CP/M-80) V@@TAG@@\n");
-        fprintf(stderr, "Copyright (C) 1984-2021 HI-TECH SOFTWARE\n");
-#if	EDUC
-        fprintf(stderr, "Licensed for Educational purposes only\n");
-#endif	EDUC
-        signal(SIGINT,prev);
-    }
-	if(argc == 1) {
-		argv = _getargs((char *)0, PROMPT);
-    }
-	setup();
-	while(*++argv) {
-		if((argv)[0][0] == '-') {
-			if(islower(i = argv[0][1]))
+#define tmpf1       temps[0]
+#define tmpf2       temps[1]
+#define tmpf3       temps[2]
+#define redname     temps[3]
+#define l_dot_obj   temps[4]
+#define execmd      temps[5]
+#define crtmp       temps[6]
+#define tmpas       temps[7]
+
+#define osegs       tempm[0]
+#define nsegs       tempm[1]
+#define rsegs       tempm[2]
+
+static int      cbase = 0x0100;
+
+static char    *cppdef[] = { "-DCPM", "-DHI_TECH_C", "-Dz80" };
+static char    *cpppath = "-I";
+
+static char     tmpbuf[128];    /* gen. purpose buffer */
+static char     single[40];     /* single object file to be deleted */
+static short    nfiles;         /* number of source or object files seen */
+static char    *outfile;        /* output file name for objtohex */
+static FILE    *cmdfile;        /* command file */
+static short    plen;           /* length of path */
+static char     ebuf[22];       /* error listing file */
+static char    *xrname;
+static struct stat  statbuf;
+
+extern char
+   **_getargs();		/* explicit for prompt mode */
+
+static char
+   *xalloc(short);
+
+int
+    sym2as(char * iname);
+
+void
+    doexec(char * name, char ** vec),
+    addobj(char * s, int p),
+    addlib(char * s),
+    setup(),
+    error(char * s, char * a),
+    doit(),
+    assemble(char * s),
+    compile(char * s),
+    print(char * s),
+    put_cmd(int i),
+    rm(int type, char * file),
+    assemble_sym(char * s),
+    viewfile(char * s);
+
+int main(int argc, char **argv)
+{
+    register char *cp, *xp;
+    short       i;
+
+    /* Do not swallow queued stream input while writing to the console */
+    signal_t prev_sig;
+    prev_sig=signal(SIGINT,SIG_IGN);
+
+    fprintf(stderr, "Hi-Tech C Compiler (CP/M-80) V@@TAG@@\n");
+    fprintf(stderr, "Copyright (C) 1984-87 HI-TECH SOFTWARE\n");
+    fprintf(stderr, "Updated from https://github.com/agn453/HI-TECH-Z80-C\n");
+#if EDUC
+    fprintf(stderr, "Licensed for Educational purposes only\n");
+#endif  EDUC
+
+    signal(SIGINT,prev_sig);
+
+    if (argc == 1)
+        argv = _getargs((char *)0, PROMPT);
+
+    setup();
+
+    while (*++argv)
+    {
+        if ((argv)[0][0] == '-')
+        {
+            if (islower(i = argv[0][1]))
 				argv[0][1] = i = toupper(i);
-			switch(i) {
-
-			case 'Y':
-                overlay=1;
-                break;
-
+			
+			switch(i) 
+			{
 			case 'A':
 				reloc = 1;
 				RELSTRT = 'R';
@@ -185,10 +230,7 @@ main(int argc, char ** argv)
 				break;
 
 			case 'R':
-				/*flgs[flg_idx++] = GETARGS;*/
-				/*flgs[flg_idx++] = CPPGET;*/
-				iuds[iud_idx++] = CPPGET;
-                objs[obj_idx++] = rdr0;
+                /* Wildcard expansion from the command line now built-in */
 				break;
 
 			case 'V':
@@ -199,20 +241,24 @@ main(int argc, char ** argv)
 				keepas = 1;
 
 			case 'C':
-				if(argv[0][2] == 'r' || argv[0][2] == 'R') {
+                if (argv[0][2] == 'r' || argv[0][2] == 'R')
+				{
 					xref = 1;
-					if(argv[0][3]) {
+                    if (argv[0][3])
+					{
 						xrname = &argv[0][1];
 						xrname[0] = '-';
 						xrname[1] = 'o';
-					} else
+                    }
+                    else
 						xrname = (char *)0;
-				} else
+				} 
+				else
 					keep = 1;
 				break;
 
             case 'E':
-                outfile=&argv[0][2];
+                outfile = &argv[0][2];
                 break;
 
 			case 'O':
@@ -245,74 +291,91 @@ main(int argc, char ** argv)
 				flgs[flg_idx++] = argv[0];
 				break;
 
+            case 'Y':
+                overlay = 1;
+                break;
+
+	    case 'H':
+                viewfile(options);
+                exit(0); /* Ignore all other options for HELP */
+
 			default:
-				fprintf(stderr, "Unknown flag %s\n", argv[0]);
-				exit(1);
+                error("Unknown flag %s - use -H for HELP\n", argv[0]);
 			}
 			continue;
 		}
-        if(overlay && reloc) {
-            fprintf(stderr,"-Y and -A options are incompatible, disabling overlay\n");
-            overlay=0;
+        
+        if (overlay && reloc)
+        {
+            fprintf(stderr, "-Y and -A options are incompatible, ignoring -Y\n");
+            overlay = 0;
         }
-		nfiles++;
-		cp = argv[0];
-		while(*cp) {
-			if(islower(*cp))
-				*cp = toupper(*cp);
-			cp++;
-		}
-		cp = rindex(argv[0], '.');
-		if(cp && (strcmp(cp, ".C") == 0 || strcmp(cp, ".AS") == 0)) {
+
+        ++nfiles;
+        cp = argv[0];
+        while (*cp)
+        {
+            if (islower(*cp))
+                *cp = toupper(*cp);
+            ++cp;
+        }
+        cp = rindex(argv[0], '.');
+        if (cp && (strcmp(cp, ".C") == 0 || strcmp(cp, ".AS") == 0))
+        {
 			c_as[c_as_idx++] = argv[0];
-			if(xp = rindex(argv[0], ':'))
+            if (xp = rindex(argv[0], ':'))
+                ++xp;
+			else
+				xp = argv[0];
+			*cp = 0;
+			strcat(strcpy(tmpbuf, xp), ".OBJ");
+            addobj(tmpbuf, 1);
+			strcpy(single, tmpbuf);
+			*cp = '.';
+        }
+        else if (cp && (strcmp(cp, ".SYM")==0 ))
+        {
+			c_as[c_as_idx++] = argv[0];
+            if (xp = rindex(argv[0], ':'))
 				xp++;
 			else
 				xp = argv[0];
 			*cp = 0;
 			strcat(strcpy(tmpbuf, xp), ".OBJ");
-			addobj(tmpbuf,1);
+            addobj(tmpbuf, 1);
 			strcpy(single, tmpbuf);
 			*cp = '.';
-		} else if(cp && (strcmp(cp,".SYM")==0)) {
-			c_as[c_as_idx++] = argv[0];
-			if(xp = rindex(argv[0], ':'))
-				xp++;
-			else
-				xp = argv[0];
-			*cp = 0;
-			strcat(strcpy(tmpbuf, xp), ".OBJ");
-			addobj(tmpbuf,1);
-			strcpy(single, tmpbuf);
-			*cp = '.';
-		} else {
-        	addobj(argv[0],0);
-        }
-	}
-	doit();
+            }
+        else
+            addobj(argv[0], 0);
+    }
+    doit();
 }
 
-setup()
+void setup()
 {
-	register char *	cp;
-	short		i, len;
+    register char * cp;
+    short       i, len;
 
-	if(!(cp = getenv(HITECH)))
-		if(stat("P1.COM", &statbuf) >= 0)
+    if (!(cp = getenv(HITECH)))
+        if (stat("P1.COM", &statbuf) >= 0)
 			cp = "";
 		else
 			cp = DEFPATH;
 	plen = strlen(cp);
 	cpppath = strcat(strcpy(xalloc(plen+strlen(cpppath)+1), cpppath), cp);
-	for(i = 0 ; i < sizeof paths/sizeof paths[0] ; i++)
-		paths[i] = strcat(strcpy(xalloc(plen+strlen(paths[i])+1), cp), paths[i]);
-	if(cp = getenv(TEMP)) {
+    for (i = 0 ; i < sizeof paths/sizeof paths[0] ; i++)
+        paths[i] = strcat(strcpy(xalloc(plen+strlen(paths[i])+1), cp),
+                          paths[i]);
+    if (cp = getenv(TEMP))
+    {
 		len = strlen(cp);
-		for(i = 0 ; i < sizeof temps/sizeof temps[0] ; i++)
-			temps[i] = strcat(strcpy(xalloc(len+strlen(temps[i])+1), cp), temps[i]);
+        for (i = 0; i < sizeof temps/sizeof temps[0]; ++i)
+            temps[i] = strcat(strcpy(xalloc(len+strlen(temps[i])+1), cp),
+                              temps[i]);
 	}
-	if(strcmp(fcbname(fileno(stdout)), "CON:") && 	
-	   strcmp(fcbname(fileno(stdout)), "RSX:")) {	
+    if (strcmp(fcbname(fileno(stdout)), "CON:"))   /* redirect errors */
+    {
 		strcat(strcpy(ebuf, "-E"), fcbname(fileno(stdout)));
 		close(fileno(stdout));
 		stdout->_file = dup(fileno(stderr));
@@ -321,88 +384,96 @@ setup()
 	obj_idx = 1;
 	flgs[0] = LFLAGS;
 	flg_idx = 1;
-	for(i = 0 ; i < sizeof cppdef/sizeof cppdef[0] ; i++) {
+    for (i = 0; i < sizeof cppdef/sizeof cppdef[0]; ++i)
 		iuds[i] = cppdef[i];
-    }
 	iud_idx = i;
 }
 
-doit()
+void doit()
 {
-	register char *	cp;
-	register uchar	i;
+    register char * cp;
+    register uchar  i;
 
-	if(xref)
-		close(creat(crtmp, 0600));
-	iuds[iud_idx++] = cpppath;
-	if(!(cmdfile = fopen(execmd, "wb")))
-		error("Can't create temporary file %s", execmd);
-	put_cmd(SKP_ERR);
-	if(verbose)
-		put_cmd(ECHO);
-	for(i = 0 ; i < c_as_idx ; i++) {
-		cp = rindex(c_as[i], '.');
-		if(strcmp(cp, ".C") == 0)
-			compile(c_as[i]);
-		else if(strcmp(cp,".AS") == 0)
-			assemble(c_as[i]);
-        else if(strcmp(cp,".SYM") == 0) {
+    if (xref)
+        close(creat(crtmp, 0600));
+    iuds[iud_idx++] = cpppath;
+    if (!(cmdfile = fopen(execmd, "wb")))
+        error("Can't create temporary file %s", execmd);
+    put_cmd(SKP_ERR);
+    if (verbose)
+        put_cmd(ECHO);
+    for (i = 0 ; i < c_as_idx ; i++)
+    {
+        cp = rindex(c_as[i], '.');
+        if (strcmp(cp, ".C") == 0)
+            compile(c_as[i]);
+        else if (strcmp(cp, ".AS") == 0)
+            assemble(c_as[i]);
+        else if (strcmp(cp, ".SYM") == 0)
             assemble_sym(c_as[i]);
-        }
-		put_cmd(TRAP);
-	}
+        put_cmd(TRAP);
+    }
 	rm(RM_FILE, tmpf1);
 	rm(RM_FILE, tmpf2);
 	rm(RM_FILE, tmpf3);
 	rm(RM_FILE, tmpas);
-	if(!keep) {
-        char * segopt=0;
-        if(overlay) {
-            segopt=xalloc(strlen(osegs)+10);
-            sprintf(segopt,osegs,cbase);
-        } else {
-            if(reloc) {
-                segopt=xalloc(strlen(rsegs)+10);
-                sprintf(segopt,rsegs,cbase);
-            } else {
-                segopt=xalloc(strlen(nsegs)+1);
-                sprintf(segopt,nsegs);
+    if (!keep)
+    {
+        char * segopt = 0;
+        if (overlay)
+        {
+            segopt = xalloc(strlen(osegs)+10);
+            sprintf(segopt, osegs, cbase);
+        }
+        else
+        {
+            if (reloc)
+            {
+                segopt = xalloc(strlen(rsegs)+10);
+                sprintf(segopt, rsegs, cbase);
+            }
+            else
+            {
+                segopt = xalloc(strlen(nsegs)+1);
+                sprintf(segopt, nsegs);
             }
         }
         flgs[flg_idx++] = segopt;
-        if(!outfile) {
+        if (!outfile)
+        {
             fprintf(stderr,"No output file specified\n");
             exit(-1);
         }
-		if(reloc)
-			flgs[flg_idx++] = strcat(strcpy(xalloc(strlen(l_dot_obj)+3), "-o"), l_dot_obj);
-		else {
-            char *cb=xalloc(10);
-            sprintf(cb,"-C%xh",cbase);
+		if (reloc)
+            flgs[flg_idx++] = strcat(strcpy(xalloc(strlen(l_dot_obj)+3), "-O"),
+                                     l_dot_obj);
+		else 
+		{
+            char *cb = xalloc(10);
+            sprintf(cb, "-C%xH", cbase);
 			flgs[flg_idx++] = cb;
-            if(overlay) {
+            if (overlay)
+			{
                 strcpy(outfile+strlen(outfile)-3,"OVR");
             }
-			flgs[flg_idx++] = strcat(strcpy(xalloc(strlen(outfile)+3), "-O"), outfile);
+            flgs[flg_idx++] = strcat(strcpy(xalloc(strlen(outfile)+3), "-O"),
+                                     outfile);
 		}
-		for(i = 0 ; i < obj_idx ; i++) {
-            if(overlay && strcmp( objs[i],strtoff)==0) {
-                continue;
-            }
-            if(overlay && strcmp( objs[i],rdr0)==0) {
-                continue;
-            }
+        for (i = 0 ; i < obj_idx ; i++)
+        {
+            if (overlay && strcmp(objs[i], strtoff) == 0)
+               continue;
 			flgs[flg_idx++] = objs[i];
         }
-        if(!overlay) {
-		    addlib(STDLIB);
-        }
+        if (!overlay)
+            addlib(STDLIB);
 		for(i = 0 ; i < lib_idx ; i++)
 			flgs[flg_idx++] = libs[i];
 		flgs[flg_idx] = 0;
 		put_cmd(IF_NERR);
 		doexec(linker, flgs);
-		if(reloc) {
+		if (reloc) 
+		{
 			flgs[0] = "-R";
 			flgs[1] = "-B100H";
 			flgs[2] = l_dot_obj;
@@ -411,11 +482,12 @@ doit()
 			doexec(objto, flgs);
 			rm(RM_FILE, l_dot_obj);
 		}
-		if(c_as_idx == 1 && nfiles == 1)
+		if (c_as_idx == 1 && nfiles == 1)
 			rm(RM_FILE, single);
 	}
-	if(xref)
-		if(xrname) {
+	if (xref)
+		if (xrname) 
+		{
 			flgs[0] = xrname;
 			strcat(strcpy(tmpbuf, "-h"), outfile);
 			if(cp = rindex(tmpbuf, '.'))
@@ -428,10 +500,13 @@ doit()
 			put_cmd(IF_NERR);
 			doexec(cref, flgs);
 			rm(RM_FILE, crtmp);
-		} else {
-			sprintf(tmpbuf, "Cross reference info left in %s: run CREF to produce listing\n", crtmp);
-			print(tmpbuf);
-		}
+        }
+        else
+        {
+            sprintf(tmpbuf, "Cross reference info left in %s: "
+                            "; run CREF to produce listing\n", crtmp);
+            print(tmpbuf);
+        }
 	put_cmd(TRAP);
 	rm(RM_EXIT, execmd);
 	fclose(cmdfile);
@@ -442,12 +517,12 @@ doit()
 	error("Can't execute %s", execprg);
 }
 
-rm(type, file)
-char *	file;
+void rm(int type, char *file)
 {
-	char	buf[40];
+    char    buf[40];
 
-	if(verbose) {
+    if (verbose)
+    {
 		strcat(strcpy(buf, "ERA "), file);
 		print(buf);
 	}
@@ -457,30 +532,29 @@ char *	file;
 	fwrite(DFCB, 1, 16, cmdfile);
 }
 
-print(s)
-char *	s;
+void print(char *s)
 {
 	putc(PRINT, cmdfile);
 	putc(strlen(s), cmdfile);
 	fputs(s, cmdfile);
 }
 
-put_cmd(i)
+void put_cmd(int i)
 {
 	putc(i, cmdfile);
 	putc(0, cmdfile);
 }
 
-addobj(s,p)
-char *	s;
-int p;
+void addobj(char *s, int p)
 {
-	char *	cp;
-	uchar	len;
-	static char	oname;
+    char *  cp;
+    uchar   len;
+    static char oname;
 
-	if(oname == 0 && outfile == 0) {
-		if(p) {
+    if (oname == 0 && outfile == 0)
+    {
+        if (p)
+        {
             oname = 1;
         }
 		if(cp = rindex(s, '.'))
@@ -497,10 +571,9 @@ int p;
 	objs[obj_idx++] = cp;
 }
 
-addlib(s)
-char *	s;
+void addlib(char *s)
 {
-	char *	cp;
+    char *  cp;
 
 	strcpy(tmpbuf, libpath);
 	strcat(strcat(tmpbuf, s), LIBSUFF);
@@ -509,58 +582,58 @@ char *	s;
 	libs[lib_idx++] = cp;
 }
 
-error(s, a)
-char *	s;
+void error(char *s, char *a)
 {
 	fprintf(stderr, s, a);
 	exit(1);
 }
 
-static char *
-xalloc(s)
-short	s;
+static char *xalloc(short s)
 {
-	register char *	cp;
+    register char * cp;
 
-	if(!(cp = malloc(s)))
-		error("Out of memory");
+    if (!(cp = malloc(s)))
+        error("Out of memory", NULL);
 	return cp;
 }
 
-upcase(s)
-register char *	s;
+void upcase(char *s)
 {
-	while(*s) {
-		if(*s >= 'a' && *s <= 'z')
-			*s -= 'a'-'A';
-		s++;
-	}
+    while (*s)
+    {
+        if (*s >= 'a' && *s <= 'z')
+            *s -= 'a'-'A';
+        ++s;
+    }
 }
 
-void doexec(char * name, char **	vec)
+void doexec(char *name, char **vec)
 {
-	uchar	len;
-	char **	pvec;
-	char *	redir[2];
-	char	redbuf[20];
-	FILE *	cfile;
-	static short	redno;
-	char	xbuf[130];
+    uchar           len;
+    char          **pvec;
+    char           *redir[2];
+    char            redbuf[20];
+    FILE           *cfile;
+    static short    redno;
+    char            xbuf[130];
 
 	pvec = vec;
 	len = 0;
 	redbuf[0] = 0;
-	while(*pvec)
+    while (*pvec)
 		len += strlen(*pvec++)+1;
-	if(len > 124) {
+    if (len > 124)
+    {
 		sprintf(xbuf, redname, ++redno);
-		if(!(cfile = fopen(xbuf, "w")))
+        if (!(cfile = fopen(xbuf, "w")))
 			error("Can't create %s", xbuf);
 		len = 0;
-		while(*vec) {
+        while (*vec)
+        {
 			len += strlen(*vec);
 			fprintf(cfile, "%s ", *vec++);
-			if(len > 126) {
+            if (len > 126)
+            {
 				len = 0;
 				fprintf(cfile, "\\\n");
 			}
@@ -588,54 +661,39 @@ void doexec(char * name, char **	vec)
 	fwrite(DFCB, 1, 32, cmdfile);
 	putc(len, cmdfile);
 	fwrite(xbuf, 1, len, cmdfile);
-	if(redbuf[0]) {
+    if (redbuf[0])
 		rm(RM_FILE, &redbuf[1]);
-    }
-}
-
-xxx(type, file)
-char *	file;
-{
-	char	buf[40];
-
-	if(verbose) {
-		strcat(strcpy(buf, "SYM2AS "), file);
-		print(buf);
-	}
-	setfcb(DFCB, file);
-	putc(type, cmdfile);
-	putc(16, cmdfile);
-	fwrite(DFCB, 1, 16, cmdfile);
 }
 
 void assemble_sym(char *s)
 {
-	char *	vec[5];
-	char	buf[80];
-	char *	cp;
-	uchar	i;
+    char  *vec[5];
+    char   buf[80];
+    char  *cp;
+    uchar  i;
 
-    if(overlay) {
-        cbase=sym2as(s);
-        vec[0]=s;
-        vec[1]=tmpas;
-        vec[2]=0;
-        doexec("SYMTOAS",vec);
+    if (overlay)
+    {
+        cbase = sym2as(s);
+        vec[0] = s;
+        vec[1] = tmpas;
+        vec[2] = 0;
+        doexec(symtoas, vec);
         put_cmd(TRAP);
     } 
-	if(c_as_idx > 1)
-		print(s);
-	i = 0;
-	if(optimize && !speed)
-		vec[i++] = "-J";
-	if(nolocal)
-		vec[i++] = "-X";
-	if(cp = rindex(s, ':'))
+    if (c_as_idx > 1)
+        print(s);
+    i = 0;
+    if (optimize && !speed)
+        vec[i++] = "-J";
+    if (nolocal)
+        vec[i++] = "-X";
+    if (cp = rindex(s, ':'))
 		cp++;
 	else
 		cp = s;
 	strcat(strcpy(buf, "-O"), cp);
-	if(rindex(buf, '.'))
+    if (rindex(buf, '.'))
 		*rindex(buf, '.') = 0;
 	strcat(buf, ".OBJ");
 	vec[i++] = buf;
@@ -646,24 +704,24 @@ void assemble_sym(char *s)
 
 void assemble(char *s)
 {
-	char *	vec[5];
-	char	buf[80];
-	char *	cp;
-	uchar	i;
+    char  *vec[5];
+    char   buf[80];
+    char  *cp;
+    uchar  i;
 
-	if(c_as_idx > 1)
-		print(s);
-	i = 0;
-	if(optimize && !speed)
-		vec[i++] = "-J";
-	if(nolocal)
-		vec[i++] = "-X";
-	if(cp = rindex(s, ':'))
-		cp++;
+    if (c_as_idx > 1)
+        print(s);
+    i = 0;
+    if (optimize && !speed)
+        vec[i++] = "-J";
+    if (nolocal)
+        vec[i++] = "-X";
+    if (cp = rindex(s, ':'))
+		++cp;
 	else
 		cp = s;
 	strcat(strcpy(buf, "-O"), cp);
-	if(rindex(buf, '.'))
+    if (rindex(buf, '.'))
 		*rindex(buf, '.') = 0;
 	strcat(buf, ".OBJ");
 	vec[i++] = buf;
@@ -674,29 +732,29 @@ void assemble(char *s)
 
 void compile(char *s)
 {
-	register char *	cp;
-	uchar	i, j;
-	char *	vec[MAXLIST];
-	char	cbuf[50];
+    register char *cp;
+    short          i, j;
+    char          *vec[MAXLIST];
+    char           cbuf[50];
 
-	if(c_as_idx > 1)
-		print(s);
-	for(j = 0; j < iud_idx ; j++)
+    if (c_as_idx > 1)
+        print(s);
+    for (j = 0; j < iud_idx ; ++j)
 		vec[j] = iuds[j];
 	vec[j++] = s;
 	vec[j++] = tmpf1;
 	vec[j] = (char *)0;
 	doexec(cpp, vec);
-	if(cp = rindex(s, ':'))
+    if (cp = rindex(s, ':'))
 		s = cp+1;
 	*rindex(s, '.') = 0;
 	i = 0;
-	if(keepas && !optimize)
+    if (keepas && !optimize)
 		vec[i++] = "-S";
-	if(xref)
-		vec[i++] = strcat(strcpy(cbuf, "-c"), crtmp);
-	if(ebuf[0])		/* error redirection */
-		vec[i++] = ebuf;
+    if (xref)
+        vec[i++] = strcat(strcpy(cbuf, "-C"), crtmp);
+    if (ebuf[0])     /* error redirection */
+        vec[i++] = ebuf;
 	vec[i++] = tmpf1;
 	vec[i++] = tmpf2;
 	vec[i++] = tmpf3;
@@ -706,28 +764,29 @@ void compile(char *s)
 	vec[1] = keepas && !optimize ? strcat(strcpy(tmpbuf, s), ".AS") : tmpf1;
 	vec[2] = (char *)0;
 	doexec(cgen, vec);
-	if(keepas && !optimize)
+    if (keepas && !optimize)
 		return;
 	cp = tmpf1;
-	if(optimize) {
+	if (optimize) 
+    {
 		i = 0;
-		if(speed)
+		if (speed)
 			vec[i++] = "-F";
 		vec[i++] = tmpf1;
-		if(keepas)
+		if (keepas)
 			vec[i++] = strcat(strcpy(tmpbuf, s), ".AS");
 		else
 			vec[i++] = tmpf2;
 		vec[i] = (char *)0;
 		doexec(optim, vec);
-		if(keepas)
+		if (keepas)
 			return;
 		cp = tmpf2;
 	}
 	i = 0;
-	if(nolocal)
+	if (nolocal)
 		vec[i++] = "-X";
-	if(optimize && !speed)
+	if (optimize && !speed)
 		vec[i++] = "-J";
 	vec[i++] = "-N";
 	vec[i++] = strcat(strcat(strcpy(tmpbuf, "-o"), s), ".OBJ");
@@ -738,60 +797,70 @@ void compile(char *s)
 
 #define MAXLINE 200
 #define START ("__ovrbgn")
-int sym2as(char * fname) {
-    static char line[MAXLINE+1];
-    char *addr=line;
-    char *sym=line+5;
-    register int i=0;
-    register int j=0;
-    int c=0;
-    char* r=0;
-    int base=0x100;
-    FILE * in;
 
-    in=fopen(fname,"rt");
-    if(!in) {
+int sym2as(char * fname) 
+{
+    static char line[MAXLINE+1];
+    char       *addr = line;
+    char       *sym = line+5;
+    register int i = 0;
+    register int j = 0;
+    int         c = 0;
+    char       *r = 0;
+    int         base = 0x100;
+    FILE       *in;
+
+    in = fopen(fname,"rt");
+    if (!in)
         return -1;
-    }
-    while(!feof(in)&& !ferror(in)) {
-        i=0; 
-        while(i<MAXLINE) {
-            c=fgetc(in);
-            if(isspace(c)&&(i==0)) {
+
+    while (!feof(in) && !ferror(in))
+    {
+        i = 0;
+        while (i < MAXLINE)
+        {
+            c = fgetc(in);
+            if (isspace(c) && (i==0))
                 continue;
-            }
-            if(c==EOF ||c=='\n'||c=='\r') {
+            if (c == EOF || c == '\n' || c == '\r')
                 break;
-            }
-            line[i++]=c;
+            line[i++] = c;
         }
-        line[i]=0;
-        r=index(line,' ');
-        if(!r) {
+        line[i] = 0;
+        r = index(line, ' ');
+        if (!r)
             continue;
-        }
-        *r=0;
-        addr=line;
-        sym=r+1;
-        while(*sym && isspace(*sym)) {
+        *r = 0;
+        addr = line;
+        sym = r+1;
+        while (*sym && isspace(*sym))
             sym++;
+        if (strlen(addr) > 4) 
+        {
+            addr += strlen(addr);
+            addr -= 4;
         }
-        if(strlen(addr)>4) {
-            addr+=strlen(addr);
-            addr-=4;
+        for (j=strlen(sym)-1; j>=0; j--)
+        {
+            if (isspace(sym[j]))
+                sym[j] = 0;
         }
-        for(j=strlen(sym)-1;j>=0;j--) {
-            if(isspace(sym[j])) {
-                sym[j]=0;
-            }
-        }
-        if(!strcmp(sym,START)) {
-            sscanf(addr,"%x",&base);
-        }
+        if (!strcmp(sym, START))
+            sscanf(addr,"%x", &base);
     }
-    if(ferror(in)) {
+    if (ferror(in)) 
         fclose(in);
-    }
     fclose(in);
     return base;
+}
+
+void viewfile(char *fn)
+{
+    FILE  *f;
+    char  *bp, buf[200];
+
+    f = fopen(fn, "r");
+    while (bp=fgets(buf, 200, f))
+        printf("%s", bp);
+    fclose(f);
 }
