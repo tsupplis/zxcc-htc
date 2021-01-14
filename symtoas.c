@@ -24,13 +24,12 @@ int sym2as(char * fname, char * tmpas);
 
 int main(int argc, char ** argv) {
     int rc=0;
-    fprintf(stderr,"SYM2AS V1.00\n");
     if(argc<2) {
+        fprintf(stderr,"SYMTOAS V1.00\n");
         fprintf(stderr,"Missing sym file\n");
         return -1;
     }
     if(argc==2) {
-        fprintf(stderr,"Yop");
         rc=sym2as(argv[1],0);
     } else {
         rc=sym2as(argv[1],argv[2]);
@@ -62,7 +61,6 @@ int sym2as(char * fname, char * tmpas) {
         out=stdout;
     } else {
         out=fopen(tmpas,"wt");
-        fprintf(stderr,"%s %X\n",tmpas,out);
         if(!out) {
             fclose(in);
             return -1;
