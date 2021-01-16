@@ -240,7 +240,7 @@ dist/htc-bin-$(TAG).zip dist/htc-bin-$(TAG).lbr: all
 	cp $(ORIGTOOLS) dist/cpm/bin80
 	cp '$$exec.com' dist/cpm/bin80/'$$exec.com'
 	cp symtoas.com dist/cpm/bin80
-	cp options.txt dist/cpm/options
+	cp options.txt dist/cpm/bin80/options
 	cp c.com dist/cpm/bin80
 	cp enhuff.com dehuff.com dist/cpm/bin80
 	cp $(CRTOBJS) dist/cpm/lib80
@@ -259,5 +259,6 @@ dist/htc-bin-$(TAG).zip dist/htc-bin-$(TAG).lbr: all
         mv temp.lbr ../htc-bin-$(TAG).lbr ;\
     )
 	rm -rf dist/htc
+	rm -rf dist/cpm
 
 
