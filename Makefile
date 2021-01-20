@@ -46,7 +46,8 @@ swap.obj aslr.obj bmove.obj imul.obj rand.obj  \
 alrsh.obj lmul.obj rindex.obj strrchr.obj sbrk.obj  \
 shar.obj shll.obj shlr.obj strcat.obj strcmp.obj  \
 strcpy.obj strlen.obj stricmp.obj stristr.obj strncat.obj \
-strncmp.obj strnicmp.obj strncpy.obj csv.obj rcsv.obj tolower.obj toupper.obj xtoi.obj
+strncmp.obj strnicmp.obj strncpy.obj csv.obj rcsv.obj tolower.obj \
+toupper.obj xtoi.obj newfsiz.obj
 
 FOBJS=printf.obj fprintf.obj sprintf.obj scanf.obj fscanf.obj sscanf.obj fdoprnt.obj \
  fdoscan.obj atof.obj fnum.obj fbcd.obj tan.obj acos.obj asin.obj atan2.obj atan.obj \
@@ -125,10 +126,10 @@ c.com: ec.obj $(LIBS) $(CRTOBJS) $$exec.com
 	zxcc link --z --Ptext=0,data,bss --C100h --oc.com crtcpm.obj ec.obj libc.lib
 
 enhuff.com: enhuff.obj encode.obj hmisc.obj $(LIBS) c.com $(CRTOBJS)
-	zxcc c --v --r --oenhuff.com enhuff.obj encode.obj hmisc.onj
+	zxcc c --v --r --of enhuff.obj encode.obj hmisc.obj
 
 dehuff.com: dehuff.obj decode.obj hmisc.obj $(LIBS) c.com $(CRTOBJS)
-	zxcc c --v --r --odehuff.com dehuff.obj decode.obj hmisc.obj
+	zxcc c --v --r --of dehuff.obj decode.obj hmisc.obj
 
 testfile.com: testfile.c $(LIBS) $(TOOLS) $(CRTOBJS)
 	zxcc c --v --r testfile.c
