@@ -146,7 +146,7 @@ static char *tempm[] =
 #define l_dot_obj   temps[4]
 #define execmd      temps[5]
 #define crtmp       temps[6]
-#define tmpas       temps[7]
+#define tmpf5       temps[7]
 
 #define osegs       tempm[0]
 #define nsegs       tempm[1]
@@ -154,7 +154,11 @@ static char *tempm[] =
 
 static int      cbase = 0x0100;
 
-static char    *cppdef[] = { "-DCPM", "-DHI_TECH_C", "-Dz80" };
+static char    *cppdef[] = { 
+    "-DCPM", 
+    "-DHI_TECH_C", 
+    "-Dz80" 
+};
 static char    *cpppath = "-I";
 
 static char     tmpbuf[128];    /* gen. purpose buffer */
@@ -416,7 +420,7 @@ void doit()
 	rm(RM_FILE, tmpf1);
 	rm(RM_FILE, tmpf2);
 	rm(RM_FILE, tmpf3);
-	rm(RM_FILE, tmpas);
+	rm(RM_FILE, tmpf5);
     if (!keep)
     {
         char * segopt = 0;
@@ -676,7 +680,7 @@ void assemble_sym(char *s)
     {
         cbase = sym2as(s);
         vec[0] = s;
-        vec[1] = tmpas;
+        vec[1] = tmpf5;
         vec[2] = 0;
         doexec(symtoas, vec);
         put_cmd(TRAP);
@@ -697,7 +701,7 @@ void assemble_sym(char *s)
 		*rindex(buf, '.') = 0;
 	strcat(buf, ".OBJ");
 	vec[i++] = buf;
-	vec[i++] = tmpas;
+	vec[i++] = tmpf5;
 	vec[i] = (char *)0;
 	doexec(assem, vec);
 }
