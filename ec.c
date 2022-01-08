@@ -235,6 +235,7 @@ int main(int argc, char **argv)
 
 			case 'R':
                 /* Wildcard expansion from the command line now built-in */
+                /* flgs[flg_idx++] = GETARGS; */
 				break;
 
 			case 'V':
@@ -268,7 +269,9 @@ int main(int argc, char **argv)
 			case 'O':
 				optimize = 1;
 				if(argv[0][2] == 'F' || argv[0][2] == 'f')
+                {
 					speed = 1;
+                }
 				break;
 
 			case 'I':
@@ -624,7 +627,11 @@ void doexec(char *name, char **vec)
 	pvec = vec;
 	len = 0;
 	redbuf[0] = 0;
-    while (*pvec)
+    /* PMO: bug fix we could overrun 255 length
+     * as we are only interested in creating a redir
+     * for > 124 chars we can quit early
+     */
+	while(*pvec && len <= 124)
 		len += strlen(*pvec++)+1;
     if (len > 124)
     {
@@ -634,13 +641,17 @@ void doexec(char *name, char **vec)
 		len = 0;
         while (*vec)
         {
-			len += strlen(*vec);
-			fprintf(cfile, "%s ", *vec++);
-            if (len > 126)
-            {
-				len = 0;
-				fprintf(cfile, "\\\n");
+           /* PMO: bug fix, check if we will
+             * overrun the buffer with this item
+             * also space between tokens was not
+             * counted
+             */
+			len += strlen(*vec) + 1;    /* account for space */
+			if(len > 126) {             /* test if it will overrun */
+				fprintf(cfile, "\\\n"); /* put continuation \ */
+				len = strlen(*vec) + 1; /* reset len */
 			}
+			fprintf(cfile, "%s ", *vec++);
 		}
 		fputc('\n', cfile);
 		fclose(cfile);
@@ -757,16 +768,23 @@ void compile(char *s)
 		vec[i++] = "-S";
     if (xref)
         vec[i++] = strcat(strcpy(cbuf, "-C"), crtmp);
-    if (ebuf[0])     /* error redirection */
+    /* error redirection */
+/*AGN - temporarily ignore error redirection*/
+/*
+    if (ebuf[0])
         vec[i++] = ebuf;
+ */
 	vec[i++] = tmpf1;
 	vec[i++] = tmpf2;
 	vec[i++] = tmpf3;
 	vec[i++] = (char *)0;
 
     /* vec[0] is junk.  Move everything down one slot.  */
+/*AGN - remove the following two lines*/
+/*
     for (i=0; vec[i]; ++i)
 		vec[i] = vec[i+1];
+*/
 	doexec(pass1, vec);
 	vec[0] = tmpf2;
 	vec[1] = keepas && !optimize ? strcat(strcpy(tmpbuf, s), ".AS") : tmpf1;
