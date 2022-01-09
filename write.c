@@ -1,5 +1,6 @@
 #include    "cpm.h"
 
+extern int _new_fsize;
 extern char _piped;    /* PIPEMGR loaded? */
 
 write(uchar fd, char *buf, ushort nbytes)
@@ -87,7 +88,7 @@ write(uchar fd, char *buf, ushort nbytes)
                 break;
             buf += size;
             fc->rwp += size;
-            if (0 && (fc->fsize < fc->rwp))
+            if (!_new_fsize && (fc->fsize < fc->rwp))
                 fc->fsize = fc->rwp;
             nbytes -= size;
             setuid(luid);
