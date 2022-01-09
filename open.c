@@ -1,7 +1,6 @@
 #include    "cpm.h"
 
 extern int errno;
-extern int _new_fsize;
 
 long _fsize(uchar fd)
 {
@@ -27,9 +26,8 @@ long _fsize(uchar fd)
     if ((d = bdos(CPMFFST, fc) & 0xFF) < 4)   /* Account for CP/M3 bytewise */
     {
         d = (buf[13 + (d << 5)] & 0x7F);  /* file sizes */
-        if (d && !_new_fsize)         /* Byte count represents UNUSED bytes in last */
-            d = 0x80 - d;             /* sector ... Changed 9 Apr 2014 jrs */
- 
+/*      if (d)               // Byte count represents UNUSED bytes in last
+            d = 0x80 - d;    // sector ... Changed 9 Apr 2014 jrs */
         tmp -= d;
     }
     setuid(luid);
