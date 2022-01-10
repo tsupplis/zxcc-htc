@@ -6,7 +6,7 @@
 	defs	100h		;Base of CP/M's TPA
 
 	global	start,_main,_exit,__Hbss, __Lbss, __argc_, __z3env, startup
-        global  __piped
+    global  __piped,__getargs
 
 start:		; DOS Protection	8080/Z80	x86
 				;	---------  --------------------
