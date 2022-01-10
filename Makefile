@@ -221,6 +221,7 @@ dist/htc-test-$(TAG).zip dist/htc-test-$(TAG).lbr:
 	rm -rf dist/test
 
 dist/htc-bin-$(TAG).zip dist/htc-bin-$(TAG).lbr: all
+	(cd pipemgr;make all)
 	mkdir -p dist
 	rm -rf dist/htc dist/htc-bin*
 	mkdir -p dist/htc
