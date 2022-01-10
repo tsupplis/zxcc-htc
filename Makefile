@@ -261,6 +261,7 @@ dist/htc-bin-$(TAG).zip dist/htc-bin-$(TAG).lbr: all
         zxcc lu --O temp.lbr --A '*.OBJ' --C ;\
         zxcc lu --O temp.lbr --A '*.RSX' --C ;\
         zxcc lu --O temp.lbr --A '*.TXT' --C ;\
+        zxcc lu --O temp.lbr --A 'OPTIONS' --C ;\
         mv temp.lbr ../htc-bin-$(TAG).lbr ;\
     )
 	rm -rf dist/htc
