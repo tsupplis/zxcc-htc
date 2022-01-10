@@ -71,7 +71,7 @@ static char
     reloc,      /* auto-relocate program at run time */
     xref,       /* generate cross reference listing */
     nolocal,    /* strip local symbols */
-    wildcar,
+    wildcard,
     overlay=0;  /* build with overlays */
 
 static char
@@ -88,7 +88,7 @@ static uchar
     lib_idx,    /*   "     "  libs[] */
     c_as_idx;   /*   "     "  c_as[] */
 
-#define WILDCAR "WCR.OBJ"
+#define WILDCARD "WCR.OBJ"
 
 static char *paths[] =
 {
@@ -239,7 +239,7 @@ int main(int argc, char **argv)
 			case 'R':
                 /* Wildcard expansion from the command line now built-in */
                 /* flgs[flg_idx++] = GETARGS; */
-                wildcar = 1;
+                wildcard = 1;
 				break;
 
 			case 'V':
@@ -477,8 +477,8 @@ void doit()
 			flgs[flg_idx++] = objs[i];
         }
         if (!overlay) {
-            if(wildcar) {
-			    flgs[flg_idx++] = WILDCAR;
+            if(wildcard) {
+			    flgs[flg_idx++] = WILDCARD;
             }
             addlib(STDLIB);
         }
