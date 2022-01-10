@@ -64,7 +64,7 @@ ORIGTOOLS=cgen.com cpp.com cref.com debug.com  \
 	zas.com
 
 OVROBJS=ovrload.obj ovrbgn.obj
-CRTOBJS=crtcpm.obj rrtcpm.obj
+CRTOBJS=crtcpm.obj rrtcpm.obj wcr.obj
 ZCRTOBJS=zcrtcpm.obj zrrtcpm.obj
 TOOLSOBJS=ec.obj symtoas.obj exec.obj
 LIBS=libc.lib libovr.lib libf.lib
@@ -86,6 +86,9 @@ libc.lib: $(COBJS)
 
 zcrtcpm.obj: zcrtcpm.as
 	zxcc zas zcrtcpm.as
+
+wcr.obj: wcr.as
+	zxcc zas wcr.as
 
 zrrtcpm.obj: zrrtcpm.as
 	zxcc zas zrrtcpm.as
