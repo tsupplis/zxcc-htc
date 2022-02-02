@@ -14,7 +14,8 @@ TAG=$(shell ((git describe --exact-match --tags $(git log -n1 --pretty='%h') 2>/
 
 TESTS=testver.com testio.com testovr.com testovr1.ovr testovr2.ovr teststr.com \
  testbios.com testbdos.com testtrig.com testftim.com testfile.com testaes.com \
- testuid.com testrc.com testrel.com testargs.com testfsiz.com testsub.com
+ testuid.com testrc.com testrel.com testargs.com testfsiz.com testsub.com \
+ testpr.com testpwd.com testview.com testhell.com 
 
 COBJS=getargs.obj assert.obj printf.obj fprintf.obj sprintf.obj  \
 doprnt.obj gets.obj puts.obj fwrite.obj getw.obj  \
@@ -143,6 +144,15 @@ testfsiz.com: testfsiz.c $(LIBS) $(TOOLS) $(CRTOBJS)
 testaes.com: testaes.c $(LIBS) $(TOOLS) $(CRTOBJS)
 	zxcc c --v --r testaes.c
 
+testpr.com: testpr.c $(LIBS) $(TOOLS) $(CRTOBJS)
+	zxcc c --v --r testpr.c
+
+testpwd.com: testpwd.c $(LIBS) $(TOOLS) $(CRTOBJS)
+	zxcc c --v --r testpwd.c
+
+testsub.com: testsub.c $(LIBS) $(TOOLS) $(CRTOBJS)
+	zxcc c --v --r testsub.c
+
 teststr.com: teststr.c $(LIBS) $(TOOLS) $(CRTOBJS)
 	zxcc c --v --r teststr.c
 
@@ -164,14 +174,14 @@ testovr1.ovr: testovr2.obj testovrx.sym
 testbdos.com: testbdos.c  $(LIBS) $(TOOLS) $(CRTOBJS)
 	zxcc c --v --r testbdos.c
 
-testsub.com: testsub.c  $(LIBS) $(TOOLS) $(CRTOBJS)
-	zxcc c --v --r testsub.c
-
 testargs.com: testargs.c  $(LIBS) $(TOOLS) $(CRTOBJS)
 	zxcc c --v --r testargs.c
 
 testrel.com: testrel.c  $(LIBS) $(TOOLS) $(CRTOBJS)
 	zxcc c --A --v --r testrel.c
+
+testhell.com: testhell.c  $(LIBS) $(TOOLS) $(CRTOBJS)
+	zxcc c --v --r testhell.c
 
 testrc.com: testrc.c  $(LIBS) $(TOOLS) $(CRTOBJS)
 	zxcc c --v --r testrc.c
@@ -185,14 +195,19 @@ testbios.com: testbios.c  $(LIBS) $(TOOLS) $(CRTOBJS)
 testtrig.com: testtrig.c  $(LIBS) $(TOOLS) $(CRTOBJS)
 	zxcc c --v --r testtrig.c --lf
 
+testview.com: testview.c  $(LIBS) $(TOOLS) $(CRTOBJS)
+	zxcc c --v --r testview.c
+
 testftim.com: testftim.c  $(LIBS) $(TOOLS) $(CRTOBJS)
 	zxcc c --v --r testftim.c
 
 test: $(TESTS)
+	zxcc testhell
 	zxcc testver
 	rm -f testio.sta testio.out testio.err
 	zxcc testovr
 	zxcc teststr
+	zxcc testsub a b c
 	zxcc testtrig
 	zxcc testftim
 	zxcc testbdos
@@ -202,6 +217,9 @@ test: $(TESTS)
 	zxcc testrc || echo testrc=$$?
 	zxcc testargs -*.i
 	zxcc testfsiz
+	zxcc testpr
+	zxcc testpwd
+	zxcc testview test.sub
 
 dist: dist/htc-bin-$(TAG).zip dist/htc-test-$(TAG).zip \
  dist/htc-bin-$(TAG).lbr dist/htc-test-$(TAG).lbr

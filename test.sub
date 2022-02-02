@@ -1,3 +1,4 @@
+c -v -r testhell.c
 c -v -r testver.c
 c -v -r testio.c
 c -v -r testuid.c
@@ -9,9 +10,16 @@ c -v -r testftim.c
 c -v -r testfile.c
 c -v -r testaes.c
 c -v -r testrc.c
+c -v -r testpr.c
+c -v -r testpwd.c
+c -v -r testargs.c
+c -v -r testfsiz.c
+c -v -r testview.c
+c -v -r testsub.c
 c -ftestovrx.sym -v -r testovr.c -lovr
 c -y -r -v testovr2.c testovrx.sym
 c -y -r -v testovr1.c testovrx.sym
+testhell
 testver
 era testio.sta
 era testio.out
@@ -27,3 +35,10 @@ testftim
 testfile
 testaes
 testrc
+testargs *.i
+testfsiz
+testpr
+testpwd
+testsub 
+testview test.sub
+
