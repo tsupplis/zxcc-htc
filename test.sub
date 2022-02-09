@@ -16,6 +16,7 @@ c -v -r testargs.c
 c -v -r testfsiz.c
 c -v -r testview.c
 c -v -r testsub.c
+c -v -r -A testrel.c
 c -ftestovrx.sym -v -r testovr.c -lovr
 c -y -r -v testovr2.c testovrx.sym
 c -y -r -v testovr1.c testovrx.sym
